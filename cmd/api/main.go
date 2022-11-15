@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/godror/godror"
 	"github.com/tijanadmi/tis-api/models"
 )
 
@@ -21,9 +22,9 @@ type config struct {
 	db   struct {
 		dsn string
 	}
-	/*jwt struct {
+	jwt struct {
 		secret string
-	}*/
+	}
 }
 
 type AppStatus struct {
@@ -43,7 +44,8 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment (development|production")
-	flag.StringVar(&cfg.db.dsn, "dsn", "postgres://tcs@localhost/go_movies?sslmode=disable", "Postgres connection string")
+	flag.StringVar(&cfg.db.dsn, "dsn", "", "Oracle connection string")
+	flag.StringVar(&cfg.jwt.secret, "jwt-secret", "", "secret")
 
 	flag.Parse()
 
@@ -54,6 +56,8 @@ func main() {
 		logger.Fatal(err)
 	}
 	defer db.Close()
+
+	logger.Println("Connected to database", cfg.port)
 
 	app := &application{
 		config: cfg,
@@ -79,7 +83,7 @@ func main() {
 }
 
 func openDB(cfg config) (*sql.DB, error) {
-	db, err := sql.Open("postgres", cfg.db.dsn)
+	db, err := sql.Open("godror", cfg.db.dsn)
 	if err != nil {
 		return nil, err
 	}

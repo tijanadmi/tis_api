@@ -3,7 +3,11 @@ package models
 import (
 	"context"
 	"database/sql"
+	"errors"
+	"fmt"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type DBModel struct {
@@ -11,64 +15,63 @@ type DBModel struct {
 }
 
 // Get returns one movie and error, if any
-func (m *DBModel) Get(id int) (*Movie, error) {
+func (m *DBModel) GetDvDidf() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select id, title, description, year, release_date, rating, runtime, mpaa_rating,
-				created_at, updated_at from movies where id = $1
+	query := `select infor_id, infor_sifra, infor_naziv from ted.zas_dv_didf_v
 	`
 
-	row := m.DB.QueryRowContext(ctx, query, id)
-
-	var movie Movie
-
-	err := row.Scan(
-		&movie.ID,
-		&movie.Title,
-		&movie.Description,
-		&movie.Year,
-		&movie.ReleaseDate,
-		&movie.Rating,
-		&movie.Runtime,
-		&movie.MPAARating,
-		&movie.CreatedAt,
-		&movie.UpdatedAt,
-	)
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
-
-	// get genres, if any
-	query = `select
-				mg.id, mg.movie_id, mg.genre_id, g.genre_name
-			from
-				movies_genres mg
-				left join genres g on (g.id = mg.genre_id)
-			where
-				mg.movie_id = $1
-	`
-
-	rows, _ := m.DB.QueryContext(ctx, query, id)
 	defer rows.Close()
 
-	genres := make(map[int]string)
+	var signals []*Signal
+
 	for rows.Next() {
-		var mg MovieGenre
+		var signal Signal
 		err := rows.Scan(
-			&mg.ID,
-			&mg.MovieID,
-			&mg.GenreID,
-			&mg.Genre.GenreName,
+			&signal.ID,
+			&signal.Code,
+			&signal.Name,
 		)
+
 		if err != nil {
 			return nil, err
 		}
-		genres[mg.ID] = mg.Genre.GenreName
+
+		signals = append(signals, &signal)
 	}
 
-	movie.MovieGenre = genres
-
-	return &movie, nil
+	return signals, nil
 }
 
+// Authenticate authenticates a user
+func (m *DBModel) Authenticate(username, testPassword string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	/*var id int
+	var hashedPassword string*/
+
+	var user User
+
+	query := `select id, username, password from tis_services_users where username = :1`
+
+	row := m.DB.QueryRowContext(ctx, query, username)
+	err := row.Scan(&user.ID, &user.Username, &user.Password)
+	if err != nil {
+		return err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(testPassword))
+	if err == bcrypt.ErrMismatchedHashAndPassword {
+		return errors.New("incorrect password")
+	} else if err != nil {
+		return err
+	}
+	return nil
+}
