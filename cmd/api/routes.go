@@ -27,6 +27,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/signals/sp_dis_diff", app.getDisDiffSp)
 	router.HandlerFunc(http.MethodGet, "/signals/malfunction_in", app.getMalfunctionIn)
 	router.HandlerFunc(http.MethodGet, "/signals/apu", app.getAPU)
+	router.HandlerFunc(http.MethodGet, "/signals/dv_oc", app.getOCDV)
 
 	router.POST("/dv_didf", app.wrap(secure.ThenFunc(app.getDvDidf)))
 	return app.enableCORS(router)

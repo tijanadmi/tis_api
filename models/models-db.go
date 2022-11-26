@@ -19,7 +19,7 @@ func (m *DBModel) GetDvDidf() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select infor_id, infor_sifra, infor_naziv, status from ted.zas_dv_didf_all_v
+	query := `select infor_id, infor_naziv, status from ted.zas_dv_didf_all_v
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -35,7 +35,6 @@ func (m *DBModel) GetDvDidf() ([]*Signal, error) {
 		var signal Signal
 		err := rows.Scan(
 			&signal.ID,
-			&signal.Code,
 			&signal.Name,
 			&signal.Status,
 		)
@@ -55,7 +54,7 @@ func (m *DBModel) GetDiffTr() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select infor_id, infor_sifra, infor_naziv, status from ted.zas_tr_gldif_all_v
+	query := `select infor_id, infor_naziv, status from ted.zas_tr_gldif_all_v
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -71,7 +70,6 @@ func (m *DBModel) GetDiffTr() ([]*Signal, error) {
 		var signal Signal
 		err := rows.Scan(
 			&signal.ID,
-			&signal.Code,
 			&signal.Name,
 			&signal.Status,
 		)
@@ -91,7 +89,7 @@ func (m *DBModel) GetDisTrRes() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select infor_id, infor_sifra, infor_naziv, status from ted.zas_tr_rez_dis_all_v
+	query := `select infor_id, infor_naziv, status from ted.zas_tr_rez_dis_all_v
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -107,7 +105,6 @@ func (m *DBModel) GetDisTrRes() ([]*Signal, error) {
 		var signal Signal
 		err := rows.Scan(
 			&signal.ID,
-			&signal.Code,
 			&signal.Name,
 			&signal.Status,
 		)
@@ -127,7 +124,7 @@ func (m *DBModel) GetDisDiffSp() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select infor_id, infor_sifra, infor_naziv, status from ted.zas_spp_didf_all_v
+	query := `select infor_id, infor_naziv, status from ted.zas_spp_didf_all_v
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -143,7 +140,6 @@ func (m *DBModel) GetDisDiffSp() ([]*Signal, error) {
 		var signal Signal
 		err := rows.Scan(
 			&signal.ID,
-			&signal.Code,
 			&signal.Name,
 			&signal.Status,
 		)
@@ -228,6 +224,41 @@ func (m *DBModel) GetAPU() ([]*Apu, error) {
 	}
 
 	return ms, nil
+}
+
+// Get returns all zas_tr_rez_dis_all_v and error, if any
+func (m *DBModel) GetOCDV() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_dv_pres_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
 }
 
 // Authenticate authenticates a user

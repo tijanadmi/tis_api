@@ -10,7 +10,7 @@ func (app *application) getDvDidf(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-	err = app.writeJSON(w, http.StatusOK, signals, "dv_didf_signals")
+	err = app.writeJSON(w, http.StatusOK, signals, "dv_didff_signals")
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -76,6 +76,19 @@ func (app *application) getAPU(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err = app.writeJSON(w, http.StatusOK, signals, "apu")
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOCDV(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetOCDV()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals, "dv_oc_protection")
 	if err != nil {
 		app.errorJSON(w, err)
 		return
