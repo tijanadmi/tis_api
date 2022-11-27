@@ -37,15 +37,27 @@ type application struct {
 	config config
 	logger *log.Logger
 	models models.Models
+	Domain       string
+	auth         Auth
+	JWTSecret    string
+	JWTIssuer    string
+	JWTAudience  string
+	CookieDomain string
 }
 
 func main() {
 	var cfg config
+	var app application
 
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment (development|production")
 	flag.StringVar(&cfg.db.dsn, "dsn", "", "Oracle connection string")
 	flag.StringVar(&cfg.jwt.secret, "jwt-secret", "", "secret")
+	flag.StringVar(&app.JWTSecret, "jwt-secret1", "", "signing secret")
+	flag.StringVar(&app.JWTIssuer, "jwt-issuer", "", "signing issuer")
+	flag.StringVar(&app.JWTAudience, "jwt-audience", "", "signing audience")
+	flag.StringVar(&app.CookieDomain, "cookie-domain", "localhost", "cookie domain")
+	flag.StringVar(&app.Domain, "domain", "example.com", "domain")
 
 	flag.Parse()
 
@@ -59,11 +71,33 @@ func main() {
 
 	logger.Println("Connected to database", cfg.port)
 
-	app := &application{
+	
+	app = application{
 		config: cfg,
 		logger: logger,
 		models: models.NewModels(db),
+		auth : Auth{
+			Issuer: app.JWTIssuer,
+			Audience: app.JWTAudience,
+			Secret: app.JWTSecret,
+			TokenExpiry: time.Minute * 15,
+			RefreshExpiry: time.Hour * 24,
+			CookiePath: "/",
+			CookieName: "__Host-refresh_token",
+			CookieDomain: app.CookieDomain,
+		},
 	}
+
+	/*app.auth = Auth{
+		Issuer: app.JWTIssuer,
+		Audience: app.JWTAudience,
+		Secret: app.JWTSecret,
+		TokenExpiry: time.Minute * 15,
+		RefreshExpiry: time.Hour * 24,
+		CookiePath: "/",
+		CookieName: "__Host-refresh_token",
+		CookieDomain: app.CookieDomain,
+	}*/
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
