@@ -287,3 +287,47 @@ func (m *DBModel) Authenticate(username, testPassword string) error {
 	}
 	return nil
 }
+
+func (m *DBModel) GetUserByUsername(username string) (*User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, username, password from tis_services_users where username = :1`
+
+	var user User
+	row := m.DB.QueryRowContext(ctx, query, username)
+
+	err := row.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Password,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (m *DBModel) GetUserByID(id int) (*User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, username, password from tis_services_users where id = :1`
+
+	var user User
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	err := row.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Password,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
