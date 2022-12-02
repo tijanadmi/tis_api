@@ -282,6 +282,45 @@ func (app *application) getWeatherConditions(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+func (app *application) getOHL(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetOHL()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPowerCables(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetPowerCables()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getSubstations(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetSubstations()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload

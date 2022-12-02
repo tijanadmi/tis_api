@@ -64,6 +64,9 @@ func (app *application) routes() http.Handler {
 	mux.Get("/signals/bbp_bb_trip", app.getBBPBBtrip)
 	mux.Get("/signals/bf_trip", app.getBFtrip)
 	mux.Get("/weather_conditions", app.getWeatherConditions)
+	mux.Get("/overhead_lines", app.getOHL)
+	mux.Get("/power_cables", app.getPowerCables)
+	mux.Get("/substations", app.getSubstations)
 
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(app.authRequired)

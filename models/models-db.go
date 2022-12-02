@@ -752,6 +752,179 @@ func (m *DBModel) GetWeatherConditions() ([]*WeatherConditions, error) {
 	return signals, nil
 }
 
+// Get returns all weather conditions and error, if any
+func (m *DBModel) GetOHL() ([]*OverheadLine, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID_DV,IPS_ID_DV,SAP_ID_DV,ID_DAL,NAZIV_IPS,OPIS_PO_KATEGORIZACIJI,ID_NAP,NAPON_NAZIV,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),TIS_ID_PT_POLJA,IPS_ID_PT_POLJA,
+			  SAP_ID_PT_POLJA,BROJ_POLJA_PT,NAZIV_PT_POLJA,NAZIV_PT_POLJA_PO_KATEGORIZACIJI,TIS_ID_KT_POLJA,IPS_ID_KT_POLJA,SAP_ID_KT_POLJA,BROJ_POLJA_KT,
+	          NAZIV_KT_POLJA,NAZIV_KT_POLJA_PO_KATEGORIZACIJI,TIPOB_ID,TIPOB_SIFRA,TIPOB_NAZIV,COALESCE(to_char(ID_S_MRC1), ''),COALESCE(MRC1, ''),COALESCE(to_char(ID_S_MRC2), ''),COALESCE(MRC2, '')
+ 	          from synsoft_DV_a
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ohls []*OverheadLine
+
+	for rows.Next() {
+		var ohl OverheadLine
+		err := rows.Scan(
+			&ohl.ID,
+			&ohl.IpsIdDV,
+			&ohl.SapIdDV,
+			&ohl.IdDal,
+			&ohl.IPSName,
+			&ohl.CategoryNameDV,
+			&ohl.IdNN,
+			&ohl.NNName,
+			&ohl.CategoryId,
+			&ohl.CategoryName,
+			&ohl.TisIdFirstFeeder,
+			&ohl.IpsIdFirstFeeder,
+			&ohl.SapIdFirstFeeder,
+			&ohl.FirstFeederNumber,
+			&ohl.FirstFeederName,
+			&ohl.FirstFeederCategoryName,
+			&ohl.TisIdLastFeeder,
+			&ohl.IpsIdLastFeeder,
+			&ohl.SapIdLastFeeder,
+			&ohl.LastFeederNumber,
+			&ohl.LastFeederName,
+			&ohl.LastFeederCategoryName,
+			&ohl.ObjTypeId,
+			&ohl.ObjTypeCode,
+			&ohl.ObjTypeName,
+			&ohl.Mrc1Id,
+			&ohl.Mrc1Name,
+			&ohl.Mrc2Id,
+			&ohl.Mrc2Name,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		ohls = append(ohls, &ohl)
+	}
+
+	return ohls, nil
+}
+
+// Get returns all power_cables and error, if any
+func (m *DBModel) GetPowerCables() ([]*PowerCable, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID_KB,IPS_ID_KB,SAP_ID_KB,ID_KAB,NAZIV_IPS,OPIS_PO_KATEGORIZACIJI,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),TIS_ID_PT_POLJA,IPS_ID_PT_POLJA,
+			  SAP_ID_PT_POLJA,BROJ_POLJA_PT,NAZIV_PT_POLJA,NAZIV_PT_POLJA_PO_KATEGORIZACIJI,TIS_ID_KT_POLJA,IPS_ID_KT_POLJA,SAP_ID_KT_POLJA,BROJ_POLJA_KT,
+	          NAZIV_KT_POLJA,NAZIV_KT_POLJA_PO_KATEGORIZACIJI,TIPOB_ID,TIPOB_SIFRA,TIPOB_NAZIV,COALESCE(to_char(ID_S_MRC1), ''),COALESCE(MRC1, ''),COALESCE(to_char(ID_S_MRC2), ''),COALESCE(MRC2, '')
+ 	          from synsoft_KB_a
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var cabs []*PowerCable
+
+	for rows.Next() {
+		var cab PowerCable
+		err := rows.Scan(
+			&cab.ID,
+			&cab.IpsIdKB,
+			&cab.SapIdKB,
+			&cab.IdKab,
+			&cab.IPSName,
+			&cab.CategoryNameDV,
+			&cab.CategoryId,
+			&cab.CategoryName,
+			&cab.TisIdFirstFeeder,
+			&cab.IpsIdFirstFeeder,
+			&cab.SapIdFirstFeeder,
+			&cab.FirstFeederNumber,
+			&cab.FirstFeederName,
+			&cab.FirstFeederCategoryName,
+			&cab.TisIdLastFeeder,
+			&cab.IpsIdLastFeeder,
+			&cab.SapIdLastFeeder,
+			&cab.LastFeederNumber,
+			&cab.LastFeederName,
+			&cab.LastFeederCategoryName,
+			&cab.ObjTypeId,
+			&cab.ObjTypeCode,
+			&cab.ObjTypeName,
+			&cab.Mrc1Id,
+			&cab.Mrc1Name,
+			&cab.Mrc2Id,
+			&cab.Mrc2Name,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		cabs = append(cabs, &cab)
+	}
+
+	return cabs, nil
+}
+
+// Get returns all substations and error, if any
+func (m *DBModel) GetSubstations() ([]*Substation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID,IPS_ID,SAP_ID,NAZIV_TS,NAZIV_PO_KATEGORIZACIJI,TIPOB,TIPOB_SIFRA,TIPOB_NAZIV,COALESCE(to_char(ID_S_MRC1), ''),COALESCE(MRC1, ''),COALESCE(to_char(ID_S_MRC2), ''),COALESCE(MRC2, ''), ID_S_ORG, NAZIV_ORG
+ 	          from synsoft_TS_a
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var subs []*Substation
+
+	for rows.Next() {
+		var sub Substation
+		err := rows.Scan(
+			&sub.ID,
+			&sub.IpsId,
+			&sub.SapId,
+			&sub.TISName,
+			&sub.CategoryNameSub,
+			&sub.ObjTypeId,
+			&sub.ObjTypeCode,
+			&sub.ObjTypeName,
+			&sub.Mrc1Id,
+			&sub.Mrc1Name,
+			&sub.Mrc2Id,
+			&sub.Mrc2Name,
+			&sub.OrgId,
+			&sub.OrgName,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		subs = append(subs, &sub)
+	}
+
+	return subs, nil
+}
+
 // Authenticate authenticates a user
 func (m *DBModel) Authenticate(username, testPassword string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
