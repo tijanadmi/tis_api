@@ -40,6 +40,13 @@ type Apu struct {
 	Status    string `json:"status"`
 }
 
+type WeatherConditions struct {
+	ID     int    `json:"id"`
+	Code   string `json:"code"`
+	Name   string `json:"name"`
+	Status string `json:"status"`
+}
+
 // User is the type for users
 type User struct {
 	ID       int

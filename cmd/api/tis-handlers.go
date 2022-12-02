@@ -100,11 +100,193 @@ func (app *application) getOCDV(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getOCTR12(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetOCTR12()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOCTRR(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetOCTRR()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOCSP(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetOCSP()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getEarthfaultOCDV(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetEarthfaultOCDV()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getEarthfaultOCTR(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetEarthfaultOCTR()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getEarthfaultOCSP(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetEarthfaultOCSP()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getDirEarthfaultOC(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetDirEarthfaultOC()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getTPSendRcdv(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetTPSendRcdv()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getCircuitbreaker(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetCircuitbreaker()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getBBPBFtrip(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetBBPBFtrip()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getNonElectrical(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetNonElectrical()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getBBPBBtrip(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetBBPBBtrip()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getBFtrip(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetBFtrip()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getWeatherConditions(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetWeatherConditions()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload
 	var requestPayload struct {
-		Username    string `json:"username"`
+		Username string `json:"username"`
 		Password string `json:"password"`
 	}
 
@@ -135,8 +317,6 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		LastName:  user.Username,
 	}
 
-	
-
 	// generate tokens
 	tokens, err := app.auth.GenerateTokenPair(&u)
 	if err != nil {
@@ -148,8 +328,6 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)
-
-	
 
 	app.writeJSON(w, http.StatusAccepted, tokens)
 }
@@ -183,9 +361,9 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 			}
 
 			u := jwtUser{
-				ID: user.ID,
+				ID:        user.ID,
 				FirstName: user.Username,
-				LastName: user.Username,
+				LastName:  user.Username,
 			}
 
 			tokenPairs, err := app.auth.GenerateTokenPair(&u)
@@ -206,4 +384,3 @@ func (app *application) logout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, app.auth.GetExpiredRefreshCookie())
 	w.WriteHeader(http.StatusAccepted)
 }
-

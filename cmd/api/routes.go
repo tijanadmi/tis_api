@@ -50,8 +50,22 @@ func (app *application) routes() http.Handler {
 	mux.Get("/signals/malfunction_in", app.getMalfunctionIn)
 	mux.Get("/signals/apu", app.getAPU)
 	mux.Get("/signals/dv_oc", app.getOCDV)
+	mux.Get("/signals/tr12_oc", app.getOCTR12)
+	mux.Get("/signals/trres_oc", app.getOCTRR)
+	mux.Get("/signals/sp_oc_sc", app.getOCSP)
+	mux.Get("/signals/dv_earthfault_oc", app.getEarthfaultOCDV)
+	mux.Get("/signals/tr_earthfault_oc", app.getEarthfaultOCTR)
+	mux.Get("/signals/sp_earthfault_oc", app.getEarthfaultOCSP)
+	mux.Get("/signals/dir_earthfault_oc", app.getDirEarthfaultOC)
+	mux.Get("/signals/tp_send_rcvd", app.getTPSendRcdv)
+	mux.Get("/signals/circuitbreaker", app.getCircuitbreaker)
+	mux.Get("/signals/bbp_bf_trip", app.getBBPBFtrip)
+	mux.Get("/signals/non_electrical", app.getNonElectrical)
+	mux.Get("/signals/bbp_bb_trip", app.getBBPBBtrip)
+	mux.Get("/signals/bf_trip", app.getBFtrip)
+	mux.Get("/weather_conditions", app.getWeatherConditions)
 
-	mux.Route("/admin", func(mux chi.Router){
+	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(app.authRequired)
 
 		mux.Get("/signals/dv_didf", app.getDvDidf)

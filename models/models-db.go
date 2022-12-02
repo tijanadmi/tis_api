@@ -119,7 +119,7 @@ func (m *DBModel) GetDisTrRes() ([]*Signal, error) {
 	return signals, nil
 }
 
-// Get returns all zas_tr_rez_dis_all_v and error, if any
+// Get returns all ted.zas_spp_didf_all_v and error, if any
 func (m *DBModel) GetDisDiffSp() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -154,7 +154,7 @@ func (m *DBModel) GetDisDiffSp() ([]*Signal, error) {
 	return signals, nil
 }
 
-// Get returns all zas_tr_rez_pgd.zas_pd_kk_v and error, if any
+// Get returns all pgd.zas_pd_kk_v and error, if any
 func (m *DBModel) GetMalfunctionIn() ([]*MalfunctionIn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -189,7 +189,7 @@ func (m *DBModel) GetMalfunctionIn() ([]*MalfunctionIn, error) {
 	return ms, nil
 }
 
-// Get returns all zas_tr_rez_pgd.zas_pd_kk_v and error, if any
+// Get returns all ddn.s_rapu and error, if any
 func (m *DBModel) GetAPU() ([]*Apu, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -226,7 +226,7 @@ func (m *DBModel) GetAPU() ([]*Apu, error) {
 	return ms, nil
 }
 
-// Get returns all zas_tr_rez_dis_all_v and error, if any
+// Get returns all zas_dv_pres_all_v and error, if any
 func (m *DBModel) GetOCDV() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -247,6 +247,497 @@ func (m *DBModel) GetOCDV() ([]*Signal, error) {
 		var signal Signal
 		err := rows.Scan(
 			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_tr_glprs_all_v and error, if any
+func (m *DBModel) GetOCTR12() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_tr_glprs_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_tr_rez_prs_all_v and error, if any
+func (m *DBModel) GetOCTRR() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_tr_rez_prs_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_spp_prs_all_v and error, if any
+func (m *DBModel) GetOCSP() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_spp_prs_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_dv_zmsp_all_v and error, if any
+func (m *DBModel) GetEarthfaultOCDV() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_dv_zmsp_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_tr_glzms_all_v and error, if any
+func (m *DBModel) GetEarthfaultOCTR() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_tr_glzms_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_spp_zms_all_v and error, if any
+func (m *DBModel) GetEarthfaultOCSP() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_spp_zms_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_dv_uzms_all_v and error, if any
+func (m *DBModel) GetDirEarthfaultOC() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_dv_uzms_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all ZAS_DV_TELE_ALL_V and error, if any
+func (m *DBModel) GetTPSendRcdv() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from ZAS_DV_TELE_ALL_V
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_prek_all_v and error, if any
+func (m *DBModel) GetCircuitbreaker() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_prek_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_jps_all_v and error, if any
+func (m *DBModel) GetBBPBFtrip() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_jps_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_tr_neel_all_v and error, if any
+func (m *DBModel) GetNonElectrical() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_tr_neel_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_sab_sbr_all_v and error, if any
+func (m *DBModel) GetBBPBBtrip() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_sab_sbr_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all zas_sab_opr_all_v and error, if any
+func (m *DBModel) GetBFtrip() ([]*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_sab_opr_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*Signal
+
+	for rows.Next() {
+		var signal Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
+// Get returns all weather conditions and error, if any
+func (m *DBModel) GetWeatherConditions() ([]*WeatherConditions, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, sifra, naziv, status from DDN.S_VREM_USL
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*WeatherConditions
+
+	for rows.Next() {
+		var signal WeatherConditions
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Code,
 			&signal.Name,
 			&signal.Status,
 		)
