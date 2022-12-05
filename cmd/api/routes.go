@@ -67,6 +67,7 @@ func (app *application) routes() http.Handler {
 	mux.Get("/overhead_lines", app.getOHL)
 	mux.Get("/power_cables", app.getPowerCables)
 	mux.Get("/substations", app.getSubstations)
+	mux.Get("/feeders", app.getFeeders)
 
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(app.authRequired)

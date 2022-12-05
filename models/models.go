@@ -126,6 +126,47 @@ type Substation struct {
 	OrgName         string `json:"org_name"`
 }
 
+type Feeder struct {
+	ID                 int    `json:"tis_id_feeder"`
+	IpsIdFeeder        string `json:"ips_id_feeder"`
+	SapIdFeeder        string `json:"sap_id_feeder"`
+	TisIdSub           int    `json:"tis_id_substation"`
+	IpsIdSub           string `json:"ips_id_substation"`
+	SapIdSub           string `json:"sap_id_substation"`
+	NameSub            string `json:"name_substation"`
+	IdNN               int    `json:"id_voltage_level"`
+	NNName             string `json:"name_voltage_level"`
+	FeederNumber       string `json:"feeder_number"`
+	FeederName         string `json:"feeder_name"`
+	FeederCategoryName string `json:"feeder_category_name"`
+	CategoryId         string `json:"category_id"`
+	CategoryName       string `json:"category_name"`
+	FeederFunId        string `json:"feeder_fun_id"`
+	FeederFunName      string `json:"feeder_fun_name"`
+	Equipped           string `json:"equipped"`
+	Active             string `json:"active"`
+	Completely         string `json:"completely"`
+	FeederType         string `json:"feeder_type"`
+}
+
+type ProtectionDevice struct {
+	ID           int    `json:"tis_id_prd"`
+	IpsIdDV      string `json:"ips_id_prd"`
+	TisIdFeeder  int    `json:"tis_id_feeder"`
+	IpsIdFeeder  string `json:"ips_id_feeder"`
+	SapIdFFeeder string `json:"sap_id_feeder"`
+	Manufacturer string `json:"manufacturer"`
+	Type         string `json:"type"`
+	TypeOfEqu    int    `json:"type_of_equ"`
+	Indicator    string `json:"indicator"`
+	Technology   string `json:"tehnology"`
+	StatusIPS    string `json:"status_ips"`
+	Status       string `json:"status"`
+	SerialNumber string `json:"serial_number"`
+	DeviceTag    string `json:"device_tag"`
+	APU          string `json:"apu"`
+}
+
 // User is the type for users
 type User struct {
 	ID       int

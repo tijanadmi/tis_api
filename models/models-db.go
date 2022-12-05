@@ -925,6 +925,61 @@ func (m *DBModel) GetSubstations() ([]*Substation, error) {
 	return subs, nil
 }
 
+// Get returns all feeders and error, if any
+func (m *DBModel) GetFeeders() ([]*Feeder, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID_POLJA,IPS_ID_POLJA,SAP_ID_POLJA,TIS_ID_TRAFOSTANICE,IPS_ID_TRAFOSTANICE,SAP_ID_TRAFOSTANICE,NAZIV_TRAFOSTANICE,
+			  NN_ID,NN_NAZIV,BROJ_POLJA,NAZIV_POLJA,OPIS_PO_KATEGORIZACIJI,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),COALESCE(to_char(FUNKCIJA_POLJA_ID), ''),COALESCE(FUNKCIJA_POLJA, ''),
+			  OPREM,AKTNE,POTPUN,TIP_POLJA
+ 	          from synsoft_polja_a
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var feeds []*Feeder
+
+	for rows.Next() {
+		var feed Feeder
+		err := rows.Scan(
+			&feed.ID,
+			&feed.IpsIdFeeder,
+			&feed.SapIdFeeder,
+			&feed.TisIdSub,
+			&feed.IpsIdSub,
+			&feed.SapIdSub,
+			&feed.NameSub,
+			&feed.IdNN,
+			&feed.NNName,
+			&feed.FeederNumber,
+			&feed.FeederName,
+			&feed.FeederCategoryName,
+			&feed.CategoryId,
+			&feed.CategoryName,
+			&feed.FeederFunId,
+			&feed.FeederFunName,
+			&feed.Equipped,
+			&feed.Active,
+			&feed.Completely,
+			&feed.FeederType,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		feeds = append(feeds, &feed)
+	}
+
+	return feeds, nil
+}
+
 // Authenticate authenticates a user
 func (m *DBModel) Authenticate(username, testPassword string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

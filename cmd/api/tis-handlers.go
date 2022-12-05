@@ -321,6 +321,19 @@ func (app *application) getSubstations(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getFeeders(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetFeeders()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload
