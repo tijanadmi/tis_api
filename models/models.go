@@ -40,11 +40,60 @@ type Apu struct {
 	Status    string `json:"status"`
 }
 
-type WeatherConditions struct {
+type GroupOfCause struct {
+	ID        int    `json:"id"`
+	Code      string `json:"code"`
+	Name      string `json:"name"`
+	ShortName string `json:"short_name"`
+	Status    string `json:"status"`
+	DDNCode   string `json:"ddn_code"`
+	Sort      int    `json:"sort"`
+}
+
+type Cause struct {
+	ID           int    `json:"id"`
+	GroupCauseId int    `json:"group_cause_id"`
+	Code         string `json:"code"`
+	Name         string `json:"name"`
+	ShortName    string `json:"short_name"`
+	Status       string `json:"status"`
+	Sort         int    `json:"sort"`
+}
+
+type GroupOfReason struct {
+	ID        int    `json:"id"`
+	Code      string `json:"code"`
+	Name      string `json:"name"`
+	ShortName string `json:"short_name"`
+	Status    string `json:"status"`
+	Sort      int    `json:"sort"`
+}
+
+type Reason struct {
+	ID            int    `json:"id"`
+	GroupReasonId int    `json:"group_reason_id"`
+	Code          string `json:"code"`
+	Name          string `json:"name"`
+	ShortName     string `json:"short_name"`
+	Status        string `json:"status"`
+	Sort          int    `json:"sort"`
+}
+
+type WeatherCondition struct {
 	ID     int    `json:"id"`
 	Code   string `json:"code"`
 	Name   string `json:"name"`
 	Status string `json:"status"`
+}
+
+type CategoryOfEvent struct {
+	ID          int    `json:"id"`
+	TypeEventId int    `json:"event_type_id"`
+	Code        string `json:"code"`
+	Name        string `json:"name"`
+	ShortName   string `json:"short_name"`
+	Status      string `json:"status"`
+	Sort        int    `json:"sort"`
 }
 
 type OverheadLine struct {
@@ -150,14 +199,14 @@ type Feeder struct {
 }
 
 type ProtectionDevice struct {
-	ID           int    `json:"tis_id_prd"`
-	IpsIdDV      string `json:"ips_id_prd"`
+	ID           int    `json:"tis_id_prt"`
+	IpsIdDV      string `json:"ips_id_prt"`
 	TisIdFeeder  int    `json:"tis_id_feeder"`
 	IpsIdFeeder  string `json:"ips_id_feeder"`
 	SapIdFFeeder string `json:"sap_id_feeder"`
 	Manufacturer string `json:"manufacturer"`
 	Type         string `json:"type"`
-	TypeOfEqu    int    `json:"type_of_equ"`
+	TypeOfEqu    string `json:"type_of_equ"`
 	Indicator    string `json:"indicator"`
 	Technology   string `json:"tehnology"`
 	StatusIPS    string `json:"status_ips"`
@@ -165,6 +214,52 @@ type ProtectionDevice struct {
 	SerialNumber string `json:"serial_number"`
 	DeviceTag    string `json:"device_tag"`
 	APU          string `json:"apu"`
+}
+
+type PowerTransformer struct {
+	ID              int    `json:"tis_id_tr"`
+	IpsIdDV         string `json:"ips_id_tr"`
+	SapIdDV         string `json:"sap_id_tr"`
+	TisIdSub        int    `json:"tis_id_substation"`
+	IpsIdSub        string `json:"ips_id_substation"`
+	SapIdSub        string `json:"sap_id_substation"`
+	NameSub         string `json:"name_substation"`
+	NameTr          string `json:"name_tr"`
+	CategoryNameTr  string `json:"category_name_tr"`
+	CategoryId      string `json:"category_id"`
+	CategoryName    string `json:"category_name"`
+	Un              string `json:"un"`
+	TisIdPrimFeeder int    `json:"tis_id_prim_feeder"`
+	IpsIdPrimFeeder string `json:"ips_id_prim_feeder"`
+	SapIdPrimFeeder string `json:"sap_id_prim_feeder"`
+	PrimFeederName  string `json:"prim_feeder_name"`
+	TisIdSec1Feeder string `json:"tis_id_sec1_feeder"`
+	IpsIdSec1Feeder string `json:"ips_id_sec1_feeder"`
+	SapIdSec1Feeder string `json:"sap_id_sec1_feeder"`
+	Sec1FeederName  string `json:"sec1_feeder_name"`
+	TisIdSec2Feeder string `json:"tis_id_sec2_feeder"`
+	IpsIdSec2Feeder string `json:"ips_id_sec2_feeder"`
+	SapIdSec2Feeder string `json:"sap_id_sec2_feeder"`
+	Sec2FeederName  string `json:"sec2_feeder_name"`
+	TisIdTerFeeder  string `json:"tis_id_ter_feeder"`
+	IpsIdTerFeeder  string `json:"ips_id_ter_feeder"`
+	SapIdTerFeeder  string `json:"sap_id_ter_feeder"`
+	TerFeederName   string `json:"ter_feeder_name"`
+}
+
+type Disconnector struct {
+	ID              int    `json:"tis_id_dis"`
+	IpsIdDs         string `json:"ips_id_dis"`
+	SapIdDs         string `json:"sap_id_dis"`
+	TisIdFeeder     int    `json:"tis_id_feeder"`
+	IpsIdFeeder     string `json:"ips_id_feeder"`
+	SapIdFeeder     string `json:"sap_id_feeder"`
+	FeederName      string `json:"feeder_name"`
+	DisCategoryName string `json:"dis_category_name"`
+	FunDisId        string `json:"fun_dis_id"`
+	FunDis          string `json:"fun_dis"`
+	CategoryId      string `json:"category_id"`
+	CategoryName    string `json:"category_name"`
 }
 
 // User is the type for users

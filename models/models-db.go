@@ -716,8 +716,167 @@ func (m *DBModel) GetBFtrip() ([]*Signal, error) {
 	return signals, nil
 }
 
+// Get returns all groups of causes and error, if any
+func (m *DBModel) GetGroupsOfCauses() ([]*GroupOfCause, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, sifra, naziv, skr, status, sif_ddn, sortr
+			  from pgi.s_gruzr
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var grcs []*GroupOfCause
+
+	for rows.Next() {
+		var grc GroupOfCause
+		err := rows.Scan(
+			&grc.ID,
+			&grc.Code,
+			&grc.Name,
+			&grc.ShortName,
+			&grc.Status,
+			&grc.DDNCode,
+			&grc.Sort,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		grcs = append(grcs, &grc)
+	}
+
+	return grcs, nil
+}
+
+// Get returns all causes and error, if any
+func (m *DBModel) GetCauses() ([]*Cause, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, id_s_gruzr, sifra, naziv, skr, status, sortr
+			  from pgi.s_uzrok
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var caus []*Cause
+
+	for rows.Next() {
+		var cau Cause
+		err := rows.Scan(
+			&cau.ID,
+			&cau.GroupCauseId,
+			&cau.Code,
+			&cau.Name,
+			&cau.ShortName,
+			&cau.Status,
+			&cau.Sort,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		caus = append(caus, &cau)
+	}
+
+	return caus, nil
+}
+
+// Get returns all groups of reasons and error, if any
+func (m *DBModel) GetGroupOfReasons() ([]*GroupOfReason, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, sifra, naziv, skr, status, sortr
+	from PGI.S_GRRAZ
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var grs []*GroupOfReason
+
+	for rows.Next() {
+		var gr GroupOfReason
+		err := rows.Scan(
+			&gr.ID,
+			&gr.Code,
+			&gr.Name,
+			&gr.ShortName,
+			&gr.Status,
+			&gr.Sort,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		grs = append(grs, &gr)
+	}
+
+	return grs, nil
+}
+
+// Get returns all  reasons and error, if any
+func (m *DBModel) GetReasons() ([]*Reason, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, id_s_grraz, sifra, naziv, skr, status, sortr
+	from pgi.s_razlog	
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var rs []*Reason
+
+	for rows.Next() {
+		var r Reason
+		err := rows.Scan(
+			&r.ID,
+			&r.GroupReasonId,
+			&r.Code,
+			&r.Name,
+			&r.ShortName,
+			&r.Status,
+			&r.Sort,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		rs = append(rs, &r)
+	}
+
+	return rs, nil
+}
+
 // Get returns all weather conditions and error, if any
-func (m *DBModel) GetWeatherConditions() ([]*WeatherConditions, error) {
+func (m *DBModel) GetWeatherConditions() ([]*WeatherCondition, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -731,10 +890,10 @@ func (m *DBModel) GetWeatherConditions() ([]*WeatherConditions, error) {
 	}
 	defer rows.Close()
 
-	var signals []*WeatherConditions
+	var signals []*WeatherCondition
 
 	for rows.Next() {
-		var signal WeatherConditions
+		var signal WeatherCondition
 		err := rows.Scan(
 			&signal.ID,
 			&signal.Code,
@@ -750,6 +909,47 @@ func (m *DBModel) GetWeatherConditions() ([]*WeatherConditions, error) {
 	}
 
 	return signals, nil
+}
+
+// Get returns all categories of events and error, if any
+func (m *DBModel) GetCategoriesOfEvents() ([]*CategoryOfEvent, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, id_s_tipd, sifra, naziv, skr, status, sortr
+			  from s_vrpd
+			  where id_s_tipd in (1,2,3)	
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ces []*CategoryOfEvent
+
+	for rows.Next() {
+		var ce CategoryOfEvent
+		err := rows.Scan(
+			&ce.ID,
+			&ce.TypeEventId,
+			&ce.Code,
+			&ce.Name,
+			&ce.ShortName,
+			&ce.Status,
+			&ce.Sort,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		ces = append(ces, &ce)
+	}
+
+	return ces, nil
 }
 
 // Get returns all weather conditions and error, if any
@@ -978,6 +1178,165 @@ func (m *DBModel) GetFeeders() ([]*Feeder, error) {
 	}
 
 	return feeds, nil
+}
+
+// Get returns all protection devices and error, if any
+func (m *DBModel) GetProtectionDevices() ([]*ProtectionDevice, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID_OPREME, IPS_ID_OPREME, TIS_ID_POLJA, IPS_ID_POLJA, SAP_ID_POLJA, PROIZVODJAC, TIP, VRSTA_OPR, IND_GL,
+			  TEHNOLOGIJA, STATUS_IPS, STATUS, SERIJSKI_BR, OZNAKA_URE, APU_URE
+ 	          from SYNSOFT_ZASTITNA_OPR
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prts []*ProtectionDevice
+
+	for rows.Next() {
+		var prt ProtectionDevice
+		err := rows.Scan(
+			&prt.ID,
+			&prt.IpsIdDV,
+			&prt.TisIdFeeder,
+			&prt.IpsIdFeeder,
+			&prt.SapIdFFeeder,
+			&prt.Manufacturer,
+			&prt.Type,
+			&prt.TypeOfEqu,
+			&prt.Indicator,
+			&prt.Technology,
+			&prt.StatusIPS,
+			&prt.Status,
+			&prt.SerialNumber,
+			&prt.DeviceTag,
+			&prt.APU,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prts = append(prts, &prt)
+	}
+
+	return prts, nil
+}
+
+// Get returns all power transformers and error, if any
+func (m *DBModel) GetPowerTransformers() ([]*PowerTransformer, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID_TRANSFORMATORA, IPS_ID_TRANSFORMATORA, SAP_ID_TRANSFORMATORA, TIS_ID_TRAFOSTANICE, IPS_ID_TRAFOSTANICE, SAP_ID_TRAFOSTANICE, NAZIV_TRAFOSTANICE,
+	NAZIV_TRANSFORMATORA, OPIS_TRANSF_PO_KATEGOR, COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''), PRENOSNI_ODNOS, TIS_ID_VN_POLJA, IPD_ID_VN_POLA, SAP_ID_VN_POLA, NAZIV_VN_POLJA,
+	COALESCE(to_char(TIS_ID_SN1_POLJA), ''), COALESCE(IPD_ID_SN1_POLA, ''), COALESCE(SAP_ID_SN1_POLA, ''), COALESCE(NAZIV_SN1_POLJA, ''), COALESCE(to_char(TIS_ID_SN2_POLJA), ''), COALESCE(IPD_ID_SN2_POLA, ''), COALESCE(SAP_ID_SN2_POLA, ''), COALESCE(NAZIV_SN2_POLJA, ''), COALESCE(to_char(TIS_ID_T_POLJA), ''),
+	COALESCE(IPD_ID_T_POLA, ''), COALESCE(SAP_ID_T_POLA, ''), COALESCE(NAZIV_T_POLJA, '')
+ 	          from SYNSOFT_TR_A
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var trs []*PowerTransformer
+
+	for rows.Next() {
+		var tr PowerTransformer
+		err := rows.Scan(
+			&tr.ID,
+			&tr.IpsIdDV,
+			&tr.SapIdDV,
+			&tr.TisIdSub,
+			&tr.IpsIdSub,
+			&tr.SapIdSub,
+			&tr.NameSub,
+			&tr.NameTr,
+			&tr.CategoryNameTr,
+			&tr.CategoryId,
+			&tr.CategoryName,
+			&tr.Un,
+			&tr.TisIdPrimFeeder,
+			&tr.IpsIdPrimFeeder,
+			&tr.SapIdPrimFeeder,
+			&tr.PrimFeederName,
+			&tr.TisIdSec1Feeder,
+			&tr.IpsIdSec1Feeder,
+			&tr.SapIdSec1Feeder,
+			&tr.Sec1FeederName,
+			&tr.TisIdSec2Feeder,
+			&tr.IpsIdSec2Feeder,
+			&tr.SapIdSec2Feeder,
+			&tr.Sec2FeederName,
+			&tr.TisIdTerFeeder,
+			&tr.IpsIdTerFeeder,
+			&tr.SapIdTerFeeder,
+			&tr.TerFeederName,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		trs = append(trs, &tr)
+	}
+
+	return trs, nil
+}
+
+// Get returns all disconnectors and error, if any
+func (m *DBModel) GetDisconnectors() ([]*Disconnector, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select TIS_ID_RASTAVLJACA, IPS_ID_RASTAVLJACA, SAP_ID_RASTAVLJACA, TIS_ID_POLJA, IPS_ID_POLJA, SAP_ID_POLJA, NAZIV_POLJA, OPIS_PO_KATEGORIZACIJI,
+			  COALESCE(to_char(ID_FUN_RAS), ''), COALESCE(FUNKCIJA_RAST_U_POLJU, ''), COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, '')
+		     from synsoft_rastavljaci_a
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var diss []*Disconnector
+
+	for rows.Next() {
+		var dis Disconnector
+		err := rows.Scan(
+			&dis.ID,
+			&dis.IpsIdDs,
+			&dis.SapIdDs,
+			&dis.TisIdFeeder,
+			&dis.IpsIdFeeder,
+			&dis.SapIdFeeder,
+			&dis.FeederName,
+			&dis.DisCategoryName,
+			&dis.FunDisId,
+			&dis.FunDis,
+			&dis.CategoryId,
+			&dis.CategoryName,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		diss = append(diss, &dis)
+	}
+
+	return diss, nil
 }
 
 // Authenticate authenticates a user

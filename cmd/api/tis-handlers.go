@@ -269,8 +269,73 @@ func (app *application) getBFtrip(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getGroupsOfCauses(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetGroupsOfCauses()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getCauses(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetCauses()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getGroupOfReasons(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetGroupOfReasons()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getReasons(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetReasons()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getWeatherConditions(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetWeatherConditions()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getCategoriesOfEvents(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetCategoriesOfEvents()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -323,6 +388,45 @@ func (app *application) getSubstations(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) getFeeders(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetFeeders()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getProtectionDevices(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetProtectionDevices()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPowerTransformers(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetPowerTransformers()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getDisconnectors(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetDisconnectors()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
