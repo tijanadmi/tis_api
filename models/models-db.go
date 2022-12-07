@@ -14,6 +14,31 @@ type DBModel struct {
 	DB *sql.DB
 }
 
+func (m *DBModel) OneSignal(id int) (*Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, naziv, status
+			  from zsi_info
+			  where id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var signal Signal
+
+	err := row.Scan(
+		&signal.ID,
+		&signal.Name,
+		&signal.Status,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &signal, err
+}
+
 // Get returns all zas_dv_didf_all_v and error, if any
 func (m *DBModel) GetDvDidf() ([]*Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -189,6 +214,31 @@ func (m *DBModel) GetMalfunctionIn() ([]*MalfunctionIn, error) {
 	return ms, nil
 }
 
+func (m *DBModel) OneMalfunctionIn(id int) (*MalfunctionIn, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id_pd_kk,naziv_edd,RED
+			  from zas_pd_kk_v
+			  where id_pd_kk=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var mf MalfunctionIn
+
+	err := row.Scan(
+		&mf.ID,
+		&mf.Name,
+		&mf.Order,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &mf, err
+}
+
 // Get returns all ddn.s_rapu and error, if any
 func (m *DBModel) GetAPU() ([]*Apu, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -224,6 +274,33 @@ func (m *DBModel) GetAPU() ([]*Apu, error) {
 	}
 
 	return ms, nil
+}
+
+func (m *DBModel) OneAPU(id int) (*Apu, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id,naziv,SKR_NAZ,SIFRA, status
+			  from s_rapu
+			  where id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var apu Apu
+
+	err := row.Scan(
+		&apu.ID,
+		&apu.Name,
+		&apu.ShortName,
+		&apu.Code,
+		&apu.Status,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &apu, err
 }
 
 // Get returns all zas_dv_pres_all_v and error, if any
@@ -756,13 +833,43 @@ func (m *DBModel) GetGroupsOfCauses() ([]*GroupOfCause, error) {
 	return grcs, nil
 }
 
+func (m *DBModel) OneGroupOfCauses(id int) (*GroupOfCause, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, sifra, naziv, skr, status, sif_ddn, sortr
+			  from pgi.s_gruzr	
+			  where id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var grc GroupOfCause
+
+	err := row.Scan(
+		&grc.ID,
+		&grc.Code,
+		&grc.Name,
+		&grc.ShortName,
+		&grc.Status,
+		&grc.DDNCode,
+		&grc.Sort,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &grc, err
+}
+
 // Get returns all causes and error, if any
 func (m *DBModel) GetCauses() ([]*Cause, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select id, id_s_gruzr, sifra, naziv, skr, status, sortr
-			  from pgi.s_uzrok
+	query := `select u.id, u.id_s_gruzr, u.sifra, u.naziv, u.skr, u.status, u.sortr, gu.id, gu.sifra, gu.naziv, gu.skr, gu.status, gu.sif_ddn, gu.sortr
+			  from pgi.s_uzrok u, pgi.s_gruzr gu
+			  where u.id_s_gruzr=gu.id
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -784,6 +891,13 @@ func (m *DBModel) GetCauses() ([]*Cause, error) {
 			&cau.ShortName,
 			&cau.Status,
 			&cau.Sort,
+			&cau.GroupOfCause.ID,
+			&cau.GroupOfCause.Code,
+			&cau.GroupOfCause.Name,
+			&cau.GroupOfCause.ShortName,
+			&cau.GroupOfCause.Status,
+			&cau.GroupOfCause.DDNCode,
+			&cau.GroupOfCause.Sort,
 		)
 
 		if err != nil {
@@ -794,6 +908,43 @@ func (m *DBModel) GetCauses() ([]*Cause, error) {
 	}
 
 	return caus, nil
+}
+
+func (m *DBModel) OneCause(id int) (*Cause, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select u.id, u.id_s_gruzr, u.sifra, u.naziv, u.skr, u.status, u.sortr, gu.id, gu.sifra, gu.naziv, gu.skr, gu.status, gu.sif_ddn, gu.sortr
+			  from pgi.s_uzrok u, pgi.s_gruzr gu
+			  where u.id_s_gruzr=gu.id
+			  and u.id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var cau Cause
+
+	err := row.Scan(
+		&cau.ID,
+		&cau.GroupCauseId,
+		&cau.Code,
+		&cau.Name,
+		&cau.ShortName,
+		&cau.Status,
+		&cau.Sort,
+		&cau.GroupOfCause.ID,
+		&cau.GroupOfCause.Code,
+		&cau.GroupOfCause.Name,
+		&cau.GroupOfCause.ShortName,
+		&cau.GroupOfCause.Status,
+		&cau.GroupOfCause.DDNCode,
+		&cau.GroupOfCause.Sort,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &cau, err
 }
 
 // Get returns all groups of reasons and error, if any
@@ -835,13 +986,42 @@ func (m *DBModel) GetGroupOfReasons() ([]*GroupOfReason, error) {
 	return grs, nil
 }
 
+func (m *DBModel) OneGroupOfReasons(id int) (*GroupOfReason, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, sifra, naziv, skr, status, sortr
+	          from PGI.S_GRRAZ		
+			  where id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var gr GroupOfReason
+
+	err := row.Scan(
+		&gr.ID,
+		&gr.Code,
+		&gr.Name,
+		&gr.ShortName,
+		&gr.Status,
+		&gr.Sort,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &gr, err
+}
+
 // Get returns all  reasons and error, if any
 func (m *DBModel) GetReasons() ([]*Reason, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select id, id_s_grraz, sifra, naziv, skr, status, sortr
-	from pgi.s_razlog	
+	query := `select r.id, r.id_s_grraz, r.sifra, r.naziv, r.skr, r.status, r.sortr,gr.id, gr.sifra, gr.naziv, gr.skr, gr.status, gr.sortr
+			  from pgi.s_razlog r, PGI.S_GRRAZ gr
+		 	  where r.id_s_grraz=gr.id	
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -863,6 +1043,12 @@ func (m *DBModel) GetReasons() ([]*Reason, error) {
 			&r.ShortName,
 			&r.Status,
 			&r.Sort,
+			&r.GroupOfReason.ID,
+			&r.GroupOfReason.Code,
+			&r.GroupOfReason.Name,
+			&r.GroupOfReason.ShortName,
+			&r.GroupOfReason.Status,
+			&r.GroupOfReason.Sort,
 		)
 
 		if err != nil {
@@ -873,6 +1059,42 @@ func (m *DBModel) GetReasons() ([]*Reason, error) {
 	}
 
 	return rs, nil
+}
+
+func (m *DBModel) OneReason(id int) (*Reason, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select r.id, r.id_s_grraz, r.sifra, r.naziv, r.skr, r.status, r.sortr,gr.id, gr.sifra, gr.naziv, gr.skr, gr.status, gr.sortr
+			  from pgi.s_razlog r, PGI.S_GRRAZ gr
+	 		  where r.id_s_grraz=gr.id
+			  and r.id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var r Reason
+
+	err := row.Scan(
+		&r.ID,
+		&r.GroupReasonId,
+		&r.Code,
+		&r.Name,
+		&r.ShortName,
+		&r.Status,
+		&r.Sort,
+		&r.GroupOfReason.ID,
+		&r.GroupOfReason.Code,
+		&r.GroupOfReason.Name,
+		&r.GroupOfReason.ShortName,
+		&r.GroupOfReason.Status,
+		&r.GroupOfReason.Sort,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &r, err
 }
 
 // Get returns all weather conditions and error, if any
@@ -909,6 +1131,32 @@ func (m *DBModel) GetWeatherConditions() ([]*WeatherCondition, error) {
 	}
 
 	return signals, nil
+}
+
+func (m *DBModel) OneWeatherCondition(id int) (*WeatherCondition, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, sifra, naziv, status
+			  from DDN.S_VREM_USL			
+			  where id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var signal WeatherCondition
+
+	err := row.Scan(
+		&signal.ID,
+		&signal.Code,
+		&signal.Name,
+		&signal.Status,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &signal, err
 }
 
 // Get returns all categories of events and error, if any
@@ -950,6 +1198,35 @@ func (m *DBModel) GetCategoriesOfEvents() ([]*CategoryOfEvent, error) {
 	}
 
 	return ces, nil
+}
+
+func (m *DBModel) OneCategoryOfEvents(id int) (*CategoryOfEvent, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select id, id_s_tipd, sifra, naziv, skr, status, sortr
+			  from s_vrpd				
+			  where id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	var ce CategoryOfEvent
+
+	err := row.Scan(
+		&ce.ID,
+		&ce.TypeEventId,
+		&ce.Code,
+		&ce.Name,
+		&ce.ShortName,
+		&ce.Status,
+		&ce.Sort,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &ce, err
 }
 
 // Get returns all weather conditions and error, if any

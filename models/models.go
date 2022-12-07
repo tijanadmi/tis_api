@@ -52,12 +52,13 @@ type GroupOfCause struct {
 
 type Cause struct {
 	ID           int    `json:"id"`
-	GroupCauseId int    `json:"group_cause_id"`
+	GroupCauseId int    `json:"-"`
 	Code         string `json:"code"`
 	Name         string `json:"name"`
 	ShortName    string `json:"short_name"`
 	Status       string `json:"status"`
 	Sort         int    `json:"sort"`
+	GroupOfCause GroupOfCause
 }
 
 type GroupOfReason struct {
@@ -71,12 +72,13 @@ type GroupOfReason struct {
 
 type Reason struct {
 	ID            int    `json:"id"`
-	GroupReasonId int    `json:"group_reason_id"`
+	GroupReasonId int    `json:"-"`
 	Code          string `json:"code"`
 	Name          string `json:"name"`
 	ShortName     string `json:"short_name"`
 	Status        string `json:"status"`
 	Sort          int    `json:"sort"`
+	GroupOfReason GroupOfReason
 }
 
 type WeatherCondition struct {

@@ -6,8 +6,31 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v4"
 )
+
+func (app *application) getOneSignal(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneSignal(signalID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
 
 func (app *application) getDvDidf(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetDvDidf()
@@ -74,8 +97,52 @@ func (app *application) getMalfunctionIn(w http.ResponseWriter, r *http.Request)
 	}
 }
 
+func (app *application) getOneMalfunctionIn(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneMalfunctionIn(signalID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getAPU(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetAPU()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOneAPU(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneAPU(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -282,8 +349,52 @@ func (app *application) getGroupsOfCauses(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (app *application) getOneGroupOfCauses(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneGroupOfCauses(signalID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getCauses(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetCauses()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOneCause(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneCause(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -308,8 +419,52 @@ func (app *application) getGroupOfReasons(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (app *application) getOneGroupOfReason(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneGroupOfReasons(signalID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getReasons(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetReasons()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOneReason(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneReason(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -334,8 +489,52 @@ func (app *application) getWeatherConditions(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+func (app *application) getOneWeatherCondition(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneWeatherCondition(signalID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getCategoriesOfEvents(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.models.DB.GetCategoriesOfEvents()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOneCategoryOfEvents(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.models.DB.OneCategoryOfEvents(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
