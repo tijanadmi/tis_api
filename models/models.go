@@ -262,6 +262,18 @@ type Disconnector struct {
 	CategoryName    string `json:"category_name"`
 }
 
+type WorkPermission struct {
+	Code               int    `json:"code"`
+	PerNum1            string `json:"per_num1"`
+	PerNum2            string `json:"per_num2"`
+	ScheduledTimeStart string `json:"scheduled_time_start"`
+	ScheduledDateStart string `json:"scheduled_date_start"`
+	Note               string `json:"note"`
+	Status             string `json:"status"`
+	EndTime            string `json:"ens_time"`
+	EndDate            string `json:"end_date"`
+}
+
 // User is the type for users
 type User struct {
 	ID       int

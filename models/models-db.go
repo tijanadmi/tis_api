@@ -1339,6 +1339,49 @@ func (m *DBModel) GetDisconnectors() ([]*Disconnector, error) {
 	return diss, nil
 }
 
+// Get returns all permissions and error, if any
+func (m *DBModel) GetWorkPermissions() ([]*WorkPermission, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select RBR, COALESCE(to_char(BROJ_RAD1), ''), COALESCE(to_char(BROJ_RAD2), ''), COALESCE(PL_VREME_OD, ''), 
+			  COALESCE(to_char(PL_DATUM_OD,'dd.mm.yyyy'), ''), COALESCE(NAPOMENA, ''), COALESCE(STATUS, ''), COALESCE(ZAV_VREME, ''), COALESCE(to_char(ZAV_DATUM,'dd.mm.yyyy'), '')
+			  from synsoft_dozvole
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*WorkPermission
+
+	for rows.Next() {
+		var prm WorkPermission
+		err := rows.Scan(
+			&prm.Code,
+			&prm.PerNum1,
+			&prm.PerNum2,
+			&prm.ScheduledTimeStart,
+			&prm.ScheduledDateStart,
+			&prm.Note,
+			&prm.Status,
+			&prm.EndTime,
+			&prm.EndDate,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
 // Authenticate authenticates a user
 func (m *DBModel) Authenticate(username, testPassword string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

@@ -76,6 +76,7 @@ func (app *application) routes() http.Handler {
 	mux.Get("/protection_devices", app.getProtectionDevices)
 	mux.Get("/power_transformers", app.getPowerTransformers)
 	mux.Get("/disconnectors", app.getDisconnectors)
+	mux.Get("/work_permissions", app.getWorkPermissions)
 
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(app.authRequired)
