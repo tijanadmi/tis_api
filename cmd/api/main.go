@@ -34,9 +34,9 @@ type AppStatus struct {
 }
 
 type application struct {
-	config config
-	logger *log.Logger
-	models models.Models
+	config       config
+	logger       *log.Logger
+	models       models.Models
 	Domain       string
 	auth         Auth
 	JWTSecret    string
@@ -71,22 +71,22 @@ func main() {
 
 	logger.Println("Connected to database", cfg.port)
 
-	
 	app = application{
 		config: cfg,
 		logger: logger,
 		models: models.NewModels(db),
-		auth : Auth{
-			Issuer: app.JWTIssuer,
-			Audience: app.JWTAudience,
-			Secret: app.JWTSecret,
-			TokenExpiry: time.Minute * 15,
+		auth: Auth{
+			Issuer:        app.JWTIssuer,
+			Audience:      app.JWTAudience,
+			Secret:        app.JWTSecret,
+			TokenExpiry:   time.Minute * 15,
 			RefreshExpiry: time.Hour * 24,
-			CookiePath: "/",
-			CookieName: "__Host-refresh_token",
-			CookieDomain: app.CookieDomain,
+			CookiePath:    "/",
+			CookieName:    "__Host-refresh_token",
+			CookieDomain:  app.CookieDomain,
 		},
 	}
+	logger.Println("Audience and Issuer", app.JWTAudience, app.JWTIssuer)
 
 	/*app.auth = Auth{
 		Issuer: app.JWTIssuer,
