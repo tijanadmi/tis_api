@@ -35,7 +35,7 @@ func (app *application) Signin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var claims jwt.Claims
-	claims.Subject = fmt.Sprint("validUser.ID")
+	claims.Subject = "validUser.ID"
 	claims.Issued = jwt.NewNumericTime(time.Now())
 	claims.NotBefore = jwt.NewNumericTime(time.Now())
 	claims.Expires = jwt.NewNumericTime(time.Now().Add(24 * time.Hour))
@@ -48,9 +48,6 @@ func (app *application) Signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.writeJSON(w, http.StatusOK, string(jwtBytes)/*, "reponse"*/)
+	app.writeJSON(w, http.StatusOK, string(jwtBytes) /*, "reponse"*/)
 
 }
-
-
-

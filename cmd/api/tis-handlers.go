@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -650,6 +649,154 @@ func (app *application) getWorkPermissions(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) getWeather(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+	weatherData, err := app.models.DB.GetWeather(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getWeatherForecast(w http.ResponseWriter, r *http.Request) {
+
+	weatherData, err := app.models.DB.GetWeatherForecast()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getWeatherHistory(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetWeatherHistory(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPermissions1(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetPermissions1(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPermissions23(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetPermissions23(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getRequests1(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetRequests1(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getRequests23(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetRequests23(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOutages(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetOutages(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getExclusions(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetExclusions(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
+	year := chi.URLParam(r, "year")
+
+	weatherData, err := app.models.DB.GetPlans(year)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload
@@ -678,11 +825,18 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var roles []string
+	for _, r := range user.UserRole {
+		roles = append(roles, r.RoleCode)
+	}
+
+	//fmt.Println(roles)
 	// create a jwt user
 	u := jwtUser{
 		ID:        user.ID,
 		FirstName: user.Username,
 		LastName:  user.Username,
+		Roles:     roles,
 	}
 
 	// generate tokens
@@ -692,7 +846,7 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(tokens.Token)
+	//log.Println(tokens.Token)
 
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)

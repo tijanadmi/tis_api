@@ -22,9 +22,10 @@ type Auth struct {
 }
 
 type jwtUser struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
+	ID        int      `json:"id"`
+	FirstName string   `json:"first_name"`
+	LastName  string   `json:"last_name"`
+	Roles     []string `json:"-"`
 }
 
 type TokenPairs struct {
@@ -33,6 +34,7 @@ type TokenPairs struct {
 }
 
 type Claims struct {
+	Roles []string `json:"roles"`
 	jwt.RegisteredClaims
 }
 
@@ -42,8 +44,9 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 
 	// Set the claims
 	claims := token.Claims.(jwt.MapClaims)
-	claims["name"] = fmt.Sprintf("%s", user.FirstName)
+	claims["name"] = user.FirstName
 	claims["sub"] = fmt.Sprint(user.ID)
+	claims["roles"] = user.Roles
 	claims["aud"] = j.Audience
 	claims["iss"] = j.Issuer
 	claims["iat"] = time.Now().UTC().Unix()
@@ -111,12 +114,10 @@ func (j *Auth) GetExpiredRefreshCookie() *http.Cookie {
 	}
 }
 
-func (j *Auth) GetTokenFromHeaderAndVerify(w http.ResponseWriter, r *http.Request) (string, *Claims, error) {
+func (j *Auth) GetTokenFromHeaderAndVerify(w http.ResponseWriter, r *http.Request, role string) (string, *Claims, error) {
 	w.Header().Add("Vary", "Authorization")
-
 	// get auth header
 	authHeader := r.Header.Get("Authorization")
-
 	// sanity check
 	if authHeader == "" {
 		return "", nil, errors.New("no auth header")
@@ -130,7 +131,7 @@ func (j *Auth) GetTokenFromHeaderAndVerify(w http.ResponseWriter, r *http.Reques
 
 	// check to see if we have the word Bearer
 	if headerParts[0] != "Bearer" {
-		return "", nil, errors.New("invalid auth header")
+		return "", nil, errors.New("invalid auth header, no Bearer")
 	}
 
 	token := headerParts[1]
@@ -155,6 +156,16 @@ func (j *Auth) GetTokenFromHeaderAndVerify(w http.ResponseWriter, r *http.Reques
 
 	if claims.Issuer != j.Issuer {
 		return "", nil, errors.New("invalid issuer")
+	}
+	inSlice := false
+	for i := 0; i < len(claims.Roles); i++ {
+
+		if claims.Roles[i] == role {
+			inSlice = true
+		}
+	}
+	if !inSlice {
+		return "", nil, errors.New("invalid role")
 	}
 
 	return token, claims, nil
