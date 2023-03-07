@@ -649,6 +649,19 @@ func (app *application) getWorkPermissions(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) getWorkInEENetwork(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.models.DB.GetWorkInEENetwork()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getWeather(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 	weatherData, err := app.models.DB.GetWeather(year)

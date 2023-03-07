@@ -1659,6 +1659,48 @@ func (m *DBModel) GetWorkPermissions() ([]*WorkPermission, error) {
 	return prms, nil
 }
 
+// Get returns all permissions and error, if any
+func (m *DBModel) GetWorkInEENetwork() ([]*WorkInEENetwork, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select  COALESCE(to_char(MAX_RB), ''), COALESCE(to_char(BROJ), ''),  COALESCE(EE_ELEMENTI, ''), COALESCE(MESTO_RADA, ''), 
+    		COALESCE(OPIS, ''), COALESCE(STATUS, ''), COALESCE(VREME, '') , COALESCE(VEZA, '')
+			from SYNSOFT_RADOVI_U_MREZI
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*WorkInEENetwork
+
+	for rows.Next() {
+		var prm WorkInEENetwork
+		err := rows.Scan(
+			&prm.MaxNum,
+			&prm.Num,
+			&prm.EEElements,
+			&prm.Workplace,
+			&prm.Description,
+			&prm.Status,
+			&prm.Time,
+			&prm.Link,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
 func (m *DBModel) GetWeather(year string) ([]*WeatherData, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

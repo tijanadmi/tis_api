@@ -276,6 +276,17 @@ type WorkPermission struct {
 	EndDate            string `json:"end_date"`
 }
 
+type WorkInEENetwork struct {
+	MaxNum      string `json:"max_num"`
+	Num         string `json:"number"`
+	EEElements  string `json:"ee_elements"`
+	Workplace   string `json:"workplace"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
+	Time        string `json:"time"`
+	Link        string `json:"link"`
+}
+
 type PiPiDDN struct {
 	Datizv         string `json:"datizv"`
 	IdSMrc         string `json:"id_s_mrc"`
@@ -516,7 +527,6 @@ type Plan struct {
 	DatumZav  string `json:"datum_zav"`
 	Id        string `json:"id"`
 }
-
 
 // User is the type for users
 type User struct {
