@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -2607,4 +2608,38 @@ func (m *DBModel) GetUserByID(id int) (*User, error) {
 	user.UserRole = roles
 
 	return &user, nil
+}
+
+func (m *DBModel) InsertPiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `call  pi_pi_ddn_iskljucenje_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15)`
+    //var int status
+	//var string message
+	_, err :=m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.TipMan,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.IdSGrraz,
+		pipiddn.IdSRazlog,
+		pipiddn.ManTekst,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.SynsoftId,
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }
