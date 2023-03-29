@@ -415,10 +415,10 @@ type PiPiDDN struct {
 */
 type PiPiDDNIsklj struct {
 	DatSmene  string `json:"dat_smene"`
-	IdSMrc    string `json:"-"`
+	IdSMrc    int    `json:"id_s_mrc"`
 	TipMan    string `json:"tip_man"`
-	IdTipob   string `json:"id_tipob"`
-	ObId      string `json:"ob_id"`
+	IdTipob   int    `json:"id_tipob"`
+	ObId      int    `json:"ob_id"`
 	TrafoId   string `json:"trafo_id"`
 	Vrepoc    string `json:"vrepoc"`
 	Vrezav    string `json:"vrezav"`

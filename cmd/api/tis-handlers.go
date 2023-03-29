@@ -1,12 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/tijanadmi/tis-api/models"
 )
 
 func (app *application) getOneSignal(w http.ResponseWriter, r *http.Request) {
@@ -809,6 +812,33 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+/***** start PiPiDDN api  ****/
+
+func (app *application) editPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIsklj
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+	fmt.Printf("Izgleda da je TipMan %s\n", payload.TipMan)
+	err = app.models.DB.InsertPiPiDDNIsklj(payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, "Poruka message")
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+/*** end PiPiDDN api  ***/
 
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
