@@ -287,33 +287,23 @@ type WorkInEENetwork struct {
 	Link        string `json:"link"`
 }
 
-type PiPiDDN struct {
+type PiPiDDNIspad struct {
 	DatSmene       string `json:"dat_smene"`
-	TipSmene       string `json:"tip_smene"`
-	IdSMrc         string `json:"-"`
-	ID_S_TIPD      string `json:"id_s_tipd"`
+	IdSMrc         int    `json:"id_s_mrc"`
+	IdSTipd        string `json:"id_s_tipd"`
 	IdSVrpd        string `json:"id_s_vrpd"`
-	IdTipob        string `json:"id_tipob"`
-	ObId           string `json:"ob_id"`
+	IdRadAPU        string `json:"id_s_rpu"`
+	IdTipob        int    `json:"id_tipob"`
+	ObId           int    `json:"ob_id"`
 	TrafoId        string `json:"trafo_id"`
 	Vrepoc         string `json:"vrepoc"`
-	PocPP          string `json:"-"`
 	Vrezav         string `json:"vrezav"`
-	ZavPP          string `json:"-"`
-	Traj           string `json:"-"`
 	Id1SGruzr      string `json:"id_s_gruzr"`
 	Id1SUzrok      string `json:"id_s_uzrok"`
-	IdSGrraz       string `json:"id_s_grraz"`
-	IdSRazlog      string `json:"id_s_razlog"`
 	Snaga          string `json:"snaga"`
 	Opis           string `json:"opis"`
-	TxRx           string `json:"-"`
 	IdSNap         string `json:"id_s_nap"`
 	P2TrafId       string `json:"p2_traf_id"`
-	PgiKor         string `json:"pgi_kor"`
-	Status         string `json:"-"`
-	IdDogSmene     string `json:"-"`
-	IdStavke       string `json:"-"`
 	IdZDsdfGL1     string `json:"id_z_dsdf_gl1"`
 	IdZKvarGL1     string `json:"id_z_kvar_gl1"`
 	IdZRapuGL1     string `json:"id_z_rapu_gl1"`
@@ -348,6 +338,8 @@ type PiPiDDN struct {
 	IdZTeleKrajGL1 string `json:"id_z_tele_kraj_gl1"`
 	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`
 	IdZTeleKrajGL2 string `json:"id_z_tele_kraj_gl2"`
+	KorUneo        string `json:"kor_uneo"`
+	SynsoftId      string `json:"synsoft_id"`
 }
 
 /*type PiPiDDN struct {

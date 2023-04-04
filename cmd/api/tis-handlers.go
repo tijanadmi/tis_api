@@ -815,7 +815,7 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 
 /***** start PiPiDDN api  ****/
 
-func (app *application) editPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
+func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIsklj
 
 	err := json.NewDecoder(r.Body).Decode(&payload)
@@ -836,6 +836,97 @@ func (app *application) editPiPiDDNIsklj(w http.ResponseWriter, r *http.Request)
 		app.errorJSON(w, err)
 		return
 	}
+}
+
+func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIspad
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+	//fmt.Printf("Izgleda da je TipMan %s\n", payload.TipMan)
+	err = app.models.DB.InsertPiPiDDNIspad(payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, "Poruka message")
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIsklj
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.models.DB.UpdatePiPiDDNIsklj(payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "pipiddn updated",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+}
+
+func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIspad
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.models.DB.UpdatePiPiDDNIspad(payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "pipiddn updated",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+}
+
+func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
+	//id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.models.DB.DeletePiPiDDN(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "pipiddn deleted",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
 }
 
 /*** end PiPiDDN api  ***/

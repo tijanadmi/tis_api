@@ -43,7 +43,13 @@ func (app *application) routes() http.Handler {
 	mux.Get("/status", app.statusHandler)
 	mux.Post("/signin", app.Signin)
 
-	mux.Put("/pipiddn/0", app.editPiPiDDNIsklj)
+	mux.Put("/pipiddn/0", app.insertPiPiDDNIsklj)
+	mux.Put("/pipiddn/0", app.insertPiPiDDNIspad)
+
+	mux.Patch("/pipiddn/{id}", app.updatePiPiDDNIsklj)
+	mux.Patch("/pipiddn/{id}", app.updatePiPiDDNIspad)
+
+	mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
 
 	mux.Route("/dwh", func(mux chi.Router) {
 		mux.Use(app.authRequiredDWH)

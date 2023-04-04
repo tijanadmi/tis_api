@@ -2652,3 +2652,220 @@ func (m *DBModel) InsertPiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
 
 	return nil
 }
+
+func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.pi_pi_ddn_iskljucenje_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.TipMan,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.IdSGrraz,
+		pipiddn.IdSRazlog,
+		pipiddn.ManTekst,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	fmt.Println(pipiddn.TipMan)
+	fmt.Println(pipiddn.DatSmene)
+	fmt.Println(status)
+	fmt.Println(message)
+
+	return nil
+}
+
+func (m *DBModel) DeletePiPiDDN(synsoftId int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `delete from pi_pi_ddn_s where synsoft_id = :1`
+
+	_, err := m.DB.ExecContext(ctx, stmt, synsoftId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBModel) InsertPiPiDDNIspad(pipiddn PiPiDDNIspad) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.pi_pi_ddn_ispad_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.IdSTipd,
+		pipiddn.IdSVrpd,
+		pipiddn.IdRadAPU,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.Id1SGruzr,
+		pipiddn.Id1SUzrok,
+		pipiddn.Snaga,
+		pipiddn.Opis,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.IdZDsdfGL1,
+		pipiddn.IdZKvarGL1,
+		pipiddn.IdZRapuGL1,
+		pipiddn.IdZPrstGL1,
+		pipiddn.IdZZmspGL1,
+		pipiddn.IdZUzmsGL1,
+		pipiddn.ZLokkGL1,
+		pipiddn.IdZDsdfGL2,
+		pipiddn.IdZKvarGL2,
+		pipiddn.IdZRapuGL2,
+		pipiddn.IdZPrstGL2,
+		pipiddn.IdZZmspGL2,
+		pipiddn.IdZUzmsGL2,
+		pipiddn.ZLokkGL2,
+		pipiddn.IdZPrekVN,
+		pipiddn.IdZDisREZ,
+		pipiddn.IdZKvarREZ,
+		pipiddn.IdZPrstREZ,
+		pipiddn.IdZZmspREZ,
+		pipiddn.IdZNel1,
+		pipiddn.IdZNel2,
+		pipiddn.IdZNel3,
+		pipiddn.IdZPrekNN,
+		pipiddn.IdZSabzSAB,
+		pipiddn.IdZOtprSAB,
+		pipiddn.IdSVremUSL,
+		pipiddn.UzrokTekst,
+		pipiddn.IdZJpsVN,
+		pipiddn.IdZJpsNN,
+		pipiddn.PoslTekst,
+		pipiddn.IdZTelePocGL1,
+		pipiddn.IdZTeleKrajGL1,
+		pipiddn.IdZTelePocGL2,
+		pipiddn.IdZTeleKrajGL2,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	fmt.Println(pipiddn.DatSmene)
+	fmt.Println(status)
+	fmt.Println(message)
+
+	return nil
+}
+
+func (m *DBModel) UpdatePiPiDDNIspad(pipiddn PiPiDDNIspad) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.pi_pi_ddn_update_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.IdSTipd,
+		pipiddn.IdSVrpd,
+		pipiddn.IdRadAPU,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.Id1SGruzr,
+		pipiddn.Id1SUzrok,
+		pipiddn.Snaga,
+		pipiddn.Opis,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.IdZDsdfGL1,
+		pipiddn.IdZKvarGL1,
+		pipiddn.IdZRapuGL1,
+		pipiddn.IdZPrstGL1,
+		pipiddn.IdZZmspGL1,
+		pipiddn.IdZUzmsGL1,
+		pipiddn.ZLokkGL1,
+		pipiddn.IdZDsdfGL2,
+		pipiddn.IdZKvarGL2,
+		pipiddn.IdZRapuGL2,
+		pipiddn.IdZPrstGL2,
+		pipiddn.IdZZmspGL2,
+		pipiddn.IdZUzmsGL2,
+		pipiddn.ZLokkGL2,
+		pipiddn.IdZPrekVN,
+		pipiddn.IdZDisREZ,
+		pipiddn.IdZKvarREZ,
+		pipiddn.IdZPrstREZ,
+		pipiddn.IdZZmspREZ,
+		pipiddn.IdZNel1,
+		pipiddn.IdZNel2,
+		pipiddn.IdZNel3,
+		pipiddn.IdZPrekNN,
+		pipiddn.IdZSabzSAB,
+		pipiddn.IdZOtprSAB,
+		pipiddn.IdSVremUSL,
+		pipiddn.UzrokTekst,
+		pipiddn.IdZJpsVN,
+		pipiddn.IdZJpsNN,
+		pipiddn.PoslTekst,
+		pipiddn.IdZTelePocGL1,
+		pipiddn.IdZTeleKrajGL1,
+		pipiddn.IdZTelePocGL2,
+		pipiddn.IdZTeleKrajGL2,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	fmt.Println(pipiddn.DatSmene)
+	fmt.Println(status)
+	fmt.Println(message)
+
+	return nil
+}
