@@ -2649,11 +2649,14 @@ func (m *DBModel) InsertPiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
 	fmt.Println(pipiddn.DatSmene)
 	fmt.Println(status)
 	fmt.Println(message)
-
-	return nil
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
 }
 
-func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
+func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) (string, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -2686,14 +2689,14 @@ func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
 
 	if err != nil {
 		log.Println(err)
-		return err
+		return "", err
 	}
 	fmt.Println(pipiddn.TipMan)
 	fmt.Println(pipiddn.DatSmene)
 	fmt.Println(status)
 	fmt.Println(message)
 
-	return nil
+	return message, nil
 }
 
 func (m *DBModel) DeletePiPiDDN(synsoftId int) error {

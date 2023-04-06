@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -824,14 +823,24 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, err)
 		return
 	}
-	fmt.Printf("Izgleda da je TipMan %s\n", payload.TipMan)
-	err = app.models.DB.InsertPiPiDDNIsklj(payload)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
 
-	err = app.writeJSON(w, http.StatusOK, "Poruka message")
+	var resp JSONResponse
+	if payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.models.DB.InsertPiPiDDNIsklj(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted",
+		}
+	}
+	//err = app.writeJSON(w, http.StatusOK, m)
+	app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -869,18 +878,24 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, err)
 		return
 	}
+	var resp JSONResponse
+	if payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
+		resp = JSONResponse{
+			Error:   true,
+			Message: "Nisu uneti obavezni podaci",
+		}
+	} else {
+		m, err := app.models.DB.UpdatePiPiDDNIsklj(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
 
-	err = app.models.DB.UpdatePiPiDDNIsklj(payload)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
+		resp = JSONResponse{
+			Error:   false,
+			Message: m,
+		}
 	}
-
-	resp := JSONResponse{
-		Error:   false,
-		Message: "pipiddn updated",
-	}
-
 	app.writeJSON(w, http.StatusAccepted, resp)
 }
 

@@ -292,7 +292,7 @@ type PiPiDDNIspad struct {
 	IdSMrc         int    `json:"id_s_mrc"`
 	IdSTipd        string `json:"id_s_tipd"`
 	IdSVrpd        string `json:"id_s_vrpd"`
-	IdRadAPU        string `json:"id_s_rpu"`
+	IdRadAPU       string `json:"id_s_rpu"`
 	IdTipob        int    `json:"id_tipob"`
 	ObId           int    `json:"ob_id"`
 	TrafoId        string `json:"trafo_id"`
@@ -407,10 +407,10 @@ type PiPiDDNIspad struct {
 */
 type PiPiDDNIsklj struct {
 	DatSmene  string `json:"dat_smene"`
-	IdSMrc    int    `json:"id_s_mrc"`
+	IdSMrc    string `json:"id_s_mrc"`
 	TipMan    string `json:"tip_man"`
-	IdTipob   int    `json:"id_tipob"`
-	ObId      int    `json:"ob_id"`
+	IdTipob   string `json:"id_tipob"`
+	ObId      string `json:"ob_id"`
 	TrafoId   string `json:"trafo_id"`
 	Vrepoc    string `json:"vrepoc"`
 	Vrezav    string `json:"vrezav"`
