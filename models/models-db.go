@@ -2645,10 +2645,10 @@ func (m *DBModel) InsertPiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
 		log.Println(err)
 		return err
 	}
-	fmt.Println(pipiddn.TipMan)
-	fmt.Println(pipiddn.DatSmene)
-	fmt.Println(status)
-	fmt.Println(message)
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
 	if status != 0 {
 		return errors.New(message)
 	} else {
@@ -2656,7 +2656,7 @@ func (m *DBModel) InsertPiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
 	}
 }
 
-func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) (string, error) {
+func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -2669,7 +2669,7 @@ func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) (string, error) {
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
 		pipiddn.DatSmene,
-		8,
+		pipiddn.IdSMrc,
 		pipiddn.TipMan,
 		pipiddn.IdTipob,
 		pipiddn.ObId,
@@ -2689,14 +2689,88 @@ func (m *DBModel) UpdatePiPiDDNIsklj(pipiddn PiPiDDNIsklj) (string, error) {
 
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return err
 	}
-	fmt.Println(pipiddn.TipMan)
-	fmt.Println(pipiddn.DatSmene)
-	fmt.Println(status)
-	fmt.Println(message)
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
 
-	return message, nil
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *DBModel) GetAllPiPiDDNIsklj() ([]*PiPiDDN, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+				COALESCE(to_char(ID_S_MRC), ''),
+				COALESCE(to_char(ID_S_TIPD), ''),
+				COALESCE(to_char(ID_S_VRPD), ''),
+				COALESCE(to_char(ID_TIPOB), ''),
+				COALESCE(to_char(OB_ID), ''),
+				COALESCE(to_char(TRAFO_ID), ''),
+				to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+				POC_PP,
+				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+				ZAV_PP,
+				COALESCE(to_char(ID_S_GRRAZ), ''),
+				COALESCE(to_char(ID_S_RAZLOG), ''),
+				OPIS,
+				COALESCE(to_char(ID_S_NAP), ''),
+				COALESCE(to_char(P2_TRAF_ID), ''),
+				PGI_KOR,
+				STATUS,
+				to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
+				SYNSOFT_ID
+				from PI_PI_DDN_S`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*PiPiDDN
+
+	for rows.Next() {
+		var pipiddn PiPiDDN
+		err := rows.Scan(
+			&pipiddn.Datizv,
+			&pipiddn.IdSMrc,
+			&pipiddn.IdSTipd,
+			&pipiddn.IdSVrpd,
+			&pipiddn.IdTipob,
+			&pipiddn.ObId,
+			&pipiddn.TrafoId,
+			&pipiddn.Vrepoc,
+			&pipiddn.PocPP,
+			&pipiddn.Vrezav,
+			&pipiddn.ZavPP,
+			&pipiddn.IdSGrraz,
+			&pipiddn.IdSRazlog,
+			&pipiddn.Opis,
+			&pipiddn.IdSNap,
+			&pipiddn.P2TrafId,
+			&pipiddn.KorUneo,
+			&pipiddn.Status,
+			&pipiddn.Datpri,
+			&pipiddn.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &pipiddn)
+	}
+
+	return p, nil
 }
 
 func (m *DBModel) DeletePiPiDDN(synsoftId int) error {

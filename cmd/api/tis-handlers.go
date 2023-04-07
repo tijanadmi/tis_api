@@ -847,6 +847,21 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) getPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.models.DB.GetAllPiPiDDNIsklj()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIspad
 
@@ -880,12 +895,10 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 	}
 	var resp JSONResponse
 	if payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
-		resp = JSONResponse{
-			Error:   true,
-			Message: "Nisu uneti obavezni podaci",
-		}
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
 	} else {
-		m, err := app.models.DB.UpdatePiPiDDNIsklj(payload)
+		err := app.models.DB.UpdatePiPiDDNIsklj(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -893,10 +906,14 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 
 		resp = JSONResponse{
 			Error:   false,
-			Message: m,
+			Message: "Record updated",
 		}
 	}
 	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Request) {

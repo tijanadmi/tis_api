@@ -43,6 +43,8 @@ func (app *application) routes() http.Handler {
 	mux.Get("/status", app.statusHandler)
 	mux.Post("/signin", app.Signin)
 
+	mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
+
 	mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
 	mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
 
