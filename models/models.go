@@ -339,7 +339,7 @@ type PiPiDDNIspad struct {
 	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`
 	IdZTeleKrajGL2 string `json:"id_z_tele_kraj_gl2"`
 	KorUneo        string `json:"kor_uneo"`
-	SynsoftId      string `json:"synsoft_id"`
+	SynsoftId      string `json:"ed_id"`
 }
 
 /*type PiPiDDN struct {
@@ -420,7 +420,7 @@ type PiPiDDNIsklj struct {
 	IdSNap    string `json:"id_s_nap"`
 	P2TrafId  string `json:"p2_traf_id"`
 	KorUneo   string `json:"kor_uneo"`
-	SynsoftId string `json:"synsoft_id"`
+	SynsoftId string `json:"ed_id"`
 }
 
 type PiPiDDN struct {
@@ -443,7 +443,7 @@ type PiPiDDN struct {
 	KorUneo   string `json:"kor_uneo"`
 	Status    string `json:"status"`
 	Datpri    string `json:"datpri"`
-	SynsoftId string `json:"synsoft_id"`
+	SynsoftId string `json:"ed_id"`
 }
 
 type WeatherData struct {

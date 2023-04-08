@@ -43,7 +43,7 @@ func (app *application) routes() http.Handler {
 	mux.Get("/status", app.statusHandler)
 	mux.Post("/signin", app.Signin)
 
-	mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
+	/*mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
 
 	mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
 	mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
@@ -51,7 +51,7 @@ func (app *application) routes() http.Handler {
 	mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIsklj)
 	mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
 
-	mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
+	mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)*/
 
 	mux.Route("/dwh", func(mux chi.Router) {
 		mux.Use(app.authRequiredDWH)
@@ -115,6 +115,16 @@ func (app *application) routes() http.Handler {
 		mux.Get("/disconnectors", app.getDisconnectors)
 		mux.Get("/workpermissions", app.getWorkPermissions)
 		mux.Get("/workineenetwork", app.getWorkInEENetwork)
+
+		mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
+
+		mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
+		mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
+
+		mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIsklj)
+		mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
+
+		mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
 	})
 
 	return mux
