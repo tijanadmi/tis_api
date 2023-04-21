@@ -43,9 +43,6 @@ func (app *application) routes() http.Handler {
 	mux.Get("/status", app.statusHandler)
 	mux.Post("/signin", app.Signin)
 
-	mux.Get("/workpermissionsall", app.getWorkPermissionsAll)
-	mux.Get("/request1gr", app.getRequest1Gr)
-	mux.Get("/request2gr", app.getRequest2Gr)
 
 	/*mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
 
@@ -119,6 +116,10 @@ func (app *application) routes() http.Handler {
 		mux.Get("/disconnectors", app.getDisconnectors)
 		mux.Get("/workpermissions", app.getWorkPermissions)
 		mux.Get("/workineenetwork", app.getWorkInEENetwork)
+
+		mux.Get("/workpermissionsall", app.getWorkPermissionsAll)
+		mux.Get("/request1gr", app.getRequest1Gr)
+		mux.Get("/request2gr", app.getRequest2Gr)
 
 		mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
 
