@@ -371,11 +371,51 @@ type PiPiDDNIspad struct {
 	SynsoftId      string `json:"ed_id"`
 }
 
-/*type PiPiDDN struct {
-	DatSmene       string `json:"dat_smene"`
-	TipSmene       string `json:"tip_smene"`
+type PiPiDDNIsklj struct {
+	DatSmene  string `json:"dat_smene"`
+	IdSMrc    string `json:"id_s_mrc"`
+	TipMan    string `json:"tip_man"`
+	IdTipob   string `json:"id_tipob"`
+	ObId      string `json:"ob_id"`
+	TrafoId   string `json:"trafo_id"`
+	Vrepoc    string `json:"vrepoc"`
+	Vrezav    string `json:"vrezav"`
+	IdSGrraz  string `json:"id_s_grraz"`
+	IdSRazlog string `json:"id_s_razlog"`
+	ManTekst  string `json:"man_tekst"`
+	IdSNap    string `json:"id_s_nap"`
+	P2TrafId  string `json:"p2_traf_id"`
+	KorUneo   string `json:"kor_uneo"`
+	SynsoftId string `json:"ed_id"`
+}
+
+type PiPiDDN struct {
+	Datizv    string `json:"datizv"`
+	IdSMrc    string `json:"id_s_mrc"`
+	IdSTipd   string `json:"id_s_tipd"`
+	IdSVrpd   string `json:"id_s_vrpd"`
+	IdTipob   string `json:"id_tipob"`
+	ObId      string `json:"ob_id"`
+	TrafoId   string `json:"trafo_id"`
+	Vrepoc    string `json:"vrepoc"`
+	PocPP     string `json:"poc_pp"`
+	Vrezav    string `json:"vrezav"`
+	ZavPP     string `json:"zav_pp"`
+	IdSGrraz  string `json:"id_s_grraz"`
+	IdSRazlog string `json:"id_s_razlog"`
+	Opis      string `json:"opis"`
+	IdSNap    string `json:"id_s_nap"`
+	P2TrafId  string `json:"p2_traf_id"`
+	KorUneo   string `json:"kor_uneo"`
+	Status    string `json:"status"`
+	Datpri    string `json:"datpri"`
+	SynsoftId string `json:"ed_id"`
+}
+
+type UnfinishedEvents struct {
+	Datizv         string `json:"datizv"`
 	IdSMrc         string `json:"-"`
-	ID_S_TIPD      string `json:"id_s_tipd"`
+	IdSTipd        string `json:"id_s_tipd"`
 	IdSVrpd        string `json:"id_s_vrpd"`
 	IdTipob        string `json:"id_tipob"`
 	ObId           string `json:"ob_id"`
@@ -432,47 +472,7 @@ type PiPiDDNIspad struct {
 	IdZTeleKrajGL1 string `json:"id_z_tele_kraj_gl1"`
 	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`
 	IdZTeleKrajGL2 string `json:"id_z_tele_kraj_gl2"`
-}
-*/
-type PiPiDDNIsklj struct {
-	DatSmene  string `json:"dat_smene"`
-	IdSMrc    string `json:"id_s_mrc"`
-	TipMan    string `json:"tip_man"`
-	IdTipob   string `json:"id_tipob"`
-	ObId      string `json:"ob_id"`
-	TrafoId   string `json:"trafo_id"`
-	Vrepoc    string `json:"vrepoc"`
-	Vrezav    string `json:"vrezav"`
-	IdSGrraz  string `json:"id_s_grraz"`
-	IdSRazlog string `json:"id_s_razlog"`
-	ManTekst  string `json:"man_tekst"`
-	IdSNap    string `json:"id_s_nap"`
-	P2TrafId  string `json:"p2_traf_id"`
-	KorUneo   string `json:"kor_uneo"`
-	SynsoftId string `json:"ed_id"`
-}
-
-type PiPiDDN struct {
-	Datizv    string `json:"datizv"`
-	IdSMrc    string `json:"id_s_mrc"`
-	IdSTipd   string `json:"id_s_tipd"`
-	IdSVrpd   string `json:"id_s_vrpd"`
-	IdTipob   string `json:"id_tipob"`
-	ObId      string `json:"ob_id"`
-	TrafoId   string `json:"trafo_id"`
-	Vrepoc    string `json:"vrepoc"`
-	PocPP     string `json:"poc_pp"`
-	Vrezav    string `json:"vrezav"`
-	ZavPP     string `json:"zav_pp"`
-	IdSGrraz  string `json:"id_s_grraz"`
-	IdSRazlog string `json:"id_s_razlog"`
-	Opis      string `json:"opis"`
-	IdSNap    string `json:"id_s_nap"`
-	P2TrafId  string `json:"p2_traf_id"`
-	KorUneo   string `json:"kor_uneo"`
-	Status    string `json:"status"`
-	Datpri    string `json:"datpri"`
-	SynsoftId string `json:"ed_id"`
+	SynsoftId      string `json:"ed_id"`
 }
 
 type WeatherData struct {

@@ -1000,6 +1000,21 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 	app.writeJSON(w, http.StatusAccepted, resp)
 }
 
+func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.models.DB.GetAllUnfinishedEventsNDC()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /*** end PiPiDDN api  ***/
 
 /**************** the another method ***********/

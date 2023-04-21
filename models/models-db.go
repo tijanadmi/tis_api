@@ -2981,6 +2981,141 @@ func (m *DBModel) GetAllPiPiDDNIsklj() ([]*PiPiDDN, error) {
 	return p, nil
 }
 
+func (m *DBModel) GetAllUnfinishedEventsNDC() ([]*UnfinishedEvents, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+	COALESCE(to_char(ID_S_MRC), ''),
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+	COALESCE(to_char(TRAFO_ID), ''),
+   to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID1_S_GRUZR), ''),
+   COALESCE(to_char(ID1_S_UZROK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(to_char(ID_S_NAP), ''),
+   COALESCE(to_char(P2_TRAF_ID), ''),
+   COALESCE(PGI_KOR, ''),
+   COALESCE(STATUS, ''),
+   COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+   COALESCE(to_char(ID_Z_PRST_GL1), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+   COALESCE(to_char(Z_LOKK_GL1), ''),
+   COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+   COALESCE(to_char(ID_Z_PRST_GL2), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+   COALESCE(to_char(Z_LOKK_GL2), ''),
+   COALESCE(to_char(ID_Z_PREK_VN), ''),
+   COALESCE(to_char(ID_Z_DIS_REZ), ''),
+   COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+   COALESCE(to_char(ID_Z_PRST_REZ), ''),
+   COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+   COALESCE(to_char(ID_Z_NEL1), ''),
+   COALESCE(to_char(ID_Z_NEL2), ''),
+   COALESCE(to_char(ID_Z_NEL3), ''),
+   COALESCE(to_char(ID_Z_PREK_NN), ''),
+   COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+   COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+   COALESCE(to_char(ID_S_VREM_USL), ''),
+   COALESCE(UZROK_TEKST, ''),
+   COALESCE(to_char(ID_Z_JPS_VN), ''),
+   COALESCE(to_char(ID_Z_JPS_NN), ''),
+   COALESCE(POSL_TEKST, ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from nezavrseni_dog_s
+   where id_s_mrc=8`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*UnfinishedEvents
+
+	for rows.Next() {
+		var ue UnfinishedEvents
+		err := rows.Scan(
+			&ue.Datizv,
+			&ue.IdSMrc,
+			&ue.IdSTipd,
+			&ue.IdSVrpd,
+			&ue.IdTipob,
+			&ue.ObId,
+			&ue.TrafoId,
+			&ue.Vrepoc,
+			&ue.PocPP,
+			&ue.Vrezav,
+			&ue.Id1SGruzr,
+			&ue.Id1SUzrok,
+			&ue.Snaga,
+			&ue.Opis,
+			&ue.IdSNap,
+			&ue.P2TrafId,
+			&ue.PgiKor,
+			&ue.IdZDsdfGL1,
+			&ue.IdZKvarGL1,
+			&ue.IdZRapuGL1,
+			&ue.IdZPrstGL1,
+			&ue.IdZZmspGL1,
+			&ue.IdZUzmsGL1,
+			&ue.ZLokkGL1,
+			&ue.IdZDsdfGL2,
+			&ue.IdZKvarGL2,
+			&ue.IdZRapuGL2,
+			&ue.IdZPrstGL2,
+			&ue.IdZZmspGL2,
+			&ue.IdZUzmsGL2,
+			&ue.ZLokkGL2,
+			&ue.IdZPrekVN,
+			&ue.IdZDisREZ,
+			&ue.IdZKvarREZ,
+			&ue.IdZPrstREZ,
+			&ue.IdZZmspREZ,
+			&ue.IdZNel1,
+			&ue.IdZNel2,
+			&ue.IdZNel3,
+			&ue.IdZPrekNN,
+			&ue.IdZSabzSAB,
+			&ue.IdZOtprSAB,
+			&ue.IdSVremUSL,
+			&ue.UzrokTekst,
+			&ue.IdZJpsVN,
+			&ue.IdZJpsNN,
+			&ue.PoslTekst,
+			&ue.IdZTelePocGL1,
+			&ue.IdZTeleKrajGL1,
+			&ue.IdZTelePocGL2,
+			&ue.IdZTeleKrajGL2,
+			&ue.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &ue)
+	}
+
+	return p, nil
+}
+
 func (m *DBModel) DeletePiPiDDN(synsoftId int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
