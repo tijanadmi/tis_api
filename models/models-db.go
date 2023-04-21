@@ -1660,6 +1660,214 @@ func (m *DBModel) GetWorkPermissions() ([]*WorkPermission, error) {
 	return prms, nil
 }
 
+// Get returns all permissionsAll and error, if any
+func (m *DBModel) GetWorkPermissionsAll() ([]*WorkPermissionAll, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select ID_ZAHTEVA,
+			COALESCE(GRUPA, ''),
+			COALESCE(UKLJUCENOST, ''),
+			COALESCE(INT_PL, ''),
+			COALESCE(to_char(BR1_Z_1GR), ''),
+			COALESCE(BR2_Z_1GR, ''),
+			COALESCE(BR_Z_RDC_2GR, ''),
+			COALESCE(to_char(BR_SAG), ''),
+			COALESCE(PL_DATUM_OD_Z, ''),
+			COALESCE(PL_VREME_OD_Z, ''),
+			COALESCE(PL_DATUM_DO_Z, ''),
+			COALESCE(PL_VREME_DO_Z, ''),
+			COALESCE(RUK_RADOVA, ''),
+			COALESCE(OPIS_RADOVA, ''),
+			COALESCE(NAPOMENA_VEZA, ''),
+			COALESCE(SAG_USLOVI, ''),
+			COALESCE(SAG_NAPOMENA_VEZA, ''),
+			COALESCE(to_char(ID_DOZVOLE), ''),
+			COALESCE(to_char(BR1_DOZ_1GR), ''),
+			COALESCE(BR1_DOZ_2GR, ''),
+			COALESCE(to_char(BR2_DOZ), ''),
+			COALESCE(PL_VREME_OD, ''),
+			COALESCE(PL_DATUM_OD, ''),
+			COALESCE(ZAV_VREME, ''),
+			COALESCE(to_char(ZAV_DATUM,'dd.mm.yyyy HH24:MI:SS'), ''),
+			COALESCE(STATUS, '')
+			  from synsoft_dozvole_sve
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*WorkPermissionAll
+
+	for rows.Next() {
+		var prm WorkPermissionAll
+		err := rows.Scan(
+			&prm.IdZahteva,
+			&prm.Grupa,
+			&prm.Ukljucenost,
+			&prm.IntPl,
+			&prm.Br1Z1Gr,
+			&prm.Br2Z1Gr,
+			&prm.BrZRDC2Gr,
+			&prm.BrSag,
+			&prm.PlDatumOdZ,
+			&prm.PlVremeOdZ,
+			&prm.PlDatumDoZ,
+			&prm.PlVremeDoZ,
+			&prm.RukRadova,
+			&prm.OpisRadova,
+			&prm.NapomenaVeza,
+			&prm.SagUslovi,
+			&prm.SagNapomenaVeza,
+			&prm.IdDozvole,
+			&prm.Br1Doz1Gr,
+			&prm.Br1Doz2Gr,
+			&prm.Br2Doz,
+			&prm.PlVremeOd,
+			&prm.PlVremeDo,
+			&prm.ZavVreme,
+			&prm.ZavDatum,
+			&prm.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
+// Get returns all Request1Gr and error, if any
+func (m *DBModel) GetRequest1Gr() ([]*Request1Gr, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select ID_ZAHTEVA,
+			COALESCE(GRUPA, ''),
+			COALESCE(UKLJUCENOST, ''),
+			COALESCE(INT_PL, ''),
+			COALESCE(to_char(BR1_Z_1GR), ''),
+			COALESCE(BR2_Z_1GR, ''),
+			COALESCE(PL_DATUM_OD_Z, ''),
+			COALESCE(PL_VREME_OD_Z, ''),
+			COALESCE(PL_DATUM_DO_Z, ''),
+			COALESCE(PL_VREME_DO_Z, ''),
+			COALESCE(RUK_RADOVA, ''),
+			COALESCE(ELEMENTI, ''),
+			COALESCE(OPIS_RADOVA, ''),
+			COALESCE(NAPOMENA_VEZA, '')
+			  from synsoft_zahtevi_1gr
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*Request1Gr
+
+	for rows.Next() {
+		var prm Request1Gr
+		err := rows.Scan(
+			&prm.IdZahteva,
+			&prm.Grupa,
+			&prm.Ukljucenost,
+			&prm.IntPl,
+			&prm.Br1Z1Gr,
+			&prm.Br2Z1Gr,
+			&prm.PlDatumOdZ,
+			&prm.PlVremeOdZ,
+			&prm.PlDatumDoZ,
+			&prm.PlVremeDoZ,
+			&prm.RukRadova,
+			&prm.Elementi,
+			&prm.OpisRadova,
+			&prm.NapomenaVeza,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
+// Get returns all Request2Gr and error, if any
+func (m *DBModel) GetRequest2Gr() ([]*Request2Gr, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select ID_ZAHTEVA,
+			COALESCE(GRUPA, ''),
+			COALESCE(UKLJUCENOST, ''),
+			COALESCE(INT_PL, ''),
+			COALESCE(BR_Z_RDC_2GR, ''),
+			COALESCE(to_char(BR_SAG), ''),
+			COALESCE(PL_DATUM_OD_Z, ''),
+			COALESCE(PL_VREME_OD_Z, ''),
+			COALESCE(PL_DATUM_DO_Z, ''),
+			COALESCE(PL_VREME_DO_Z, ''),
+			COALESCE(RUK_RADOVA, ''),
+			COALESCE(ELEMENTI, ''),
+			COALESCE(OPIS_RADOVA, ''),
+			COALESCE(NAPOMENA_VEZA, ''),
+			COALESCE(SAG_USLOVI, ''),
+			COALESCE(SAG_NAPOMENA_VEZA, '')
+			  from synsoft_zahtevi_2gr
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*Request2Gr
+
+	for rows.Next() {
+		var prm Request2Gr
+		err := rows.Scan(
+			&prm.IdZahteva,
+			&prm.Grupa,
+			&prm.Ukljucenost,
+			&prm.IntPl,
+			&prm.BrZRDC2Gr,
+			&prm.BrSag,
+			&prm.PlDatumOdZ,
+			&prm.PlVremeOdZ,
+			&prm.PlDatumDoZ,
+			&prm.PlVremeDoZ,
+			&prm.RukRadova,
+			&prm.Elementi,
+			&prm.OpisRadova,
+			&prm.NapomenaVeza,
+			&prm.SagUslovi,
+			&prm.SagNapomenaVeza,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
 // Get returns all permissions and error, if any
 func (m *DBModel) GetWorkInEENetwork() ([]*WorkInEENetwork, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

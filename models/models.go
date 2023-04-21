@@ -276,6 +276,35 @@ type WorkPermission struct {
 	EndDate            string `json:"end_date"`
 }
 
+type WorkPermissionAll struct {
+	IdZahteva       int    `json:"id_zahteva"`
+	Grupa           string `json:"grupa"`
+	Ukljucenost     string `json:"ukljucenost"`
+	IntPl           string `json:"int_pl"`
+	Br1Z1Gr         string `json:"br1_z_1gr"`
+	Br2Z1Gr         string `json:"br2_z_1gr"`
+	BrZRDC2Gr       string `json:"br_z_rdc_2gr"`
+	BrSag           string `json:"br_sag"`
+	PlDatumOdZ      string `json:"pl_datum_od_z"`
+	PlVremeOdZ      string `json:"pl_vreme_od_z"`
+	PlDatumDoZ      string `json:"pl_datum_do_z"`
+	PlVremeDoZ      string `json:"pl_vreme_do_z"`
+	RukRadova       string `json:"ruk_radova"`
+	OpisRadova      string `json:"opis_radova"`
+	NapomenaVeza    string `json:"napomena_veza"`
+	SagUslovi       string `json:"sag_uslovi"`
+	SagNapomenaVeza string `json:"sag_napomena_veza"`
+	IdDozvole       string `json:"id_dozvole"`
+	Br1Doz1Gr       string `json:"br1_doz_1gr"`
+	Br1Doz2Gr       string `json:"br1_doz_2gr"`
+	Br2Doz          string `json:"br2_doz"`
+	PlVremeOd       string `json:"pl_vreme_od"`
+	PlVremeDo       string `json:"pl_vreme_do"`
+	ZavVreme        string `json:"zav_vreme"`
+	ZavDatum        string `json:"zav_datum"`
+	Status          string `json:"status"`
+}
+
 type WorkInEENetwork struct {
 	MaxNum      string `json:"max_num"`
 	Num         string `json:"number"`
@@ -572,6 +601,42 @@ type Request struct {
 	NapVeza    string `json:"nap_veza"`
 	PodZahteva string `json:"pod_zhteva"`
 	IskOdobrio string `json:"isk_odobrio"`
+}
+
+type Request1Gr struct {
+	IdZahteva    int64  `json:"id_zahteva"`
+	Grupa        string `json:"grupa"`
+	Ukljucenost  string `json:"ukljucenost"`
+	IntPl        string `json:"int_pl"`
+	Br1Z1Gr      string `json:"br1_z_1gr"`
+	Br2Z1Gr      string `json:"br2_z_1gr"`
+	PlDatumOdZ   string `json:"pl_datum_od_z"`
+	PlVremeOdZ   string `json:"pl_vreme_od_z"`
+	PlDatumDoZ   string `json:"pl_datum_do_z"`
+	PlVremeDoZ   string `json:"pl_vreme_do_z"`
+	RukRadova    string `json:"ruk_radova"`
+	Elementi     string `json:"elementi"`
+	OpisRadova   string `json:"opis_radova"`
+	NapomenaVeza string `json:"napomena_veza"`
+}
+
+type Request2Gr struct {
+	IdZahteva       int64  `json:"id_zahteva"`
+	Grupa           string `json:"grupa"`
+	Ukljucenost     string `json:"ukljucenost"`
+	IntPl           string `json:"int_pl"`
+	BrZRDC2Gr       string `json:"br_z_rdc_2gr"`
+	BrSag           string `json:"br_sag"`
+	PlDatumOdZ      string `json:"pl_datum_od_z"`
+	PlVremeOdZ      string `json:"pl_vreme_od_z"`
+	PlDatumDoZ      string `json:"pl_datum_do_z"`
+	PlVremeDoZ      string `json:"pl_vreme_do_z"`
+	RukRadova       string `json:"ruk_radova"`
+	Elementi        string `json:"elementi"`
+	OpisRadova      string `json:"opis_radova"`
+	NapomenaVeza    string `json:"napomena_veza"`
+	SagUslovi       string `json:"sag_uslovi"`
+	SagNapomenaVeza string `json:"sag_napomena_veza"`
 }
 
 type Outage struct {
