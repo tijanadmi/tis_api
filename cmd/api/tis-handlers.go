@@ -1017,6 +1017,110 @@ func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http
 
 /*** end PiPiDDN api  ***/
 
+/***** start DDN_PREKID_ISP ****/
+func (app *application) insertDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
+	var payload models.DDNInterruptionOfDelivery
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+
+	var resp JSONResponse
+	if payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.Ind == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.models.DB.InsertDDNInterruptionOfDelivery(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted",
+		}
+	}
+	//err = app.writeJSON(w, http.StatusOK, m)
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updateDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
+	var payload models.DDNInterruptionOfDelivery
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.Ind == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.models.DB.UpdateDDNInterruptionOfDelivery(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
+	//id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.models.DB.DeleteDDNInterruptionOfDelivery(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "DDNInterruptionOfDelivery deleted",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+}
+
+func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.models.DB.GetDDNInterruptionOfDeliveryNDC()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+/****** end DDN_PREKID_ISP ****/
+
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload

@@ -45,6 +45,11 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/unfinishedEvents/ndc", app.getAllUnfinishedEventsNDC)
 
+	mux.Get("/interruptionofdelivery/ndc", app.getDDNInterruptionOfDeliveryNDC)
+	mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
+	mux.Patch("/interruptionofdelivery/{id}", app.updateDDNInterruptionOfDelivery)
+	mux.Delete("/interruptionofdelivery/{id}", app.deleteDDNInterruptionOfDelivery)
+
 	mux.Route("/dwh", func(mux chi.Router) {
 		mux.Use(app.authRequiredDWH)
 		mux.Get("/weather/{year}", app.getWeather)

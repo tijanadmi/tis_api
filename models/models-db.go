@@ -3289,3 +3289,199 @@ func (m *DBModel) UpdatePiPiDDNIspad(pipiddn PiPiDDNIspad) error {
 
 	return nil
 }
+
+func (m *DBModel) InsertDDNInterruptionOfDelivery(ddnintd DDNInterruptionOfDelivery) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.ddn_prekid_isp_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ddnintd.IdSMrc,
+		ddnintd.IdSTipd,
+		ddnintd.IdSVrpd,
+		ddnintd.IdTipob,
+		ddnintd.ObId,
+		ddnintd.Vrepoc,
+		ddnintd.Vrezav,
+		ddnintd.IdSVrPrek,
+		ddnintd.IdSUzrokPrek,
+		ddnintd.Snaga,
+		ddnintd.Opis,
+		ddnintd.KorUneo,
+		ddnintd.IdSMernaMesta,
+		ddnintd.BrojMesta,
+		ddnintd.Ind,
+		ddnintd.P2TrafId,
+		ddnintd.Bi,
+		ddnintd.IdSPoduzrokPrek,
+		ddnintd.IdDogPrekidP,
+		ddnintd.IdTipObjektaNdc,
+		ddnintd.IdTipDogadjajaNdc,
+		ddnintd.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *DBModel) UpdateDDNInterruptionOfDelivery(ddnintd DDNInterruptionOfDelivery) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.ddn_prekid_isp_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ddnintd.IdSMrc,
+		ddnintd.IdSTipd,
+		ddnintd.IdSVrpd,
+		ddnintd.IdTipob,
+		ddnintd.ObId,
+		ddnintd.Vrepoc,
+		ddnintd.Vrezav,
+		ddnintd.IdSVrPrek,
+		ddnintd.IdSUzrokPrek,
+		ddnintd.Snaga,
+		ddnintd.Opis,
+		ddnintd.KorUneo,
+		ddnintd.IdSMernaMesta,
+		ddnintd.BrojMesta,
+		ddnintd.Ind,
+		ddnintd.P2TrafId,
+		ddnintd.Bi,
+		ddnintd.IdSPoduzrokPrek,
+		ddnintd.IdDogPrekidP,
+		ddnintd.IdTipObjektaNdc,
+		ddnintd.IdTipDogadjajaNdc,
+		ddnintd.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *DBModel) DeleteDDNInterruptionOfDelivery(synsoftId int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `delete from ddn_prekid_isp_s where synsoft_id = :1`
+
+	_, err := m.DB.ExecContext(ctx, stmt, synsoftId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBModel) GetDDNInterruptionOfDeliveryNDC() ([]*DDNInterruptionOfDelivery, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select ID_S_MRC,
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+   to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID_S_VR_PREK), ''),
+   COALESCE(to_char(ID_S_UZROK_PREK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(DDN_KOR, ''),
+   COALESCE(to_char(ID_S_MERNA_MESTA), ''),
+   COALESCE(to_char(BROJ_MMESTA), ''),
+   COALESCE(IND, ''),
+   COALESCE(to_char(ID_P2_TRAF), ''),
+   COALESCE(to_char(BI), ''),
+   COALESCE(to_char(ID_S_PODUZROK_PREK), ''),
+   COALESCE(to_char(ID_DOG_PREKID_P), ''),
+   COALESCE(to_char(ID_TIP_OBJEKTA_NDC), ''),
+   COALESCE(to_char(ID_TIP_DOGADJAJA_NDC), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from ddn_prekid_isp_s
+   where id_s_mrc=8`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*DDNInterruptionOfDelivery
+
+	for rows.Next() {
+		var ue DDNInterruptionOfDelivery
+		err := rows.Scan(
+			&ue.IdSMrc,
+			&ue.IdSTipd,
+			&ue.IdSVrpd,
+			&ue.IdTipob,
+			&ue.ObId,
+			&ue.Vrepoc,
+			&ue.Vrezav,
+			&ue.IdSVrPrek,
+			&ue.IdSUzrokPrek,
+			&ue.Snaga,
+			&ue.Opis,
+			&ue.KorUneo,
+			&ue.IdSMernaMesta,
+			&ue.BrojMesta,
+			&ue.Ind,
+			&ue.P2TrafId,
+			&ue.Bi,
+			&ue.IdSPoduzrokPrek,
+			&ue.IdDogPrekidP,
+			&ue.IdTipObjektaNdc,
+			&ue.IdTipDogadjajaNdc,
+			&ue.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &ue)
+	}
+
+	return p, nil
+}

@@ -475,6 +475,31 @@ type UnfinishedEvents struct {
 	SynsoftId      string `json:"ed_id"`
 }
 
+type DDNInterruptionOfDelivery struct {
+	IdSMrc            string `json:"id_s_mrc"`
+	IdSTipd           string `json:"id_s_tipd"`
+	IdSVrpd           string `json:"id_s_vrpd"`
+	IdTipob           string `json:"id_tipob"`
+	ObId              string `json:"ob_id"`
+	Vrepoc            string `json:"vrepoc"`
+	Vrezav            string `json:"vrezav"`
+	IdSVrPrek         string `json:"id_s_vr_prek"`
+	IdSUzrokPrek      string `json:"id_s_uzrok_prek"`
+	Snaga             string `json:"snaga"`
+	Opis              string `json:"opis"`
+	KorUneo           string `json:"kor_uneo"`
+	IdSMernaMesta     string `json:"id_s_mrena_mesta"`
+	BrojMesta         string `json:"broj_mesta"`
+	Ind               string `json:"ind"`
+	P2TrafId          string `json:"p2_traf_id"`
+	Bi                string `json:"bi"`
+	IdSPoduzrokPrek   string `json:"id_s_poduzrok_prek"`
+	IdDogPrekidP      string `json:"id_dog_prekid_p"`
+	IdTipObjektaNdc   string `json:"id_tip_objekta_ndc"`
+	IdTipDogadjajaNdc string `json:"id_tip_dogadjaja_ndc"`
+	SynsoftId         string `json:"ed_id"`
+}
+
 type WeatherData struct {
 	Name                     string  `json:"name"`
 	Latitude                 float64 `json:"latitude"`
