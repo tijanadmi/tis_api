@@ -2926,16 +2926,54 @@ func (m *DBModel) GetAllPiPiDDNIsklj() ([]*PiPiDDN, error) {
 				POC_PP,
 				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
 				ZAV_PP,
+				COALESCE(to_char(ID1_S_GRUZR), ''),
+                COALESCE(to_char(ID1_S_UZROK), ''),
 				COALESCE(to_char(ID_S_GRRAZ), ''),
 				COALESCE(to_char(ID_S_RAZLOG), ''),
+				COALESCE(to_char(SNAGA), ''),
 				OPIS,
 				COALESCE(to_char(ID_S_NAP), ''),
 				COALESCE(to_char(P2_TRAF_ID), ''),
-				PGI_KOR,
-				STATUS,
+				COALESCE(PGI_KOR, ''),
+                COALESCE(STATUS, ''),
 				to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
-				SYNSOFT_ID
-				from PI_PI_DDN_S`
+				COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+                COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+                COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+                COALESCE(to_char(ID_Z_PRST_GL1), ''),
+                COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+                COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+                COALESCE(to_char(Z_LOKK_GL1), ''),
+                COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+                COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+                COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+                COALESCE(to_char(ID_Z_PRST_GL2), ''),
+                COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+                COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+                COALESCE(to_char(Z_LOKK_GL2), ''),
+                COALESCE(to_char(ID_Z_PREK_VN), ''),
+                COALESCE(to_char(ID_Z_DIS_REZ), ''),
+                COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+                COALESCE(to_char(ID_Z_PRST_REZ), ''),
+                COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+                COALESCE(to_char(ID_Z_NEL1), ''),
+                COALESCE(to_char(ID_Z_NEL2), ''),
+                COALESCE(to_char(ID_Z_NEL3), ''),
+                COALESCE(to_char(ID_Z_PREK_NN), ''),
+                COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+                COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+                COALESCE(to_char(ID_S_VREM_USL), ''),
+                COALESCE(UZROK_TEKST, ''),
+                COALESCE(to_char(ID_Z_JPS_VN), ''),
+                COALESCE(to_char(ID_Z_JPS_NN), ''),
+                COALESCE(POSL_TEKST, ''),
+                COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+                COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+                COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+                COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+                COALESCE(SYNSOFT_ID, '')
+				from PI_PI_DDN_S
+				WHERE ID_S_TIPD=2`
 
 	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
@@ -2960,14 +2998,52 @@ func (m *DBModel) GetAllPiPiDDNIsklj() ([]*PiPiDDN, error) {
 			&pipiddn.PocPP,
 			&pipiddn.Vrezav,
 			&pipiddn.ZavPP,
+			&pipiddn.Id1SGruzr,
+			&pipiddn.Id1SUzrok,
 			&pipiddn.IdSGrraz,
 			&pipiddn.IdSRazlog,
+			&pipiddn.Snaga,
 			&pipiddn.Opis,
 			&pipiddn.IdSNap,
 			&pipiddn.P2TrafId,
 			&pipiddn.KorUneo,
 			&pipiddn.Status,
 			&pipiddn.Datpri,
+			&pipiddn.IdZDsdfGL1,
+			&pipiddn.IdZKvarGL1,
+			&pipiddn.IdZRapuGL1,
+			&pipiddn.IdZPrstGL1,
+			&pipiddn.IdZZmspGL1,
+			&pipiddn.IdZUzmsGL1,
+			&pipiddn.ZLokkGL1,
+			&pipiddn.IdZDsdfGL2,
+			&pipiddn.IdZKvarGL2,
+			&pipiddn.IdZRapuGL2,
+			&pipiddn.IdZPrstGL2,
+			&pipiddn.IdZZmspGL2,
+			&pipiddn.IdZUzmsGL2,
+			&pipiddn.ZLokkGL2,
+			&pipiddn.IdZPrekVN,
+			&pipiddn.IdZDisREZ,
+			&pipiddn.IdZKvarREZ,
+			&pipiddn.IdZPrstREZ,
+			&pipiddn.IdZZmspREZ,
+			&pipiddn.IdZNel1,
+			&pipiddn.IdZNel2,
+			&pipiddn.IdZNel3,
+			&pipiddn.IdZPrekNN,
+			&pipiddn.IdZSabzSAB,
+			&pipiddn.IdZOtprSAB,
+			&pipiddn.IdSVremUSL,
+			&pipiddn.UzrokTekst,
+			&pipiddn.IdZJpsVN,
+			&pipiddn.IdZJpsNN,
+			&pipiddn.PoslTekst,
+			&pipiddn.IdZTelePocGL1,
+			&pipiddn.IdZTeleKrajGL1,
+			&pipiddn.IdZTelePocGL2,
+			&pipiddn.IdZTeleKrajGL2,
+			&pipiddn.SynsoftId,
 			&pipiddn.SynsoftId,
 		)
 
@@ -3218,7 +3294,7 @@ func (m *DBModel) UpdatePiPiDDNIspad(pipiddn PiPiDDNIspad) error {
 	var status int
 	var message string
 
-	query := `begin  ddn.synsoft.pi_pi_ddn_update_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
+	query := `begin  ddn.synsoft.pi_pi_ddn_ispad_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
@@ -3288,6 +3364,77 @@ func (m *DBModel) UpdatePiPiDDNIspad(pipiddn PiPiDDNIspad) error {
 	fmt.Println(message)
 
 	return nil
+}
+
+func (m *DBModel) GetAllPiPiDDNIspad() ([]*PiPiDDN, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+				COALESCE(to_char(ID_S_MRC), ''),
+				COALESCE(to_char(ID_S_TIPD), ''),
+				COALESCE(to_char(ID_S_VRPD), ''),
+				COALESCE(to_char(ID_TIPOB), ''),
+				COALESCE(to_char(OB_ID), ''),
+				COALESCE(to_char(TRAFO_ID), ''),
+				to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+				POC_PP,
+				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+				ZAV_PP,
+				COALESCE(to_char(ID_S_GRRAZ), ''),
+				COALESCE(to_char(ID_S_RAZLOG), ''),
+				OPIS,
+				COALESCE(to_char(ID_S_NAP), ''),
+				COALESCE(to_char(P2_TRAF_ID), ''),
+				PGI_KOR,
+				STATUS,
+				to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
+				SYNSOFT_ID
+				from PI_PI_DDN_S
+				WHERE ID_S_TIPD=1`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*PiPiDDN
+
+	for rows.Next() {
+		var pipiddn PiPiDDN
+		err := rows.Scan(
+			&pipiddn.Datizv,
+			&pipiddn.IdSMrc,
+			&pipiddn.IdSTipd,
+			&pipiddn.IdSVrpd,
+			&pipiddn.IdTipob,
+			&pipiddn.ObId,
+			&pipiddn.TrafoId,
+			&pipiddn.Vrepoc,
+			&pipiddn.PocPP,
+			&pipiddn.Vrezav,
+			&pipiddn.ZavPP,
+			&pipiddn.IdSGrraz,
+			&pipiddn.IdSRazlog,
+			&pipiddn.Opis,
+			&pipiddn.IdSNap,
+			&pipiddn.P2TrafId,
+			&pipiddn.KorUneo,
+			&pipiddn.Status,
+			&pipiddn.Datpri,
+			&pipiddn.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &pipiddn)
+	}
+
+	return p, nil
 }
 
 func (m *DBModel) InsertDDNInterruptionOfDelivery(ddnintd DDNInterruptionOfDelivery) error {

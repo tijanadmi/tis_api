@@ -50,6 +50,17 @@ func (app *application) routes() http.Handler {
 	mux.Patch("/interruptionofdelivery/{id}", app.updateDDNInterruptionOfDelivery)
 	mux.Delete("/interruptionofdelivery/{id}", app.deleteDDNInterruptionOfDelivery)
 
+	mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
+	mux.Get("/pipiddn/outage", app.getPiPiDDNIsklj)
+
+	mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
+	mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
+
+	mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIsklj)
+	mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
+
+	mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
+
 	mux.Route("/dwh", func(mux chi.Router) {
 		mux.Use(app.authRequiredDWH)
 		mux.Get("/weather/{year}", app.getWeather)
@@ -117,7 +128,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/request1gr", app.getRequest1Gr)
 		mux.Get("/request2gr", app.getRequest2Gr)
 
-		mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
+		/*mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
 
 		mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
 		mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
@@ -125,7 +136,7 @@ func (app *application) routes() http.Handler {
 		mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIsklj)
 		mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
 
-		mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
+		mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)*/
 	})
 
 	return mux

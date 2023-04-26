@@ -853,6 +853,21 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 
 /***** start PiPiDDN api  ****/
 
+func (app *application) getPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.models.DB.GetAllPiPiDDNIsklj()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIsklj
 
@@ -864,7 +879,7 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 	}
 
 	var resp JSONResponse
-	if payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
@@ -886,44 +901,6 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-func (app *application) getPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
-	//year := chi.URLParam(r, "year")
-
-	p, err := app.models.DB.GetAllPiPiDDNIsklj()
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-	err = app.writeJSON(w, http.StatusOK, p)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-}
-
-func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
-	var payload models.PiPiDDNIspad
-
-	err := json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
-
-		app.errorJSON(w, err)
-		return
-	}
-	//fmt.Printf("Izgleda da je TipMan %s\n", payload.TipMan)
-	err = app.models.DB.InsertPiPiDDNIspad(payload)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-
-	err = app.writeJSON(w, http.StatusOK, "Poruka message")
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-}
-
 func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIsklj
 
@@ -933,7 +910,7 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	var resp JSONResponse
-	if payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
@@ -955,6 +932,40 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIspad
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+	//fmt.Printf("Izgleda da je TipMan %s\n", payload.TipMan)
+
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdRadAPU == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" || payload.Vrepoc == "" || payload.IdSTipd == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.IdSVrpd == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err = app.models.DB.InsertPiPiDDNIspad(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted",
+		}
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIspad
 
@@ -963,19 +974,27 @@ func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, err)
 		return
 	}
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdRadAPU == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" || payload.Vrepoc == "" || payload.IdSTipd == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.IdSVrpd == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.models.DB.UpdatePiPiDDNIspad(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
 
-	err = app.models.DB.UpdatePiPiDDNIspad(payload)
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
 	}
-
-	resp := JSONResponse{
-		Error:   false,
-		Message: "pipiddn updated",
-	}
-
-	app.writeJSON(w, http.StatusAccepted, resp)
 }
 
 func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {

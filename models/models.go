@@ -318,12 +318,12 @@ type WorkInEENetwork struct {
 
 type PiPiDDNIspad struct {
 	DatSmene       string `json:"dat_smene"`
-	IdSMrc         int    `json:"id_s_mrc"`
+	IdSMrc         string `json:"id_s_mrc"`
 	IdSTipd        string `json:"id_s_tipd"`
 	IdSVrpd        string `json:"id_s_vrpd"`
 	IdRadAPU       string `json:"id_s_rpu"`
-	IdTipob        int    `json:"id_tipob"`
-	ObId           int    `json:"ob_id"`
+	IdTipob        string `json:"id_tipob"`
+	ObId           string `json:"ob_id"`
 	TrafoId        string `json:"trafo_id"`
 	Vrepoc         string `json:"vrepoc"`
 	Vrezav         string `json:"vrezav"`
@@ -333,6 +333,7 @@ type PiPiDDNIspad struct {
 	Opis           string `json:"opis"`
 	IdSNap         string `json:"id_s_nap"`
 	P2TrafId       string `json:"p2_traf_id"`
+	KorUneo        string `json:"kor_uneo"`
 	IdZDsdfGL1     string `json:"id_z_dsdf_gl1"`
 	IdZKvarGL1     string `json:"id_z_kvar_gl1"`
 	IdZRapuGL1     string `json:"id_z_rapu_gl1"`
@@ -367,7 +368,6 @@ type PiPiDDNIspad struct {
 	IdZTeleKrajGL1 string `json:"id_z_tele_kraj_gl1"`
 	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`
 	IdZTeleKrajGL2 string `json:"id_z_tele_kraj_gl2"`
-	KorUneo        string `json:"kor_uneo"`
 	SynsoftId      string `json:"ed_id"`
 }
 
@@ -390,26 +390,63 @@ type PiPiDDNIsklj struct {
 }
 
 type PiPiDDN struct {
-	Datizv    string `json:"datizv"`
-	IdSMrc    string `json:"id_s_mrc"`
-	IdSTipd   string `json:"id_s_tipd"`
-	IdSVrpd   string `json:"id_s_vrpd"`
-	IdTipob   string `json:"id_tipob"`
-	ObId      string `json:"ob_id"`
-	TrafoId   string `json:"trafo_id"`
-	Vrepoc    string `json:"vrepoc"`
-	PocPP     string `json:"poc_pp"`
-	Vrezav    string `json:"vrezav"`
-	ZavPP     string `json:"zav_pp"`
-	IdSGrraz  string `json:"id_s_grraz"`
-	IdSRazlog string `json:"id_s_razlog"`
-	Opis      string `json:"opis"`
-	IdSNap    string `json:"id_s_nap"`
-	P2TrafId  string `json:"p2_traf_id"`
-	KorUneo   string `json:"kor_uneo"`
-	Status    string `json:"status"`
-	Datpri    string `json:"datpri"`
-	SynsoftId string `json:"ed_id"`
+	Datizv         string `json:"datizv"`
+	IdSMrc         string `json:"id_s_mrc"`
+	IdSTipd        string `json:"id_s_tipd"`
+	IdSVrpd        string `json:"id_s_vrpd"`
+	IdTipob        string `json:"id_tipob"`
+	ObId           string `json:"ob_id"`
+	TrafoId        string `json:"trafo_id"`
+	Vrepoc         string `json:"vrepoc"`
+	PocPP          string `json:"poc_pp"`
+	Vrezav         string `json:"vrezav"`
+	ZavPP          string `json:"zav_pp"`
+	Id1SGruzr      string `json:"id_s_gruzr"`
+	Id1SUzrok      string `json:"id_s_uzrok"`
+	IdSGrraz       string `json:"id_s_grraz"`
+	IdSRazlog      string `json:"id_s_razlog"`
+	Snaga          string `json:"snaga"`
+	Opis           string `json:"opis"`
+	IdSNap         string `json:"id_s_nap"`
+	P2TrafId       string `json:"p2_traf_id"`
+	KorUneo        string `json:"kor_uneo"`
+	Status         string `json:"status"`
+	Datpri         string `json:"datpri"`
+	IdZDsdfGL1     string `json:"id_z_dsdf_gl1"`
+	IdZKvarGL1     string `json:"id_z_kvar_gl1"`
+	IdZRapuGL1     string `json:"id_z_rapu_gl1"`
+	IdZPrstGL1     string `json:"id_z_prst_gl1"`
+	IdZZmspGL1     string `json:"id_z_zmsp_gl1"`
+	IdZUzmsGL1     string `json:"id_z_uzms_gl1"`
+	ZLokkGL1       string `json:"z_lokk_gl1"`
+	IdZDsdfGL2     string `json:"id_z_dsdf_gl2"`
+	IdZKvarGL2     string `json:"id_z_kvar_gl2"`
+	IdZRapuGL2     string `json:"id_z_rapu_gl2"`
+	IdZPrstGL2     string `json:"id_z_prst_gl2"`
+	IdZZmspGL2     string `json:"id_z_zmsp_gl2"`
+	IdZUzmsGL2     string `json:"id_z_uzms_gl2"`
+	ZLokkGL2       string `json:"z_lokk_gl2"`
+	IdZPrekVN      string `json:"id_z_prek_vn"`
+	IdZDisREZ      string `json:"id_z_dis_rez"`
+	IdZKvarREZ     string `json:"id_z_kvar_rez"`
+	IdZPrstREZ     string `json:"id_z_prst_rez"`
+	IdZZmspREZ     string `json:"id_z_zmsp_rez"`
+	IdZNel1        string `json:"id_z_nel1"`
+	IdZNel2        string `json:"id_z_nel2"`
+	IdZNel3        string `json:"id_z_nel3"`
+	IdZPrekNN      string `json:"id_z_prek_nn"`
+	IdZSabzSAB     string `json:"id_z_sabz_sab"`
+	IdZOtprSAB     string `json:"id_z_otpr_sab"`
+	IdSVremUSL     string `json:"id_s_vrem_usl"`
+	UzrokTekst     string `json:"uzrok_tekst"`
+	IdZJpsVN       string `json:"id_z_jps_vn"`
+	IdZJpsNN       string `json:"id_z_jsp_vn"`
+	PoslTekst      string `json:"posl_tekst"`
+	IdZTelePocGL1  string `json:"id_s_z_tele_poc_gl1"`
+	IdZTeleKrajGL1 string `json:"id_z_tele_kraj_gl1"`
+	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`
+	IdZTeleKrajGL2 string `json:"id_z_tele_kraj_gl2"`
+	SynsoftId      string `json:"ed_id"`
 }
 
 type UnfinishedEvents struct {
