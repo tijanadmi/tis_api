@@ -44,14 +44,16 @@ func (app *application) routes() http.Handler {
 	mux.Post("/signin", app.Signin)
 
 	mux.Get("/unfinishedEvents/ndc", app.getAllUnfinishedEventsNDC)
+	mux.Patch("/unfinishedEvents/{id}", app.updateUnfinishedEvents)
 
 	mux.Get("/interruptionofdelivery/ndc", app.getDDNInterruptionOfDeliveryNDC)
+	mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByID)
 	mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
 	mux.Patch("/interruptionofdelivery/{id}", app.updateDDNInterruptionOfDelivery)
 	mux.Delete("/interruptionofdelivery/{id}", app.deleteDDNInterruptionOfDelivery)
 
-	mux.Get("/pipiddn/operation", app.getPiPiDDNIsklj)
-	mux.Get("/pipiddn/outage", app.getPiPiDDNIsklj)
+	mux.Get("/pipiddn", app.getAllPiPiDDN)
+	mux.Get("/pipiddn/{id}", app.getPiPiDDNByID)
 
 	mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
 	mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)

@@ -512,6 +512,48 @@ type UnfinishedEvents struct {
 	SynsoftId      string `json:"ed_id"`
 }
 
+type UnfinishedEventsUpdate struct {
+	Vrezav         string `json:"vrezav"`
+	Id1SGruzr      string `json:"id_s_gruzr"`
+	Id1SUzrok      string `json:"id_s_uzrok"`
+	Opis           string `json:"opis"`
+	IdZDsdfGL1     string `json:"id_z_dsdf_gl1"`
+	IdZKvarGL1     string `json:"id_z_kvar_gl1"`
+	IdZRapuGL1     string `json:"id_z_rapu_gl1"`
+	IdZPrstGL1     string `json:"id_z_prst_gl1"`
+	IdZZmspGL1     string `json:"id_z_zmsp_gl1"`
+	IdZUzmsGL1     string `json:"id_z_uzms_gl1"`
+	ZLokkGL1       string `json:"z_lokk_gl1"`
+	IdZDsdfGL2     string `json:"id_z_dsdf_gl2"`
+	IdZKvarGL2     string `json:"id_z_kvar_gl2"`
+	IdZRapuGL2     string `json:"id_z_rapu_gl2"`
+	IdZPrstGL2     string `json:"id_z_prst_gl2"`
+	IdZZmspGL2     string `json:"id_z_zmsp_gl2"`
+	IdZUzmsGL2     string `json:"id_z_uzms_gl2"`
+	ZLokkGL2       string `json:"z_lokk_gl2"`
+	IdZPrekVN      string `json:"id_z_prek_vn"`
+	IdZDisREZ      string `json:"id_z_dis_rez"`
+	IdZKvarREZ     string `json:"id_z_kvar_rez"`
+	IdZPrstREZ     string `json:"id_z_prst_rez"`
+	IdZZmspREZ     string `json:"id_z_zmsp_rez"`
+	IdZNel1        string `json:"id_z_nel1"`
+	IdZNel2        string `json:"id_z_nel2"`
+	IdZNel3        string `json:"id_z_nel3"`
+	IdZPrekNN      string `json:"id_z_prek_nn"`
+	IdZSabzSAB     string `json:"id_z_sabz_sab"`
+	IdZOtprSAB     string `json:"id_z_otpr_sab"`
+	IdSVremUSL     string `json:"id_s_vrem_usl"`
+	UzrokTekst     string `json:"uzrok_tekst"`
+	IdZJpsVN       string `json:"id_z_jps_vn"`
+	IdZJpsNN       string `json:"id_z_jsp_vn"`
+	PoslTekst      string `json:"posl_tekst"`
+	IdZTelePocGL1  string `json:"id_s_z_tele_poc_gl1"`
+	IdZTeleKrajGL1 string `json:"id_z_tele_kraj_gl1"`
+	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`
+	IdZTeleKrajGL2 string `json:"id_z_tele_kraj_gl2"`
+	SynsoftId      string `json:"ed_id"`
+}
+
 type DDNInterruptionOfDelivery struct {
 	IdSMrc            string `json:"id_s_mrc"`
 	IdSTipd           string `json:"id_s_tipd"`

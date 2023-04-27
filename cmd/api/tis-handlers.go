@@ -853,10 +853,32 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 
 /***** start PiPiDDN api  ****/
 
-func (app *application) getPiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
+func (app *application) getAllPiPiDDN(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
 
-	p, err := app.models.DB.GetAllPiPiDDNIsklj()
+	p, err := app.models.DB.GetAllPiPiDDN()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPiPiDDNByID(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	/*pipiddnID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}*/
+
+	p, err := app.models.DB.GetPiPiDDNByID(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -998,14 +1020,14 @@ func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
-	//id, err := strconv.Atoi(chi.URLParam(r, "id"))
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id := chi.URLParam(r, "id")
+	/*id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		app.errorJSON(w, err)
 		return
-	}
+	}*/
 
-	err = app.models.DB.DeletePiPiDDN(id)
+	err := app.models.DB.DeletePiPiDDN(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1018,6 +1040,10 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 
 	app.writeJSON(w, http.StatusAccepted, resp)
 }
+
+/*** end PiPiDDN api  ***/
+
+/**** start nezavrseni_dog  *****/
 
 func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
@@ -1034,7 +1060,38 @@ func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http
 	}
 }
 
-/*** end PiPiDDN api  ***/
+func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Request) {
+	var payload models.UnfinishedEventsUpdate
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.models.DB.UpdateUnfinishedEvents(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+/**** end nezavrseni_dog  *****/
 
 /***** start DDN_PREKID_ISP ****/
 func (app *application) insertDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
@@ -1102,14 +1159,14 @@ func (app *application) updateDDNInterruptionOfDelivery(w http.ResponseWriter, r
 }
 
 func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
-	//id, err := strconv.Atoi(chi.URLParam(r, "id"))
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id := chi.URLParam(r, "id")
+	/*id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		app.errorJSON(w, err)
 		return
-	}
+	}*/
 
-	err = app.models.DB.DeleteDDNInterruptionOfDelivery(id)
+	err := app.models.DB.DeleteDDNInterruptionOfDelivery(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1127,6 +1184,21 @@ func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r
 	//year := chi.URLParam(r, "year")
 
 	p, err := app.models.DB.GetDDNInterruptionOfDeliveryNDC()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getDDNInterruptionOfDeliveryByID(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	p, err := app.models.DB.GetDDNInterruptionOfDeliveryNDCByID(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
