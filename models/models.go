@@ -458,23 +458,14 @@ type UnfinishedEvents struct {
 	ObId           string `json:"ob_id"`
 	TrafoId        string `json:"trafo_id"`
 	Vrepoc         string `json:"vrepoc"`
-	PocPP          string `json:"-"`
 	Vrezav         string `json:"vrezav"`
-	ZavPP          string `json:"-"`
-	Traj           string `json:"-"`
 	Id1SGruzr      string `json:"id_s_gruzr"`
 	Id1SUzrok      string `json:"id_s_uzrok"`
-	IdSGrraz       string `json:"id_s_grraz"`
-	IdSRazlog      string `json:"id_s_razlog"`
 	Snaga          string `json:"snaga"`
 	Opis           string `json:"opis"`
-	TxRx           string `json:"-"`
 	IdSNap         string `json:"id_s_nap"`
 	P2TrafId       string `json:"p2_traf_id"`
 	PgiKor         string `json:"pgi_kor"`
-	Status         string `json:"-"`
-	IdDogSmene     string `json:"-"`
-	IdStavke       string `json:"-"`
 	IdZDsdfGL1     string `json:"id_z_dsdf_gl1"`
 	IdZKvarGL1     string `json:"id_z_kvar_gl1"`
 	IdZRapuGL1     string `json:"id_z_rapu_gl1"`
@@ -513,6 +504,7 @@ type UnfinishedEvents struct {
 }
 
 type UnfinishedEventsUpdate struct {
+	DatSmene       string `json:"dat_smene"`
 	Vrezav         string `json:"vrezav"`
 	Id1SGruzr      string `json:"id_s_gruzr"`
 	Id1SUzrok      string `json:"id_s_uzrok"`
@@ -543,10 +535,8 @@ type UnfinishedEventsUpdate struct {
 	IdZSabzSAB     string `json:"id_z_sabz_sab"`
 	IdZOtprSAB     string `json:"id_z_otpr_sab"`
 	IdSVremUSL     string `json:"id_s_vrem_usl"`
-	UzrokTekst     string `json:"uzrok_tekst"`
 	IdZJpsVN       string `json:"id_z_jps_vn"`
 	IdZJpsNN       string `json:"id_z_jsp_vn"`
-	PoslTekst      string `json:"posl_tekst"`
 	IdZTelePocGL1  string `json:"id_s_z_tele_poc_gl1"`
 	IdZTeleKrajGL1 string `json:"id_z_tele_kraj_gl1"`
 	IdZTelePocGL2  string `json:"id_z_tele_poc_gl2"`

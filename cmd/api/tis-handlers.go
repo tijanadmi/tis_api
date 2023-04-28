@@ -1060,6 +1060,28 @@ func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http
 	}
 }
 
+func (app *application) getUnfinishedEventsByID(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	/*pipiddnID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}*/
+
+	p, err := app.models.DB.GetUnfinishedEventsByID(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Request) {
 	var payload models.UnfinishedEventsUpdate
 

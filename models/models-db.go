@@ -3208,7 +3208,6 @@ func (m *DBModel) GetAllUnfinishedEventsNDC() ([]*UnfinishedEvents, error) {
    COALESCE(to_char(ID_S_NAP), ''),
    COALESCE(to_char(P2_TRAF_ID), ''),
    COALESCE(PGI_KOR, ''),
-   COALESCE(STATUS, ''),
    COALESCE(to_char(ID_Z_DSDF_GL1), ''),
    COALESCE(to_char(ID_Z_KVAR_GL1), ''),
    COALESCE(to_char(ID_Z_RAPU_GL1), ''),
@@ -3267,7 +3266,6 @@ func (m *DBModel) GetAllUnfinishedEventsNDC() ([]*UnfinishedEvents, error) {
 			&ue.ObId,
 			&ue.TrafoId,
 			&ue.Vrepoc,
-			&ue.PocPP,
 			&ue.Vrezav,
 			&ue.Id1SGruzr,
 			&ue.Id1SUzrok,
@@ -3323,6 +3321,127 @@ func (m *DBModel) GetAllUnfinishedEventsNDC() ([]*UnfinishedEvents, error) {
 	return p, nil
 }
 
+func (m *DBModel) GetUnfinishedEventsByID(synsoftId string) (*UnfinishedEvents, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+	COALESCE(to_char(ID_S_MRC), ''),
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+	COALESCE(to_char(TRAFO_ID), ''),
+   to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID1_S_GRUZR), ''),
+   COALESCE(to_char(ID1_S_UZROK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(to_char(ID_S_NAP), ''),
+   COALESCE(to_char(P2_TRAF_ID), ''),
+   COALESCE(PGI_KOR, ''),
+   COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+   COALESCE(to_char(ID_Z_PRST_GL1), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+   COALESCE(to_char(Z_LOKK_GL1), ''),
+   COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+   COALESCE(to_char(ID_Z_PRST_GL2), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+   COALESCE(to_char(Z_LOKK_GL2), ''),
+   COALESCE(to_char(ID_Z_PREK_VN), ''),
+   COALESCE(to_char(ID_Z_DIS_REZ), ''),
+   COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+   COALESCE(to_char(ID_Z_PRST_REZ), ''),
+   COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+   COALESCE(to_char(ID_Z_NEL1), ''),
+   COALESCE(to_char(ID_Z_NEL2), ''),
+   COALESCE(to_char(ID_Z_NEL3), ''),
+   COALESCE(to_char(ID_Z_PREK_NN), ''),
+   COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+   COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+   COALESCE(to_char(ID_S_VREM_USL), ''),
+   COALESCE(UZROK_TEKST, ''),
+   COALESCE(to_char(ID_Z_JPS_VN), ''),
+   COALESCE(to_char(ID_Z_JPS_NN), ''),
+   COALESCE(POSL_TEKST, ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from nezavrseni_dog_s where SYNSOFT_ID = :1`
+
+	row := m.DB.QueryRowContext(ctx, query, synsoftId)
+
+	var ue UnfinishedEvents
+	err := row.Scan(
+		&ue.Datizv,
+		&ue.IdSMrc,
+		&ue.IdSTipd,
+		&ue.IdSVrpd,
+		&ue.IdTipob,
+		&ue.ObId,
+		&ue.TrafoId,
+		&ue.Vrepoc,
+		&ue.Vrezav,
+		&ue.Id1SGruzr,
+		&ue.Id1SUzrok,
+		&ue.Snaga,
+		&ue.Opis,
+		&ue.IdSNap,
+		&ue.P2TrafId,
+		&ue.PgiKor,
+		&ue.IdZDsdfGL1,
+		&ue.IdZKvarGL1,
+		&ue.IdZRapuGL1,
+		&ue.IdZPrstGL1,
+		&ue.IdZZmspGL1,
+		&ue.IdZUzmsGL1,
+		&ue.ZLokkGL1,
+		&ue.IdZDsdfGL2,
+		&ue.IdZKvarGL2,
+		&ue.IdZRapuGL2,
+		&ue.IdZPrstGL2,
+		&ue.IdZZmspGL2,
+		&ue.IdZUzmsGL2,
+		&ue.ZLokkGL2,
+		&ue.IdZPrekVN,
+		&ue.IdZDisREZ,
+		&ue.IdZKvarREZ,
+		&ue.IdZPrstREZ,
+		&ue.IdZZmspREZ,
+		&ue.IdZNel1,
+		&ue.IdZNel2,
+		&ue.IdZNel3,
+		&ue.IdZPrekNN,
+		&ue.IdZSabzSAB,
+		&ue.IdZOtprSAB,
+		&ue.IdSVremUSL,
+		&ue.UzrokTekst,
+		&ue.IdZJpsVN,
+		&ue.IdZJpsNN,
+		&ue.PoslTekst,
+		&ue.IdZTelePocGL1,
+		&ue.IdZTeleKrajGL1,
+		&ue.IdZTelePocGL2,
+		&ue.IdZTeleKrajGL2,
+		&ue.SynsoftId,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &ue, nil
+}
+
 func (m *DBModel) UpdateUnfinishedEvents(ue UnfinishedEventsUpdate) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -3331,10 +3450,11 @@ func (m *DBModel) UpdateUnfinishedEvents(ue UnfinishedEventsUpdate) error {
 	var status int
 	var message string
 
-	query := `begin  ddn.synsoft.nezavrseni_dog_s_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24); end;`
+	query := `begin  ddn.synsoft.nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
+		ue.DatSmene,
 		ue.Vrezav,
 		ue.Id1SGruzr,
 		ue.Id1SUzrok,
@@ -3365,10 +3485,8 @@ func (m *DBModel) UpdateUnfinishedEvents(ue UnfinishedEventsUpdate) error {
 		ue.IdZSabzSAB,
 		ue.IdZOtprSAB,
 		ue.IdSVremUSL,
-		ue.UzrokTekst,
 		ue.IdZJpsVN,
 		ue.IdZJpsNN,
-		ue.PoslTekst,
 		ue.IdZTelePocGL1,
 		ue.IdZTeleKrajGL1,
 		ue.IdZTelePocGL2,
