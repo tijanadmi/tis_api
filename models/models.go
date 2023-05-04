@@ -316,6 +316,17 @@ type WorkInEENetwork struct {
 	Link        string `json:"link"`
 }
 
+type UnopenedPermit struct {
+	BrojIsk    string `json:"broj_isk"`
+	BrojIsk2   string `json:"broj_isk2"`
+	BrojIskRDC string `json:"broj_isk_rdc"`
+	RbrIsk     string `json:"rbr_isk"`
+	RazlogO    string `json:"razlog_o"`
+	DatumO     string `json:"datum_o"`
+	Rbr        string `json:"rbr"`
+	Korisnik   string `json:"korisnik"`
+}
+
 type PiPiDDNIspad struct {
 	DatSmene       string `json:"dat_smene"`
 	IdSMrc         string `json:"id_s_mrc"`

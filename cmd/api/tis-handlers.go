@@ -851,6 +851,21 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getUnopenedPermitForDay(w http.ResponseWriter, r *http.Request) {
+	day := chi.URLParam(r, "day")
+
+	unopenedPermits, err := app.models.DB.GetUnopenedPermitForDay(day)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, unopenedPermits)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /***** start PiPiDDN api  ****/
 
 func (app *application) getAllPiPiDDN(w http.ResponseWriter, r *http.Request) {

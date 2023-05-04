@@ -2694,6 +2694,53 @@ func (m *DBModel) GetPlans(year string) ([]*Plan, error) {
 	return p, nil
 }
 
+func (m *DBModel) GetUnopenedPermitForDay(day string) ([]*UnopenedPermit, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select  COALESCE(to_char(BROJ_ISK), ''),
+			COALESCE(BROJ_ISK2, ''),
+			COALESCE(BROJ_ISK_RDC, ''),
+			RBR_ISK,
+			COALESCE(RAZLOG_O, ''),
+			to_char(DATUM_O,'dd.mm.yyyy HH24:MI:SS'),
+			COALESCE(to_char(RBR), ''),
+			COALESCE(KORISNIK, '')
+ 			from TED.SYNSOFT_NEOTVORENE_DOZ
+ 			WHERE to_char(DATUM_O,'dd.mm.yyyy')= :1`
+
+	rows, err := m.DB.QueryContext(ctx, query, day)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*UnopenedPermit
+
+	for rows.Next() {
+		var data UnopenedPermit
+		err := rows.Scan(
+			&data.BrojIsk,
+			&data.BrojIsk2,
+			&data.BrojIskRDC,
+			&data.RbrIsk,
+			&data.RazlogO,
+			&data.DatumO,
+			&data.Rbr,
+			&data.Korisnik,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &data)
+	}
+
+	return p, nil
+}
+
 // Authenticate authenticates a user
 func (m *DBModel) Authenticate(username, testPassword string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

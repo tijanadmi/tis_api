@@ -43,6 +43,8 @@ func (app *application) routes() http.Handler {
 	mux.Get("/status", app.statusHandler)
 	mux.Post("/signin", app.Signin)
 
+	mux.Get("/unopenedpermitsforday/{day}", app.getUnopenedPermitForDay)
+
 	/*mux.Get("/unfinishedevents/ndc", app.getAllUnfinishedEventsNDC)
 	mux.Get("/unfinishedevents/{id}", app.getUnfinishedEventsByID)
 	mux.Patch("/unfinishedevents/{id}", app.updateUnfinishedEvents)
