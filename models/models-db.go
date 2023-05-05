@@ -3497,11 +3497,12 @@ func (m *DBModel) UpdateUnfinishedEvents(ue UnfinishedEventsUpdate) error {
 	var status int
 	var message string
 
-	query := `begin  ddn.synsoft.nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40); end;`
+	query := `begin  ddn.synsoft.nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
 		ue.DatSmene,
+		ue.TipSmene,
 		ue.Vrezav,
 		ue.Id1SGruzr,
 		ue.Id1SUzrok,

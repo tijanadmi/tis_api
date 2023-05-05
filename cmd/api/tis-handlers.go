@@ -1106,7 +1106,7 @@ func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Re
 		return
 	}
 	var resp JSONResponse
-	if payload.SynsoftId == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" {
+	if payload.DatSmene == "" || payload.TipSmene == "" || payload.SynsoftId == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
