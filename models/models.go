@@ -9,13 +9,13 @@ import (
 
 // Models is the wrapper for database
 type Models struct {
-	DB DBModel
+	DB OracleDBRepo
 }
 
 // NewModels returns models with db pool
 func NewModels(db *sql.DB) Models {
 	return Models{
-		DB: DBModel{DB: db},
+		DB: OracleDBRepo{DB: db},
 	}
 }
 
