@@ -23,6 +23,6 @@ func TestMain(m *testing.M) {
 	app.config = cfg
 	app.models = models.NewModels(db)
 	app.Domain = "example.com"
-	app.JWTSecret = "verysecret"
+	app.JWTSecret = ""
 	os.Exit(m.Run())
 }
