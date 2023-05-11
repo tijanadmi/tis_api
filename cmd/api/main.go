@@ -11,7 +11,8 @@ import (
 	"time"
 
 	_ "github.com/godror/godror"
-	"github.com/tijanadmi/tis-api/models"
+	"github.com/tijanadmi/tis-api/repository"
+	"github.com/tijanadmi/tis-api/repository/dbrepo"
 )
 
 const version = "1.0.0"
@@ -34,9 +35,10 @@ type AppStatus struct {
 }
 
 type application struct {
-	config       config
-	logger       *log.Logger
-	models       models.Models
+	config config
+	logger *log.Logger
+	DB     repository.DatabaseRepo
+	//models       models.Models
 	Domain       string
 	auth         Auth
 	JWTSecret    string
@@ -74,7 +76,8 @@ func main() {
 	app = application{
 		config: cfg,
 		logger: logger,
-		models: models.NewModels(db),
+		DB:     &dbrepo.OracleDBRepo{DB: db},
+		//models: models.NewModels(db),
 		auth: Auth{
 			Issuer:        app.JWTIssuer,
 			Audience:      app.JWTAudience,

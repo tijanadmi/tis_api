@@ -28,7 +28,7 @@ func (app *application) Signin(w http.ResponseWriter, r *http.Request) {
 	//hashedPassword := validUser.Password
 
 	//err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(creds.Password))
-	err = app.models.DB.Authenticate(creds.Username, creds.Password)
+	err = app.DB.Authenticate(creds.Username, creds.Password)
 	if err != nil {
 		app.errorJSON(w, errors.New("unauthorized"))
 		return

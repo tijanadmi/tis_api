@@ -21,7 +21,7 @@ func (app *application) getOneSignal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	signals, err := app.models.DB.OneSignal(signalID)
+	signals, err := app.DB.OneSignal(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -34,7 +34,7 @@ func (app *application) getOneSignal(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getDvDidf(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetDvDidf()
+	signals, err := app.DB.GetDvDidf()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -47,7 +47,7 @@ func (app *application) getDvDidf(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getDiffTr(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetDiffTr()
+	signals, err := app.DB.GetDiffTr()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -60,7 +60,7 @@ func (app *application) getDiffTr(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getDisTrRes(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetDisTrRes()
+	signals, err := app.DB.GetDisTrRes()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -73,7 +73,7 @@ func (app *application) getDisTrRes(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getDisDiffSp(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetDisDiffSp()
+	signals, err := app.DB.GetDisDiffSp()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -86,7 +86,7 @@ func (app *application) getDisDiffSp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getMalfunctionIn(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetMalfunctionIn()
+	signals, err := app.DB.GetMalfunctionIn()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -108,7 +108,7 @@ func (app *application) getOneMalfunctionIn(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	signals, err := app.models.DB.OneMalfunctionIn(signalID)
+	signals, err := app.DB.OneMalfunctionIn(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -121,7 +121,7 @@ func (app *application) getOneMalfunctionIn(w http.ResponseWriter, r *http.Reque
 }
 
 func (app *application) getAPU(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetAPU()
+	signals, err := app.DB.GetAPU()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -143,7 +143,7 @@ func (app *application) getOneAPU(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	signals, err := app.models.DB.OneAPU(signalID)
+	signals, err := app.DB.OneAPU(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -156,7 +156,7 @@ func (app *application) getOneAPU(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getOCDV(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetOCDV()
+	signals, err := app.DB.GetOCDV()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -169,7 +169,7 @@ func (app *application) getOCDV(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getOCTR12(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetOCTR12()
+	signals, err := app.DB.GetOCTR12()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -182,7 +182,7 @@ func (app *application) getOCTR12(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getOCTRR(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetOCTRR()
+	signals, err := app.DB.GetOCTRR()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -195,7 +195,7 @@ func (app *application) getOCTRR(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getOCSP(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetOCSP()
+	signals, err := app.DB.GetOCSP()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -208,7 +208,7 @@ func (app *application) getOCSP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getEarthfaultOCDV(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetEarthfaultOCDV()
+	signals, err := app.DB.GetEarthfaultOCDV()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -221,7 +221,7 @@ func (app *application) getEarthfaultOCDV(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) getEarthfaultOCTR(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetEarthfaultOCTR()
+	signals, err := app.DB.GetEarthfaultOCTR()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -234,7 +234,7 @@ func (app *application) getEarthfaultOCTR(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) getEarthfaultOCSP(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetEarthfaultOCSP()
+	signals, err := app.DB.GetEarthfaultOCSP()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -247,7 +247,7 @@ func (app *application) getEarthfaultOCSP(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) getDirEarthfaultOC(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetDirEarthfaultOC()
+	signals, err := app.DB.GetDirEarthfaultOC()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -260,7 +260,7 @@ func (app *application) getDirEarthfaultOC(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *application) getTPSendRcdv(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetTPSendRcdv()
+	signals, err := app.DB.GetTPSendRcdv()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -273,7 +273,7 @@ func (app *application) getTPSendRcdv(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getCircuitbreaker(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetCircuitbreaker()
+	signals, err := app.DB.GetCircuitbreaker()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -286,7 +286,7 @@ func (app *application) getCircuitbreaker(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) getBBPBFtrip(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetBBPBFtrip()
+	signals, err := app.DB.GetBBPBFtrip()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -299,7 +299,7 @@ func (app *application) getBBPBFtrip(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getNonElectrical(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetNonElectrical()
+	signals, err := app.DB.GetNonElectrical()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -312,7 +312,7 @@ func (app *application) getNonElectrical(w http.ResponseWriter, r *http.Request)
 }
 
 func (app *application) getBBPBBtrip(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetBBPBBtrip()
+	signals, err := app.DB.GetBBPBBtrip()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -325,7 +325,7 @@ func (app *application) getBBPBBtrip(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getBFtrip(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetBFtrip()
+	signals, err := app.DB.GetBFtrip()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -338,7 +338,7 @@ func (app *application) getBFtrip(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getGroupsOfCauses(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetGroupsOfCauses()
+	signals, err := app.DB.GetGroupsOfCauses()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -360,7 +360,7 @@ func (app *application) getOneGroupOfCauses(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	signals, err := app.models.DB.OneGroupOfCauses(signalID)
+	signals, err := app.DB.OneGroupOfCauses(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -373,7 +373,7 @@ func (app *application) getOneGroupOfCauses(w http.ResponseWriter, r *http.Reque
 }
 
 func (app *application) getCauses(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetCauses()
+	signals, err := app.DB.GetCauses()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -395,7 +395,7 @@ func (app *application) getOneCause(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	signals, err := app.models.DB.OneCause(signalID)
+	signals, err := app.DB.OneCause(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -408,7 +408,7 @@ func (app *application) getOneCause(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getGroupOfReasons(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetGroupOfReasons()
+	signals, err := app.DB.GetGroupOfReasons()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -430,7 +430,7 @@ func (app *application) getOneGroupOfReason(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	signals, err := app.models.DB.OneGroupOfReasons(signalID)
+	signals, err := app.DB.OneGroupOfReasons(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -443,7 +443,7 @@ func (app *application) getOneGroupOfReason(w http.ResponseWriter, r *http.Reque
 }
 
 func (app *application) getReasons(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetReasons()
+	signals, err := app.DB.GetReasons()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -465,7 +465,7 @@ func (app *application) getOneReason(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	signals, err := app.models.DB.OneReason(signalID)
+	signals, err := app.DB.OneReason(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -478,7 +478,7 @@ func (app *application) getOneReason(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getWeatherConditions(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetWeatherConditions()
+	signals, err := app.DB.GetWeatherConditions()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -500,7 +500,7 @@ func (app *application) getOneWeatherCondition(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	signals, err := app.models.DB.OneWeatherCondition(signalID)
+	signals, err := app.DB.OneWeatherCondition(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -513,7 +513,7 @@ func (app *application) getOneWeatherCondition(w http.ResponseWriter, r *http.Re
 }
 
 func (app *application) getCategoriesOfEvents(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetCategoriesOfEvents()
+	signals, err := app.DB.GetCategoriesOfEvents()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -535,7 +535,7 @@ func (app *application) getOneCategoryOfEvents(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	signals, err := app.models.DB.OneCategoryOfEvents(signalID)
+	signals, err := app.DB.OneCategoryOfEvents(signalID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -548,7 +548,7 @@ func (app *application) getOneCategoryOfEvents(w http.ResponseWriter, r *http.Re
 }
 
 func (app *application) getOHL(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetOHL()
+	signals, err := app.DB.GetOHL()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -561,7 +561,7 @@ func (app *application) getOHL(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getPowerCables(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetPowerCables()
+	signals, err := app.DB.GetPowerCables()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -574,7 +574,7 @@ func (app *application) getPowerCables(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getSubstations(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetSubstations()
+	signals, err := app.DB.GetSubstations()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -587,7 +587,7 @@ func (app *application) getSubstations(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getFeeders(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetFeeders()
+	signals, err := app.DB.GetFeeders()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -600,7 +600,7 @@ func (app *application) getFeeders(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getProtectionDevices(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetProtectionDevices()
+	signals, err := app.DB.GetProtectionDevices()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -613,7 +613,7 @@ func (app *application) getProtectionDevices(w http.ResponseWriter, r *http.Requ
 }
 
 func (app *application) getPowerTransformers(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetPowerTransformers()
+	signals, err := app.DB.GetPowerTransformers()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -626,7 +626,7 @@ func (app *application) getPowerTransformers(w http.ResponseWriter, r *http.Requ
 }
 
 func (app *application) getDisconnectors(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetDisconnectors()
+	signals, err := app.DB.GetDisconnectors()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -639,7 +639,7 @@ func (app *application) getDisconnectors(w http.ResponseWriter, r *http.Request)
 }
 
 func (app *application) getWorkPermissions(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetWorkPermissions()
+	signals, err := app.DB.GetWorkPermissions()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -652,7 +652,7 @@ func (app *application) getWorkPermissions(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *application) getWorkPermissionsAll(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetWorkPermissionsAll()
+	signals, err := app.DB.GetWorkPermissionsAll()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -665,7 +665,7 @@ func (app *application) getWorkPermissionsAll(w http.ResponseWriter, r *http.Req
 }
 
 func (app *application) getRequest1Gr(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetRequest1Gr()
+	signals, err := app.DB.GetRequest1Gr()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -678,7 +678,7 @@ func (app *application) getRequest1Gr(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getRequest2Gr(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetRequest2Gr()
+	signals, err := app.DB.GetRequest2Gr()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -691,7 +691,7 @@ func (app *application) getRequest2Gr(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getWorkInEENetwork(w http.ResponseWriter, r *http.Request) {
-	signals, err := app.models.DB.GetWorkInEENetwork()
+	signals, err := app.DB.GetWorkInEENetwork()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -705,7 +705,7 @@ func (app *application) getWorkInEENetwork(w http.ResponseWriter, r *http.Reques
 
 func (app *application) getWeather(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
-	weatherData, err := app.models.DB.GetWeather(year)
+	weatherData, err := app.DB.GetWeather(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -719,7 +719,7 @@ func (app *application) getWeather(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) getWeatherForecast(w http.ResponseWriter, r *http.Request) {
 
-	weatherData, err := app.models.DB.GetWeatherForecast()
+	weatherData, err := app.DB.GetWeatherForecast()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -734,7 +734,7 @@ func (app *application) getWeatherForecast(w http.ResponseWriter, r *http.Reques
 func (app *application) getWeatherHistory(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetWeatherHistory(year)
+	weatherData, err := app.DB.GetWeatherHistory(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -749,7 +749,7 @@ func (app *application) getWeatherHistory(w http.ResponseWriter, r *http.Request
 func (app *application) getPermissions1(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetPermissions1(year)
+	weatherData, err := app.DB.GetPermissions1(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -764,7 +764,7 @@ func (app *application) getPermissions1(w http.ResponseWriter, r *http.Request) 
 func (app *application) getPermissions23(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetPermissions23(year)
+	weatherData, err := app.DB.GetPermissions23(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -779,7 +779,7 @@ func (app *application) getPermissions23(w http.ResponseWriter, r *http.Request)
 func (app *application) getRequests1(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetRequests1(year)
+	weatherData, err := app.DB.GetRequests1(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -794,7 +794,7 @@ func (app *application) getRequests1(w http.ResponseWriter, r *http.Request) {
 func (app *application) getRequests23(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetRequests23(year)
+	weatherData, err := app.DB.GetRequests23(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -809,7 +809,7 @@ func (app *application) getRequests23(w http.ResponseWriter, r *http.Request) {
 func (app *application) getOutages(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetOutages(year)
+	weatherData, err := app.DB.GetOutages(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -824,7 +824,7 @@ func (app *application) getOutages(w http.ResponseWriter, r *http.Request) {
 func (app *application) getExclusions(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetExclusions(year)
+	weatherData, err := app.DB.GetExclusions(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -839,7 +839,7 @@ func (app *application) getExclusions(w http.ResponseWriter, r *http.Request) {
 func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
-	weatherData, err := app.models.DB.GetPlans(year)
+	weatherData, err := app.DB.GetPlans(year)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -854,7 +854,7 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 func (app *application) getUnopenedPermitForDay(w http.ResponseWriter, r *http.Request) {
 	day := chi.URLParam(r, "day")
 
-	unopenedPermits, err := app.models.DB.GetUnopenedPermitForDay(day)
+	unopenedPermits, err := app.DB.GetUnopenedPermitForDay(day)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -871,7 +871,7 @@ func (app *application) getUnopenedPermitForDay(w http.ResponseWriter, r *http.R
 func (app *application) getAllPiPiDDN(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
 
-	p, err := app.models.DB.GetAllPiPiDDN()
+	p, err := app.DB.GetAllPiPiDDN()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -893,7 +893,7 @@ func (app *application) getPiPiDDNByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}*/
 
-	p, err := app.models.DB.GetPiPiDDNByID(id)
+	p, err := app.DB.GetPiPiDDNByID(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -920,7 +920,7 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.models.DB.InsertPiPiDDNIsklj(payload)
+		err := app.DB.InsertPiPiDDNIsklj(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -951,7 +951,7 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.models.DB.UpdatePiPiDDNIsklj(payload)
+		err := app.DB.UpdatePiPiDDNIsklj(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -985,7 +985,7 @@ func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err = app.models.DB.InsertPiPiDDNIspad(payload)
+		err = app.DB.InsertPiPiDDNIspad(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1016,7 +1016,7 @@ func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.models.DB.UpdatePiPiDDNIspad(payload)
+		err := app.DB.UpdatePiPiDDNIspad(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1042,7 +1042,7 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 		return
 	}*/
 
-	err := app.models.DB.DeletePiPiDDN(id)
+	err := app.DB.DeletePiPiDDN(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1063,7 +1063,7 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
 
-	p, err := app.models.DB.GetAllUnfinishedEventsNDC()
+	p, err := app.DB.GetAllUnfinishedEventsNDC()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1085,7 +1085,7 @@ func (app *application) getUnfinishedEventsByID(w http.ResponseWriter, r *http.R
 		return
 	}*/
 
-	p, err := app.models.DB.GetUnfinishedEventsByID(id)
+	p, err := app.DB.GetUnfinishedEventsByID(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1110,7 +1110,7 @@ func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Re
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.models.DB.UpdateUnfinishedEvents(payload)
+		err := app.DB.UpdateUnfinishedEvents(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1146,7 +1146,7 @@ func (app *application) insertDDNInterruptionOfDelivery(w http.ResponseWriter, r
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.models.DB.InsertDDNInterruptionOfDelivery(payload)
+		err := app.DB.InsertDDNInterruptionOfDelivery(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1177,7 +1177,7 @@ func (app *application) updateDDNInterruptionOfDelivery(w http.ResponseWriter, r
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.models.DB.UpdateDDNInterruptionOfDelivery(payload)
+		err := app.DB.UpdateDDNInterruptionOfDelivery(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1203,7 +1203,7 @@ func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r
 		return
 	}*/
 
-	err := app.models.DB.DeleteDDNInterruptionOfDelivery(id)
+	err := app.DB.DeleteDDNInterruptionOfDelivery(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1220,7 +1220,7 @@ func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r
 func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
 
-	p, err := app.models.DB.GetDDNInterruptionOfDeliveryNDC()
+	p, err := app.DB.GetDDNInterruptionOfDeliveryNDC()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1235,7 +1235,7 @@ func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r
 func (app *application) getDDNInterruptionOfDeliveryByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	p, err := app.models.DB.GetDDNInterruptionOfDeliveryNDCByID(id)
+	p, err := app.DB.GetDDNInterruptionOfDeliveryNDCByID(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1251,7 +1251,7 @@ func (app *application) getDDNInterruptionOfDeliveryByID(w http.ResponseWriter, 
 func (app *application) getAllUnbalancedTrader(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
 
-	p, err := app.models.DB.GetAllUnbalancedTrader()
+	p, err := app.DB.GetAllUnbalancedTrader()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1282,7 +1282,7 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// validate user against database
-	user, err := app.models.DB.GetUserByUsername(requestPayload.Username)
+	user, err := app.DB.GetUserByUsername(requestPayload.Username)
 	if err != nil {
 		app.errorJSON(w, errors.New("invalid credentials"), http.StatusUnauthorized)
 		return
@@ -1300,7 +1300,6 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		roles = append(roles, r.RoleCode)
 	}
 
-	//fmt.Println(roles)
 	// create a jwt user
 	u := jwtUser{
 		ID:        user.ID,
@@ -1346,7 +1345,7 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			user, err := app.models.DB.GetUserByID(userID)
+			user, err := app.DB.GetUserByID(userID)
 			if err != nil {
 				app.errorJSON(w, errors.New("unknown user"), http.StatusUnauthorized)
 				return

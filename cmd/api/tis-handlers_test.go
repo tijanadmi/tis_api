@@ -14,12 +14,12 @@ func Test_app_authenticate(t *testing.T) {
 		requestBody        string
 		expectedStatusCode int
 	}{
-		{"valid user", `{"username":"","password":""}`, http.StatusAccepted},
+		{"valid user", `{"username":"test","password":"test"}`, http.StatusAccepted},
 		{"not json", `I'm not JSON`, http.StatusUnauthorized},
-		/*{"empty json", `{}`, http.StatusUnauthorized},
-		{"empty email", `{"email":""}`, http.StatusUnauthorized},
-		{"empty password", `{"email":"admin@example.com"}`, http.StatusUnauthorized},
-		{"invalid user", `{"email":"admin@someotherdomain.com","password":"secret"}`, http.StatusUnauthorized},*/
+		{"empty json", `{}`, http.StatusUnauthorized},
+		{"empty user", `{"username":""}`, http.StatusUnauthorized},
+		{"empty password", `{"username":"test"}`, http.StatusUnauthorized},
+		{"invalid user", `{"username":"test","password":"secret"}`, http.StatusUnauthorized},
 	}
 
 	for _, e := range theTests {
