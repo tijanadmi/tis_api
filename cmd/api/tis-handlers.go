@@ -1247,6 +1247,24 @@ func (app *application) getDDNInterruptionOfDeliveryByID(w http.ResponseWriter, 
 	}
 }
 
+/*** start NOVITA ***/
+func (app *application) getAllUnbalancedTrader(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.models.DB.GetAllUnbalancedTrader()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+/*** end NOVITA ***/
+
 /****** end DDN_PREKID_ISP ****/
 
 /**************** the another method ***********/

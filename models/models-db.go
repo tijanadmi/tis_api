@@ -4060,3 +4060,40 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*D
 
 	return &ue, nil
 }
+
+/** start NOVITA ***/
+func (m *OracleDBRepo) GetAllUnbalancedTrader() ([]*UnbalancedTrader, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select COALESCE(SIFRA_TRG, ''),
+			COALESCE(to_char(ODSTUPANJE), '')
+   			from SYNSOFT_NEIZB_TRG`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*UnbalancedTrader
+
+	for rows.Next() {
+		var ue UnbalancedTrader
+		err := rows.Scan(
+			&ue.Code,
+			&ue.Deviation,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &ue)
+	}
+
+	return p, nil
+}
+
+/** end NOVITA ***/

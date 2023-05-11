@@ -154,6 +154,10 @@ func (app *application) routes() http.Handler {
 		mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
 
 		mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
+
+		/**** NOVITA   ****/
+		mux.Get("/unbalancestraders", app.getAllUnbalancedTrader)
+		/**** NOVITA   ****/
 	})
 
 	return mux

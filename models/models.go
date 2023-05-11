@@ -831,3 +831,9 @@ func (u *User) PasswordMatches(plainText string) (bool, error) {
 
 	return true, nil
 }
+
+// UnbalancedTraders
+type UnbalancedTrader struct {
+	Code      string `json:"code"`
+	Deviation string `json:"deviation"`
+}

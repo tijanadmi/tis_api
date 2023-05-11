@@ -85,4 +85,5 @@ type DatabaseRepo interface {
 	DeleteDDNInterruptionOfDelivery(synsoftId string) error
 	GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterruptionOfDelivery, error)
 	GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*models.DDNInterruptionOfDelivery, error)
+	GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error)
 }
