@@ -9,7 +9,6 @@ import (
 	"time"
 
 	_ "github.com/godror/godror"
-	"github.com/tijanadmi/tis-api/models"
 	"github.com/tijanadmi/tis-api/repository"
 )
 
@@ -40,7 +39,199 @@ func TestMain(m *testing.M) {
 
 }
 
-func TestOracleDBRepoInsertUser(t *testing.T) {
+func TestPostgresDBRepoOneSignal(t *testing.T) {
+	signal, err := testRepo.OneSignal(262)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if signal.Name != "Sistem za hlađenje - kvar" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", signal.Name)
+	}
+
+	_, err = testRepo.OneSignal(500)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+
+}
+
+func TestPostgresDBRepoOneMalfunctionIn(t *testing.T) {
+	mf, err := testRepo.OneMalfunctionIn(18)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if mf.Name != "Faza “0”" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", mf.Name)
+	}
+
+	_, err = testRepo.OneMalfunctionIn(1)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoOneAPU(t *testing.T) {
+	mf, err := testRepo.OneAPU(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if mf.Name != "Uspešno" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", mf.Name)
+	}
+
+	_, err = testRepo.OneAPU(201)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoOneGroupOfCauses(t *testing.T) {
+	grc, err := testRepo.OneGroupOfCauses(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if grc.Name != "DV - elektromontažni deo" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", grc.Name)
+	}
+
+	_, err = testRepo.OneGroupOfCauses(20)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoOneCause(t *testing.T) {
+	cau, err := testRepo.OneCause(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if cau.Name != "Avionska nezgoda" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", cau.Name)
+	}
+
+	_, err = testRepo.OneCause(95)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoOneGroupOfReasons(t *testing.T) {
+	gr, err := testRepo.OneGroupOfReasons(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if gr.Name != "Preventivno održavanje" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", gr.Name)
+	}
+
+	_, err = testRepo.OneGroupOfReasons(15)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoOneReason(t *testing.T) {
+	r, err := testRepo.OneReason(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if r.Name != "Pregled" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", r.Name)
+	}
+
+	_, err = testRepo.OneReason(25)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+func TestPostgresDBRepoOneWeatherCondition(t *testing.T) {
+	w, err := testRepo.OneWeatherCondition(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if w.Name != "Suvo vreme" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", w.Name)
+	}
+
+	_, err = testRepo.OneWeatherCondition(15)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoOneCategoryOfEvents(t *testing.T) {
+	ce, err := testRepo.OneCategoryOfEvents(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if ce.Name != "APU Uspešno" {
+		t.Errorf("wrong email returned by OneSignal; expected Sistem za hlađenje - kvar but got %s", ce.Name)
+	}
+
+	_, err = testRepo.OneCategoryOfEvents(95)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestPostgresDBRepoGetUserByID(t *testing.T) {
+	user, err := testRepo.GetUserByID(1)
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if user.Username != "tijana" {
+		t.Errorf("wrong email returned by OneSignal; expected tijana but got %s", user.Username)
+	}
+
+	_, err = testRepo.GetUserByID(5)
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+/*func TestPostgresDBRepoGetDvDidf(t *testing.T) {
+	signals, err := testRepo.GetDvDidf()
+	if err != nil {
+		t.Errorf("all users reports an error: %s", err)
+	}
+
+	if len(signals) != 1 {
+		t.Errorf("all users reports wrong size; expected 1, but got %d", len(users))
+	}
+
+	testUser := data.User{
+		FirstName: "Jack",
+		LastName:  "Smith",
+		Email:     "jack@smith.com",
+		Password:  "secret",
+		IsAdmin:   1,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	_, _ = testRepo.InsertUser(testUser)
+
+	users, err = testRepo.AllUsers()
+	if err != nil {
+		t.Errorf("all users reports an error: %s", err)
+	}
+
+	if len(users) != 2 {
+		t.Errorf("all users reports wrong size after insert; expected 2, but got %d", len(users))
+	}
+}*/
+
+/*func TestOracleDBRepoInsertPiPiDDNIsklj(t *testing.T) {
 
 	pipiddn := models.PiPiDDNIsklj{
 		DatSmene:  "07.04.2023",
@@ -64,4 +255,4 @@ func TestOracleDBRepoInsertUser(t *testing.T) {
 	if err != nil {
 		t.Errorf("insert user returned an error: %s", err)
 	}
-}
+}*/
