@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 
 }
 
-func TestPostgresDBRepoOneSignal(t *testing.T) {
+func OracleDBRepoOneSignal(t *testing.T) {
 	signal, err := testRepo.OneSignal(262)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -56,7 +56,7 @@ func TestPostgresDBRepoOneSignal(t *testing.T) {
 
 }
 
-func TestPostgresDBRepoOneMalfunctionIn(t *testing.T) {
+func OracleDBRepoOneMalfunctionIn(t *testing.T) {
 	mf, err := testRepo.OneMalfunctionIn(18)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -72,7 +72,7 @@ func TestPostgresDBRepoOneMalfunctionIn(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoOneAPU(t *testing.T) {
+func OracleDBRepoOneAPU(t *testing.T) {
 	mf, err := testRepo.OneAPU(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -88,7 +88,7 @@ func TestPostgresDBRepoOneAPU(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoOneGroupOfCauses(t *testing.T) {
+func OracleDBRepoOneGroupOfCauses(t *testing.T) {
 	grc, err := testRepo.OneGroupOfCauses(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -104,7 +104,7 @@ func TestPostgresDBRepoOneGroupOfCauses(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoOneCause(t *testing.T) {
+func OracleDBRepoOneCause(t *testing.T) {
 	cau, err := testRepo.OneCause(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -120,7 +120,7 @@ func TestPostgresDBRepoOneCause(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoOneGroupOfReasons(t *testing.T) {
+func OracleDBRepoOneGroupOfReasons(t *testing.T) {
 	gr, err := testRepo.OneGroupOfReasons(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -136,7 +136,7 @@ func TestPostgresDBRepoOneGroupOfReasons(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoOneReason(t *testing.T) {
+func OracleDBRepoOneReason(t *testing.T) {
 	r, err := testRepo.OneReason(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -151,7 +151,7 @@ func TestPostgresDBRepoOneReason(t *testing.T) {
 		t.Error("no error reported when getting non existent user by id")
 	}
 }
-func TestPostgresDBRepoOneWeatherCondition(t *testing.T) {
+func OracleDBRepoOneWeatherCondition(t *testing.T) {
 	w, err := testRepo.OneWeatherCondition(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -167,7 +167,7 @@ func TestPostgresDBRepoOneWeatherCondition(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoOneCategoryOfEvents(t *testing.T) {
+func OracleDBRepoOneCategoryOfEvents(t *testing.T) {
 	ce, err := testRepo.OneCategoryOfEvents(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -183,7 +183,7 @@ func TestPostgresDBRepoOneCategoryOfEvents(t *testing.T) {
 	}
 }
 
-func TestPostgresDBRepoGetUserByID(t *testing.T) {
+func OracleDBRepoGetUserByID(t *testing.T) {
 	user, err := testRepo.GetUserByID(1)
 	if err != nil {
 		t.Errorf("error getting user by id: %s", err)
@@ -199,7 +199,7 @@ func TestPostgresDBRepoGetUserByID(t *testing.T) {
 	}
 }
 
-/*func TestPostgresDBRepoGetDvDidf(t *testing.T) {
+/*func OracleDBRepoGetDvDidf(t *testing.T) {
 	signals, err := testRepo.GetDvDidf()
 	if err != nil {
 		t.Errorf("all users reports an error: %s", err)
