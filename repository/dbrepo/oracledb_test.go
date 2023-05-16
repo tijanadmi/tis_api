@@ -9,6 +9,7 @@ import (
 	"time"
 
 	_ "github.com/godror/godror"
+	"github.com/tijanadmi/tis-api/models"
 	"github.com/tijanadmi/tis-api/repository"
 )
 
@@ -183,6 +184,21 @@ func TestOracleDBRepoOneCategoryOfEvents(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoGetUserByUsername(t *testing.T) {
+	user, err := testRepo.GetUserByUsername("tijana")
+	if err != nil {
+		t.Errorf("error getting user by username: %s", err)
+	}
+
+	if user.ID != 1 {
+		t.Errorf("wrong id returned by GetUserByUsername; expected 1 but got %d", user.ID)
+	}
+
+	_, err = testRepo.GetUserByUsername("ana")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by username")
+	}
+}
 func TestOracleDBRepoGetUserByID(t *testing.T) {
 	user, err := testRepo.GetUserByID(1)
 	if err != nil {
@@ -199,39 +215,7 @@ func TestOracleDBRepoGetUserByID(t *testing.T) {
 	}
 }
 
-/*func TestOracleDBRepoGetDvDidf(t *testing.T) {
-	signals, err := testRepo.GetDvDidf()
-	if err != nil {
-		t.Errorf("all users reports an error: %s", err)
-	}
-
-	if len(signals) != 1 {
-		t.Errorf("all users reports wrong size; expected 1, but got %d", len(users))
-	}
-
-	testUser := data.User{
-		FirstName: "Jack",
-		LastName:  "Smith",
-		Email:     "jack@smith.com",
-		Password:  "secret",
-		IsAdmin:   1,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
-
-	_, _ = testRepo.InsertUser(testUser)
-
-	users, err = testRepo.AllUsers()
-	if err != nil {
-		t.Errorf("all users reports an error: %s", err)
-	}
-
-	if len(users) != 2 {
-		t.Errorf("all users reports wrong size after insert; expected 2, but got %d", len(users))
-	}
-}*/
-
-/*func TestOracleDBRepoInsertPiPiDDNIsklj(t *testing.T) {
+func TestOracleDBRepoInsertPiPiDDNIsklj(t *testing.T) {
 
 	pipiddn := models.PiPiDDNIsklj{
 		DatSmene:  "07.04.2023",
@@ -255,4 +239,376 @@ func TestOracleDBRepoGetUserByID(t *testing.T) {
 	if err != nil {
 		t.Errorf("insert user returned an error: %s", err)
 	}
-}*/
+}
+
+func TestOracleDBRepoGetPiPiDDNByID(t *testing.T) {
+	pipiddn, err := testRepo.GetPiPiDDNByID("12399")
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if pipiddn.IdSMrc != "8" {
+		t.Errorf("wrong  returned by GetPiPiDDNByID; expected 8 but got %s", pipiddn.IdSMrc)
+	}
+
+	_, err = testRepo.GetPiPiDDNByID("12398")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestOracleDBRepoUpdatePiPiDDNIsklj(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIsklj{
+		DatSmene:  "08.04.2023",
+		IdSMrc:    "8",
+		TipMan:    "1",
+		IdTipob:   "4",
+		ObId:      "105",
+		TrafoId:   "",
+		Vrepoc:    "08.04.2023 19:35:00",
+		Vrezav:    "08.04.2023 23:25:00",
+		IdSGrraz:  "3",
+		IdSRazlog: "21",
+		ManTekst:  "Od 23.03.23 07:45 na snazi planirani radovi broj: R-67/1 (AKZ metalnih nosača VN opreme u TRP 400kV od TR1 u  TS Beograd 8 Vasiljević Aleksandar). NA SNAZI;",
+		IdSNap:    "",
+		P2TrafId:  "",
+		KorUneo:   "pi1100",
+		SynsoftId: "12399",
+	}
+
+	err := testRepo.UpdatePiPiDDNIsklj(pipiddn)
+	if err != nil {
+		t.Errorf("error updating PiPiDDNIsklj  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetPiPiDDNByID(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "08.04.2023 23:25:00" {
+		t.Errorf("expected updated record to have vrezav 08.04.2023 23:25:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
+func TestOracleDBRepoDeletePiPiDDN(t *testing.T) {
+	err := testRepo.DeletePiPiDDN("12399")
+	if err != nil {
+		t.Errorf("error deleting user id 12399: %s", err)
+	}
+
+	_, err = testRepo.GetPiPiDDNByID("12399")
+	if err == nil {
+		t.Error("retrieved user id 12399, who should have been deleted")
+	}
+}
+
+func TestOracleDBRepoInsertPiPiDDNIspad(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIspad{
+		DatSmene:       "27.04.2023",
+		IdSMrc:         "8",
+		IdSTipd:        "1",
+		IdSVrpd:        "1",
+		IdRadAPU:       "1",
+		IdTipob:        "1",
+		ObId:           "354",
+		TrafoId:        "248",
+		Vrepoc:         "27.04.2023 00:04:00",
+		Vrezav:         "",
+		Id1SGruzr:      "9",
+		Id1SUzrok:      "70",
+		Snaga:          "",
+		Opis:           "this is outage put api",
+		IdSNap:         "7",
+		P2TrafId:       "3625",
+		KorUneo:        "DTOMIC",
+		IdZDsdfGL1:     "54",
+		IdZKvarGL1:     "",
+		IdZRapuGL1:     "",
+		IdZPrstGL1:     "",
+		IdZZmspGL1:     "",
+		IdZUzmsGL1:     "",
+		ZLokkGL1:       "",
+		IdZDsdfGL2:     "54",
+		IdZKvarGL2:     "",
+		IdZRapuGL2:     "",
+		IdZPrstGL2:     "",
+		IdZZmspGL2:     "",
+		IdZUzmsGL2:     "",
+		ZLokkGL2:       "",
+		IdZPrekVN:      "",
+		IdZDisREZ:      "",
+		IdZKvarREZ:     "",
+		IdZPrstREZ:     "",
+		IdZZmspREZ:     "",
+		IdZNel1:        "44",
+		IdZNel2:        "",
+		IdZNel3:        "",
+		IdZPrekNN:      "",
+		IdZSabzSAB:     "",
+		IdZOtprSAB:     "",
+		IdSVremUSL:     "",
+		UzrokTekst:     "",
+		IdZJpsVN:       "",
+		IdZJpsNN:       "",
+		PoslTekst:      "",
+		IdZTelePocGL1:  "",
+		IdZTeleKrajGL1: "",
+		IdZTelePocGL2:  "",
+		IdZTeleKrajGL2: "",
+		SynsoftId:      "1119",
+	}
+
+	err := testRepo.InsertPiPiDDNIspad(pipiddn)
+	if err != nil {
+		t.Errorf("insert user returned an error: %s", err)
+	}
+}
+
+func TestOracleDBRepoUpdatePiPiDDNIspad(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIspad{
+		DatSmene:       "27.04.2023",
+		IdSMrc:         "8",
+		IdSTipd:        "1",
+		IdSVrpd:        "1",
+		IdRadAPU:       "1",
+		IdTipob:        "1",
+		ObId:           "354",
+		TrafoId:        "248",
+		Vrepoc:         "27.04.2023 21:04:00",
+		Vrezav:         "28.04.2023 00:04:00",
+		Id1SGruzr:      "9",
+		Id1SUzrok:      "70",
+		Snaga:          "",
+		Opis:           "this is outage put api",
+		IdSNap:         "7",
+		P2TrafId:       "3625",
+		KorUneo:        "DTOMIC",
+		IdZDsdfGL1:     "54",
+		IdZKvarGL1:     "",
+		IdZRapuGL1:     "",
+		IdZPrstGL1:     "",
+		IdZZmspGL1:     "",
+		IdZUzmsGL1:     "",
+		ZLokkGL1:       "",
+		IdZDsdfGL2:     "54",
+		IdZKvarGL2:     "",
+		IdZRapuGL2:     "",
+		IdZPrstGL2:     "",
+		IdZZmspGL2:     "",
+		IdZUzmsGL2:     "",
+		ZLokkGL2:       "",
+		IdZPrekVN:      "",
+		IdZDisREZ:      "",
+		IdZKvarREZ:     "",
+		IdZPrstREZ:     "",
+		IdZZmspREZ:     "",
+		IdZNel1:        "44",
+		IdZNel2:        "",
+		IdZNel3:        "",
+		IdZPrekNN:      "",
+		IdZSabzSAB:     "",
+		IdZOtprSAB:     "",
+		IdSVremUSL:     "",
+		UzrokTekst:     "",
+		IdZJpsVN:       "",
+		IdZJpsNN:       "",
+		PoslTekst:      "",
+		IdZTelePocGL1:  "",
+		IdZTeleKrajGL1: "",
+		IdZTelePocGL2:  "",
+		IdZTeleKrajGL2: "",
+		SynsoftId:      "1119",
+	}
+
+	err := testRepo.UpdatePiPiDDNIspad(pipiddn)
+	if err != nil {
+		t.Errorf("error updating PiPiDDNIsklj  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetPiPiDDNByID(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "28.04.2023 00:04:00" {
+		t.Errorf("expected updated record to have vrezav 28.04.2023 00:04:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
+func TestOracleDBRepoDeletePiPiDDN1(t *testing.T) {
+	err := testRepo.DeletePiPiDDN("1119")
+	if err != nil {
+		t.Errorf("error deleting user id 1119: %s", err)
+	}
+
+	_, err = testRepo.GetPiPiDDNByID("1119")
+	if err == nil {
+		t.Error("retrieved user id 1119, who should have been deleted")
+	}
+}
+
+func TestOracleDBRepoGetUnfinishedEventsByID(t *testing.T) {
+	pipiddn, err := testRepo.GetUnfinishedEventsByID("123")
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if pipiddn.IdSMrc != "8" {
+		t.Errorf("wrong  returned by GetUnfinishedEventsByID; expected 8 but got %s", pipiddn.IdSMrc)
+	}
+
+	_, err = testRepo.GetUnfinishedEventsByID("124")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestOracleDBRepoUpdateUnfinishedEvents(t *testing.T) {
+
+	pipiddn := models.UnfinishedEventsUpdate{
+		DatSmene:       "26.05.2023",
+		TipSmene:       "D",
+		Vrezav:         "16.05.2023 00:04:00",
+		Id1SGruzr:      "9",
+		Id1SUzrok:      "70",
+		Opis:           "this is outage put api",
+		IdZDsdfGL1:     "54",
+		IdZKvarGL1:     "",
+		IdZRapuGL1:     "",
+		IdZPrstGL1:     "",
+		IdZZmspGL1:     "",
+		IdZUzmsGL1:     "",
+		ZLokkGL1:       "",
+		IdZDsdfGL2:     "54",
+		IdZKvarGL2:     "",
+		IdZRapuGL2:     "",
+		IdZPrstGL2:     "",
+		IdZZmspGL2:     "",
+		IdZUzmsGL2:     "",
+		ZLokkGL2:       "",
+		IdZPrekVN:      "",
+		IdZDisREZ:      "",
+		IdZKvarREZ:     "",
+		IdZPrstREZ:     "",
+		IdZZmspREZ:     "",
+		IdZNel1:        "44",
+		IdZNel2:        "",
+		IdZNel3:        "",
+		IdZPrekNN:      "",
+		IdZSabzSAB:     "",
+		IdZOtprSAB:     "",
+		IdSVremUSL:     "",
+		IdZJpsVN:       "",
+		IdZJpsNN:       "",
+		IdZTelePocGL1:  "",
+		IdZTeleKrajGL1: "",
+		IdZTelePocGL2:  "",
+		IdZTeleKrajGL2: "",
+		SynsoftId:      "123",
+	}
+
+	err := testRepo.UpdateUnfinishedEvents(pipiddn)
+	if err != nil {
+		t.Errorf("error updating PiPiDDNIsklj  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetUnfinishedEventsByID(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "16.05.2023 00:04:00" {
+		t.Errorf("expected updated record to have vrezav 16.05.2023 00:04:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
+func TestOracleDBRepoInsertDDNInterruptionOfDelivery(t *testing.T) {
+
+	pipiddn := models.DDNInterruptionOfDelivery{
+		IdSMrc:            "8",
+		IdSTipd:           "12",
+		IdSVrpd:           "",
+		IdTipob:           "6",
+		ObId:              "149",
+		Vrepoc:            "26.03.2023 12:46",
+		Vrezav:            "",
+		IdSVrPrek:         "2",
+		IdSUzrokPrek:      "2",
+		Snaga:             "",
+		Opis:              "Problem sa ležajevima podbudilice.",
+		KorUneo:           "NBRALUSIC",
+		IdSMernaMesta:     "",
+		BrojMesta:         "",
+		Ind:               "P",
+		P2TrafId:          "5391",
+		Bi:                "",
+		IdSPoduzrokPrek:   "",
+		IdDogPrekidP:      "",
+		IdTipObjektaNdc:   "",
+		IdTipDogadjajaNdc: "",
+		SynsoftId:         "12361",
+	}
+
+	err := testRepo.InsertDDNInterruptionOfDelivery(pipiddn)
+	if err != nil {
+		t.Errorf("insert InterruptionOfDelivery returned an error: %s", err)
+	}
+}
+
+func TestOracleDBRepoGetDDNInterruptionOfDeliveryNDCByID(t *testing.T) {
+	pipiddn, err := testRepo.GetDDNInterruptionOfDeliveryNDCByID("12361")
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if pipiddn.IdSMrc != "8" {
+		t.Errorf("wrong  returned by GetUnfinishedEventsByID; expected 8 but got %s", pipiddn.IdSMrc)
+	}
+
+	_, err = testRepo.GetDDNInterruptionOfDeliveryNDCByID("124")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestOracleDBRepoUpdateDDNInterruptionOfDelivery(t *testing.T) {
+
+	pipiddn := models.DDNInterruptionOfDelivery{
+		IdSMrc:            "8",
+		IdSTipd:           "12",
+		IdSVrpd:           "",
+		IdTipob:           "6",
+		ObId:              "149",
+		Vrepoc:            "26.03.2023 12:46",
+		Vrezav:            "27.03.2023 12:46",
+		IdSVrPrek:         "2",
+		IdSUzrokPrek:      "2",
+		Snaga:             "",
+		Opis:              "Problem sa ležajevima podbudilice.",
+		KorUneo:           "NBRALUSIC",
+		IdSMernaMesta:     "",
+		BrojMesta:         "",
+		Ind:               "P",
+		P2TrafId:          "5391",
+		Bi:                "",
+		IdSPoduzrokPrek:   "",
+		IdDogPrekidP:      "",
+		IdTipObjektaNdc:   "",
+		IdTipDogadjajaNdc: "",
+		SynsoftId:         "12361",
+	}
+
+	err := testRepo.UpdateDDNInterruptionOfDelivery(pipiddn)
+	if err != nil {
+		t.Errorf("error updating InterruptionOfDelivery  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetDDNInterruptionOfDeliveryNDCByID(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "27.03.2023 12:46:00" {
+		t.Errorf("expected updated record to have vrezav 28.04.2023 00:04:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
+func TestOracleDBRepoDeleteDDNInterruptionOfDelivery(t *testing.T) {
+	err := testRepo.DeleteDDNInterruptionOfDelivery("12361")
+	if err != nil {
+		t.Errorf("error deleting user id 12361: %s", err)
+	}
+
+	_, err = testRepo.GetDDNInterruptionOfDeliveryNDCByID("12361")
+	if err == nil {
+		t.Error("retrieved user id 12361, who should have been deleted")
+	}
+}
