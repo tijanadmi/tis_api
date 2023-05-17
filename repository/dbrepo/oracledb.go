@@ -2699,7 +2699,7 @@ func (m *OracleDBRepo) GetPlans(year string) ([]*models.Plan, error) {
 	return p, nil
 }
 
-func (m *OracleDBRepo) GetUnopenedPermitForDay(day string) ([]*models.UnopenedPermit, error) {
+func (m *OracleDBRepo) GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -2710,11 +2710,14 @@ func (m *OracleDBRepo) GetUnopenedPermitForDay(day string) ([]*models.UnopenedPe
 			COALESCE(RAZLOG_O, ''),
 			to_char(DATUM_O,'dd.mm.yyyy HH24:MI:SS'),
 			COALESCE(to_char(RBR), ''),
-			COALESCE(KORISNIK, '')
+			COALESCE(KORISNIK, ''),
+			COALESCE(OPIS, ''),
+			COALESCE(LICE_RUK, '')
  			from TED.SYNSOFT_NEOTVORENE_DOZ
- 			WHERE to_char(DATUM_O,'dd.mm.yyyy')= :1`
+ 			WHERE to_char(DATUM_O,'dd.mm.yyyy')= :1
+			AND KORISNIK= :2`
 
-	rows, err := m.DB.QueryContext(ctx, query, day)
+	rows, err := m.DB.QueryContext(ctx, query, day, org)
 	if err != nil {
 		fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
@@ -2734,6 +2737,8 @@ func (m *OracleDBRepo) GetUnopenedPermitForDay(day string) ([]*models.UnopenedPe
 			&data.DatumO,
 			&data.Rbr,
 			&data.Korisnik,
+			&data.Opis,
+			&data.LiceRuk,
 		)
 
 		if err != nil {

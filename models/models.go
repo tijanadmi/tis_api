@@ -325,6 +325,8 @@ type UnopenedPermit struct {
 	DatumO     string `json:"datum_o"`
 	Rbr        string `json:"rbr"`
 	Korisnik   string `json:"korisnik"`
+	Opis       string `json:"opis"`
+	LiceRuk    string `json:"lice_ruk"`
 }
 
 type PiPiDDNIspad struct {

@@ -445,7 +445,7 @@ func (m *TestDBRepo) GetPlans(year string) ([]*models.Plan, error) {
 	return p, nil
 }
 
-func (m *TestDBRepo) GetUnopenedPermitForDay(day string) ([]*models.UnopenedPermit, error) {
+func (m *TestDBRepo) GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error) {
 
 	var p []*models.UnopenedPermit
 

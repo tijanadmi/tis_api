@@ -853,8 +853,9 @@ func (app *application) getPlans(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) getUnopenedPermitForDay(w http.ResponseWriter, r *http.Request) {
 	day := chi.URLParam(r, "day")
+	org := chi.URLParam(r, "org")
 
-	unopenedPermits, err := app.DB.GetUnopenedPermitForDay(day)
+	unopenedPermits, err := app.DB.GetUnopenedPermitForDay(day, org)
 	if err != nil {
 		app.errorJSON(w, err)
 		return

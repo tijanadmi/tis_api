@@ -65,7 +65,7 @@ type DatabaseRepo interface {
 	GetOutages(year string) ([]*models.Outage, error)
 	GetExclusions(year string) ([]*models.Exclusion, error)
 	GetPlans(year string) ([]*models.Plan, error)
-	GetUnopenedPermitForDay(day string) ([]*models.UnopenedPermit, error)
+	GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error) 
 	Authenticate(username, testPassword string) error
 	GetUserByUsername(username string) (*models.User, error)
 	GetUserByID(id int) (*models.User, error)
