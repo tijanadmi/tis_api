@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -23,9 +22,8 @@ func Test_app_authenticate(t *testing.T) {
 	}
 
 	for _, e := range theTests {
-		var reader io.Reader
-		reader = strings.NewReader(e.requestBody)
-		req, _ := http.NewRequest("POST", "/auth", reader)
+
+		req, _ := http.NewRequest("POST", "/auth", strings.NewReader(e.requestBody))
 		rr := httptest.NewRecorder()
 		handler := http.HandlerFunc(app.authenticate)
 

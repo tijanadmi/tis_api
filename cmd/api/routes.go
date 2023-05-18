@@ -43,7 +43,7 @@ func (app *application) routes() http.Handler {
 	mux.Get("/status", app.statusHandler)
 	mux.Post("/signin", app.Signin)
 
-	mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
+	//mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
 
 	/*mux.Get("/unopenedpermitsforday/{day}", app.getUnopenedPermitForDay)*/
 
@@ -134,7 +134,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/workpermissionsall", app.getWorkPermissionsAll)
 		mux.Get("/request1gr", app.getRequest1Gr)
 		mux.Get("/request2gr", app.getRequest2Gr)
-		//mux.Get("/unopenedpermitsforday/{day}", app.getUnopenedPermitForDay)
+		mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
 
 		mux.Get("/unfinishedevents/ndc", app.getAllUnfinishedEventsNDC)
 		mux.Get("/unfinishedevents/{id}", app.getUnfinishedEventsByID)
