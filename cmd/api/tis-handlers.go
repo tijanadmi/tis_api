@@ -1042,7 +1042,7 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}*/
-
+	
 	err := app.DB.DeletePiPiDDN(id)
 	if err != nil {
 		app.errorJSON(w, err)
@@ -1338,6 +1338,11 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 				app.errorJSON(w, errors.New("unauthorized"), http.StatusUnauthorized)
 				return
 			}
+
+			/*if time.Unix(claims.ExpiresAt.Unix(), 0).Sub(time.Now()) > 30*time.Second {
+				app.errorJSON(w, errors.New("refresh token does not need renewed yet"), http.StatusTooEarly)
+				return
+			}*/
 
 			// get the user id from the token claims
 			userID, err := strconv.Atoi(claims.Subject)

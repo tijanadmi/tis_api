@@ -493,8 +493,10 @@ func (m *TestDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 }
 
 func (m *TestDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
-
-	return nil
+	if pipiddn.SynsoftId == "1" {
+		return nil
+	}
+	return errors.New("update failed - no PiPiDDN found")
 }
 
 func (m *TestDBRepo) GetAllPiPiDDN() ([]*models.PiPiDDN, error) {
@@ -507,8 +509,64 @@ func (m *TestDBRepo) GetAllPiPiDDN() ([]*models.PiPiDDN, error) {
 func (m *TestDBRepo) GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error) {
 
 	var pipiddn models.PiPiDDN
+	if synsoftId == "1" {
+		pipiddn = models.PiPiDDN{
+			Datizv:         "27.04.2023",
+			IdSMrc:         "8",
+			IdSTipd:        "1",
+			IdSVrpd:        "1",
+			IdTipob:        "1",
+			ObId:           "354",
+			TrafoId:        "248",
+			Vrepoc:         "27.04.2023 00:04:00",
+			Vrezav:         "",
+			Id1SGruzr:      "9",
+			Id1SUzrok:      "70",
+			Snaga:          "",
+			Opis:           "this is outage put api",
+			IdSNap:         "7",
+			P2TrafId:       "3625",
+			KorUneo:        "DTOMIC",
+			IdZDsdfGL1:     "54",
+			IdZKvarGL1:     "",
+			IdZRapuGL1:     "",
+			IdZPrstGL1:     "",
+			IdZZmspGL1:     "",
+			IdZUzmsGL1:     "",
+			ZLokkGL1:       "",
+			IdZDsdfGL2:     "54",
+			IdZKvarGL2:     "",
+			IdZRapuGL2:     "",
+			IdZPrstGL2:     "",
+			IdZZmspGL2:     "",
+			IdZUzmsGL2:     "",
+			ZLokkGL2:       "",
+			IdZPrekVN:      "",
+			IdZDisREZ:      "",
+			IdZKvarREZ:     "",
+			IdZPrstREZ:     "",
+			IdZZmspREZ:     "",
+			IdZNel1:        "44",
+			IdZNel2:        "",
+			IdZNel3:        "",
+			IdZPrekNN:      "",
+			IdZSabzSAB:     "",
+			IdZOtprSAB:     "",
+			IdSVremUSL:     "",
+			UzrokTekst:     "",
+			IdZJpsVN:       "",
+			IdZJpsNN:       "",
+			PoslTekst:      "",
+			IdZTelePocGL1:  "",
+			IdZTeleKrajGL1: "",
+			IdZTelePocGL2:  "",
+			IdZTeleKrajGL2: "",
+			SynsoftId:      "1119",
+		}
+		return &pipiddn, nil
+	}
 
-	return &pipiddn, nil
+	return nil, errors.New("pipiddn not found")
 }
 
 func (m *TestDBRepo) GetAllUnfinishedEventsNDC() ([]*models.UnfinishedEvents, error) {
@@ -531,6 +589,7 @@ func (m *TestDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) er
 }
 
 func (m *TestDBRepo) DeletePiPiDDN(synsoftId string) error {
+
 	return nil
 }
 

@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/tijanadmi/tis-api/models"
 )
 
 type application struct {
@@ -33,10 +32,7 @@ func main() {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = "tijana"
 	claims["sub"] = "1"
-	claims["roles"] = []models.UserRole{
-		{ID: 1, RoleName: "NDC"},
-		{ID: 2, RoleName: "DWH"},
-	}
+	claims["roles"] = []string{"NDC", "DWH"}
 	claims["aud"] = "example.com"
 	claims["iss"] = "example.com"
 	claims["iat"] = time.Now().UTC().Unix()
