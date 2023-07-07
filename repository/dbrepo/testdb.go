@@ -491,6 +491,10 @@ func (m *TestDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 
 	return nil
 }
+func (m *TestDBRepo) InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
+
+	return nil
+}
 
 func (m *TestDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 	if pipiddn.SynsoftId == "1" {
@@ -499,7 +503,21 @@ func (m *TestDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 	return errors.New("update failed - no PiPiDDN found")
 }
 
+func (m *TestDBRepo) UpdatePiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
+	if pipiddn.SynsoftId == "1" {
+		return nil
+	}
+	return errors.New("update failed - no PiPiDDN found")
+}
+
 func (m *TestDBRepo) GetAllPiPiDDN() ([]*models.PiPiDDN, error) {
+
+	var p []*models.PiPiDDN
+
+	return p, nil
+}
+
+func (m *TestDBRepo) GetAllPiPiDDNP() ([]*models.PiPiDDN, error) {
 
 	var p []*models.PiPiDDN
 
@@ -569,7 +587,77 @@ func (m *TestDBRepo) GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error) {
 	return nil, errors.New("pipiddn not found")
 }
 
+func (m *TestDBRepo) GetPiPiDDNByIDP(synsoftId string) (*models.PiPiDDN, error) {
+
+	var pipiddn models.PiPiDDN
+	if synsoftId == "1" {
+		pipiddn = models.PiPiDDN{
+			Datizv:         "27.04.2023",
+			IdSMrc:         "8",
+			IdSTipd:        "1",
+			IdSVrpd:        "1",
+			IdTipob:        "1",
+			ObId:           "354",
+			TrafoId:        "248",
+			Vrepoc:         "27.04.2023 00:04:00",
+			Vrezav:         "",
+			Id1SGruzr:      "9",
+			Id1SUzrok:      "70",
+			Snaga:          "",
+			Opis:           "this is outage put api",
+			IdSNap:         "7",
+			P2TrafId:       "3625",
+			KorUneo:        "DTOMIC",
+			IdZDsdfGL1:     "54",
+			IdZKvarGL1:     "",
+			IdZRapuGL1:     "",
+			IdZPrstGL1:     "",
+			IdZZmspGL1:     "",
+			IdZUzmsGL1:     "",
+			ZLokkGL1:       "",
+			IdZDsdfGL2:     "54",
+			IdZKvarGL2:     "",
+			IdZRapuGL2:     "",
+			IdZPrstGL2:     "",
+			IdZZmspGL2:     "",
+			IdZUzmsGL2:     "",
+			ZLokkGL2:       "",
+			IdZPrekVN:      "",
+			IdZDisREZ:      "",
+			IdZKvarREZ:     "",
+			IdZPrstREZ:     "",
+			IdZZmspREZ:     "",
+			IdZNel1:        "44",
+			IdZNel2:        "",
+			IdZNel3:        "",
+			IdZPrekNN:      "",
+			IdZSabzSAB:     "",
+			IdZOtprSAB:     "",
+			IdSVremUSL:     "",
+			UzrokTekst:     "",
+			IdZJpsVN:       "",
+			IdZJpsNN:       "",
+			PoslTekst:      "",
+			IdZTelePocGL1:  "",
+			IdZTeleKrajGL1: "",
+			IdZTelePocGL2:  "",
+			IdZTeleKrajGL2: "",
+			SynsoftId:      "1119",
+		}
+		return &pipiddn, nil
+	}
+
+	return nil, errors.New("pipiddn not found")
+}
+
 func (m *TestDBRepo) GetAllUnfinishedEventsNDC() ([]*models.UnfinishedEvents, error) {
+
+	var p []*models.UnfinishedEvents
+
+	return p, nil
+}
+
+func (m *TestDBRepo) GetAllUnfinishedEventsNDCP() ([]*models.UnfinishedEvents, error) {
 
 	var p []*models.UnfinishedEvents
 
@@ -583,7 +671,19 @@ func (m *TestDBRepo) GetUnfinishedEventsByID(synsoftId string) (*models.Unfinish
 	return &ue, nil
 }
 
+func (m *TestDBRepo) GetUnfinishedEventsByIDP(synsoftId string) (*models.UnfinishedEvents, error) {
+
+	var ue models.UnfinishedEvents
+
+	return &ue, nil
+}
+
 func (m *TestDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) error {
+
+	return nil
+}
+
+func (m *TestDBRepo) UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate) error {
 
 	return nil
 }
@@ -593,12 +693,26 @@ func (m *TestDBRepo) DeletePiPiDDN(synsoftId string) error {
 	return nil
 }
 
+func (m *TestDBRepo) DeletePiPiDDNP(synsoftId string) error {
+
+	return nil
+}
+
 func (m *TestDBRepo) InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 
 	return nil
 }
 
+func (m *TestDBRepo) InsertPiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
+
+	return nil
+}
+
 func (m *TestDBRepo) UpdatePiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
+	return nil
+}
+
+func (m *TestDBRepo) UpdatePiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
 	return nil
 }
 
@@ -609,11 +723,26 @@ func (m *TestDBRepo) GetAllPiPiDDNIspad() ([]*models.PiPiDDN, error) {
 	return p, nil
 }
 
+func (m *TestDBRepo) GetAllPiPiDDNIspadP() ([]*models.PiPiDDN, error) {
+
+	var p []*models.PiPiDDN
+
+	return p, nil
+}
+
 func (m *TestDBRepo) InsertDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error {
 	return nil
 }
 
+func (m *TestDBRepo) InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error {
+	return nil
+}
+
 func (m *TestDBRepo) UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error {
+	return nil
+}
+
+func (m *TestDBRepo) UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error {
 	return nil
 }
 
@@ -622,7 +751,19 @@ func (m *TestDBRepo) DeleteDDNInterruptionOfDelivery(synsoftId string) error {
 	return nil
 }
 
+func (m *TestDBRepo) DeleteDDNInterruptionOfDeliveryP(synsoftId string) error {
+
+	return nil
+}
+
 func (m *TestDBRepo) GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterruptionOfDelivery, error) {
+
+	var p []*models.DDNInterruptionOfDelivery
+
+	return p, nil
+}
+
+func (m *TestDBRepo) GetDDNInterruptionOfDeliveryNDCP() ([]*models.DDNInterruptionOfDelivery, error) {
 
 	var p []*models.DDNInterruptionOfDelivery
 
@@ -635,6 +776,29 @@ func (m *TestDBRepo) GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*mod
 
 	return &ue, nil
 }
+
+func (m *TestDBRepo) GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*models.DDNInterruptionOfDelivery, error) {
+
+	var ue models.DDNInterruptionOfDelivery
+
+	return &ue, nil
+}
+
+/** start Check for PI_DOK **/
+func (m *TestDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error) {
+	
+    var num int
+	
+	return num,nil
+}
+
+func (m *TestDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error) {
+	
+    var num int
+	
+	return num,nil
+}
+/** start Check for PI_DOK **/
 
 /** start NOVITA ***/
 func (m *TestDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error) {

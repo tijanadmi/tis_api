@@ -1,4 +1,5 @@
 //go:build integration
+
 package dbrepo
 
 import (
@@ -242,6 +243,32 @@ func TestOracleDBRepoInsertPiPiDDNIsklj(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoInsertPiPiDDNIskljP(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIsklj{
+		DatSmene:  "07.04.2023",
+		IdSMrc:    "8",
+		TipMan:    "1",
+		IdTipob:   "4",
+		ObId:      "105",
+		TrafoId:   "",
+		Vrepoc:    "08.04.2023 19:35:00",
+		Vrezav:    "08.04.2023 23:25:00",
+		IdSGrraz:  "3",
+		IdSRazlog: "21",
+		ManTekst:  "Od 23.03.23 07:45 na snazi planirani radovi broj: R-67/1 (AKZ metalnih nosača VN opreme u TRP 400kV od TR1 u  TS Beograd 8 Vasiljević Aleksandar). NA SNAZI;",
+		IdSNap:    "",
+		P2TrafId:  "",
+		KorUneo:   "pi1100",
+		SynsoftId: "12399",
+	}
+
+	err := testRepo.InsertPiPiDDNIskljP(pipiddn)
+	if err != nil {
+		t.Errorf("insert user returned an error: %s", err)
+	}
+}
+
 func TestOracleDBRepoGetPiPiDDNByID(t *testing.T) {
 	pipiddn, err := testRepo.GetPiPiDDNByID("12399")
 	if err != nil {
@@ -253,6 +280,22 @@ func TestOracleDBRepoGetPiPiDDNByID(t *testing.T) {
 	}
 
 	_, err = testRepo.GetPiPiDDNByID("12398")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestOracleDBRepoGetPiPiDDNByIDP(t *testing.T) {
+	pipiddn, err := testRepo.GetPiPiDDNByIDP("12399")
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if pipiddn.IdSMrc != "8" {
+		t.Errorf("wrong  returned by GetPiPiDDNByID; expected 8 but got %s", pipiddn.IdSMrc)
+	}
+
+	_, err = testRepo.GetPiPiDDNByIDP("12398")
 	if err == nil {
 		t.Error("no error reported when getting non existent user by id")
 	}
@@ -289,6 +332,37 @@ func TestOracleDBRepoUpdatePiPiDDNIsklj(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoUpdatePiPiDDNIskljP(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIsklj{
+		DatSmene:  "08.04.2023",
+		IdSMrc:    "8",
+		TipMan:    "1",
+		IdTipob:   "4",
+		ObId:      "105",
+		TrafoId:   "",
+		Vrepoc:    "08.04.2023 19:35:00",
+		Vrezav:    "08.04.2023 23:25:00",
+		IdSGrraz:  "3",
+		IdSRazlog: "21",
+		ManTekst:  "Od 23.03.23 07:45 na snazi planirani radovi broj: R-67/1 (AKZ metalnih nosača VN opreme u TRP 400kV od TR1 u  TS Beograd 8 Vasiljević Aleksandar). NA SNAZI;",
+		IdSNap:    "",
+		P2TrafId:  "",
+		KorUneo:   "pi1100",
+		SynsoftId: "12399",
+	}
+
+	err := testRepo.UpdatePiPiDDNIskljP(pipiddn)
+	if err != nil {
+		t.Errorf("error updating PiPiDDNIsklj  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetPiPiDDNByIDP(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "08.04.2023 23:25:00" {
+		t.Errorf("expected updated record to have vrezav 08.04.2023 23:25:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
 func TestOracleDBRepoDeletePiPiDDN(t *testing.T) {
 	err := testRepo.DeletePiPiDDN("12399")
 	if err != nil {
@@ -296,6 +370,18 @@ func TestOracleDBRepoDeletePiPiDDN(t *testing.T) {
 	}
 
 	_, err = testRepo.GetPiPiDDNByID("12399")
+	if err == nil {
+		t.Error("retrieved user id 12399, who should have been deleted")
+	}
+}
+
+func TestOracleDBRepoDeletePiPiDDNP(t *testing.T) {
+	err := testRepo.DeletePiPiDDNP("12399")
+	if err != nil {
+		t.Errorf("error deleting user id 12399: %s", err)
+	}
+
+	_, err = testRepo.GetPiPiDDNByIDP("12399")
 	if err == nil {
 		t.Error("retrieved user id 12399, who should have been deleted")
 	}
@@ -359,6 +445,69 @@ func TestOracleDBRepoInsertPiPiDDNIspad(t *testing.T) {
 	}
 
 	err := testRepo.InsertPiPiDDNIspad(pipiddn)
+	if err != nil {
+		t.Errorf("insert user returned an error: %s", err)
+	}
+}
+
+func TestOracleDBRepoInsertPiPiDDNIspadP(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIspad{
+		DatSmene:       "27.04.2023",
+		IdSMrc:         "8",
+		IdSTipd:        "1",
+		IdSVrpd:        "1",
+		IdRadAPU:       "1",
+		IdTipob:        "1",
+		ObId:           "354",
+		TrafoId:        "248",
+		Vrepoc:         "27.04.2023 00:04:00",
+		Vrezav:         "",
+		Id1SGruzr:      "9",
+		Id1SUzrok:      "70",
+		Snaga:          "",
+		Opis:           "this is outage put api",
+		IdSNap:         "7",
+		P2TrafId:       "3625",
+		KorUneo:        "DTOMIC",
+		IdZDsdfGL1:     "54",
+		IdZKvarGL1:     "",
+		IdZRapuGL1:     "",
+		IdZPrstGL1:     "",
+		IdZZmspGL1:     "",
+		IdZUzmsGL1:     "",
+		ZLokkGL1:       "",
+		IdZDsdfGL2:     "54",
+		IdZKvarGL2:     "",
+		IdZRapuGL2:     "",
+		IdZPrstGL2:     "",
+		IdZZmspGL2:     "",
+		IdZUzmsGL2:     "",
+		ZLokkGL2:       "",
+		IdZPrekVN:      "",
+		IdZDisREZ:      "",
+		IdZKvarREZ:     "",
+		IdZPrstREZ:     "",
+		IdZZmspREZ:     "",
+		IdZNel1:        "44",
+		IdZNel2:        "",
+		IdZNel3:        "",
+		IdZPrekNN:      "",
+		IdZSabzSAB:     "",
+		IdZOtprSAB:     "",
+		IdSVremUSL:     "",
+		UzrokTekst:     "",
+		IdZJpsVN:       "",
+		IdZJpsNN:       "",
+		PoslTekst:      "",
+		IdZTelePocGL1:  "",
+		IdZTeleKrajGL1: "",
+		IdZTelePocGL2:  "",
+		IdZTeleKrajGL2: "",
+		SynsoftId:      "1119",
+	}
+
+	err := testRepo.InsertPiPiDDNIspadP(pipiddn)
 	if err != nil {
 		t.Errorf("insert user returned an error: %s", err)
 	}
@@ -432,6 +581,74 @@ func TestOracleDBRepoUpdatePiPiDDNIspad(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoUpdatePiPiDDNIspadP(t *testing.T) {
+
+	pipiddn := models.PiPiDDNIspad{
+		DatSmene:       "27.04.2023",
+		IdSMrc:         "8",
+		IdSTipd:        "1",
+		IdSVrpd:        "1",
+		IdRadAPU:       "1",
+		IdTipob:        "1",
+		ObId:           "354",
+		TrafoId:        "248",
+		Vrepoc:         "27.04.2023 21:04:00",
+		Vrezav:         "28.04.2023 00:04:00",
+		Id1SGruzr:      "9",
+		Id1SUzrok:      "70",
+		Snaga:          "",
+		Opis:           "this is outage put api",
+		IdSNap:         "7",
+		P2TrafId:       "3625",
+		KorUneo:        "DTOMIC",
+		IdZDsdfGL1:     "54",
+		IdZKvarGL1:     "",
+		IdZRapuGL1:     "",
+		IdZPrstGL1:     "",
+		IdZZmspGL1:     "",
+		IdZUzmsGL1:     "",
+		ZLokkGL1:       "",
+		IdZDsdfGL2:     "54",
+		IdZKvarGL2:     "",
+		IdZRapuGL2:     "",
+		IdZPrstGL2:     "",
+		IdZZmspGL2:     "",
+		IdZUzmsGL2:     "",
+		ZLokkGL2:       "",
+		IdZPrekVN:      "",
+		IdZDisREZ:      "",
+		IdZKvarREZ:     "",
+		IdZPrstREZ:     "",
+		IdZZmspREZ:     "",
+		IdZNel1:        "44",
+		IdZNel2:        "",
+		IdZNel3:        "",
+		IdZPrekNN:      "",
+		IdZSabzSAB:     "",
+		IdZOtprSAB:     "",
+		IdSVremUSL:     "",
+		UzrokTekst:     "",
+		IdZJpsVN:       "",
+		IdZJpsNN:       "",
+		PoslTekst:      "",
+		IdZTelePocGL1:  "",
+		IdZTeleKrajGL1: "",
+		IdZTelePocGL2:  "",
+		IdZTeleKrajGL2: "",
+		SynsoftId:      "1119",
+	}
+
+	err := testRepo.UpdatePiPiDDNIspadP(pipiddn)
+	if err != nil {
+		t.Errorf("error updating PiPiDDNIsklj  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetPiPiDDNByIDP(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "28.04.2023 00:04:00" {
+		t.Errorf("expected updated record to have vrezav 28.04.2023 00:04:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
 func TestOracleDBRepoDeletePiPiDDN1(t *testing.T) {
 	err := testRepo.DeletePiPiDDN("1119")
 	if err != nil {
@@ -439,6 +656,18 @@ func TestOracleDBRepoDeletePiPiDDN1(t *testing.T) {
 	}
 
 	_, err = testRepo.GetPiPiDDNByID("1119")
+	if err == nil {
+		t.Error("retrieved user id 1119, who should have been deleted")
+	}
+}
+
+func TestOracleDBRepoDeletePiPiDDN1P(t *testing.T) {
+	err := testRepo.DeletePiPiDDNP("1119")
+	if err != nil {
+		t.Errorf("error deleting user id 1119: %s", err)
+	}
+
+	_, err = testRepo.GetPiPiDDNByIDP("1119")
 	if err == nil {
 		t.Error("retrieved user id 1119, who should have been deleted")
 	}
@@ -455,6 +684,22 @@ func TestOracleDBRepoGetUnfinishedEventsByID(t *testing.T) {
 	}
 
 	_, err = testRepo.GetUnfinishedEventsByID("124")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestOracleDBRepoGetUnfinishedEventsByIDP(t *testing.T) {
+	pipiddn, err := testRepo.GetUnfinishedEventsByIDP("123")
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if pipiddn.IdSMrc != "8" {
+		t.Errorf("wrong  returned by GetUnfinishedEventsByID; expected 8 but got %s", pipiddn.IdSMrc)
+	}
+
+	_, err = testRepo.GetUnfinishedEventsByIDP("124")
 	if err == nil {
 		t.Error("no error reported when getting non existent user by id")
 	}
@@ -515,6 +760,61 @@ func TestOracleDBRepoUpdateUnfinishedEvents(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoUpdateUnfinishedEventsP(t *testing.T) {
+
+	pipiddn := models.UnfinishedEventsUpdate{
+		DatSmene:       "26.05.2023",
+		TipSmene:       "D",
+		Vrezav:         "16.05.2023 00:04:00",
+		Id1SGruzr:      "9",
+		Id1SUzrok:      "70",
+		Opis:           "this is outage put api",
+		IdZDsdfGL1:     "54",
+		IdZKvarGL1:     "",
+		IdZRapuGL1:     "",
+		IdZPrstGL1:     "",
+		IdZZmspGL1:     "",
+		IdZUzmsGL1:     "",
+		ZLokkGL1:       "",
+		IdZDsdfGL2:     "54",
+		IdZKvarGL2:     "",
+		IdZRapuGL2:     "",
+		IdZPrstGL2:     "",
+		IdZZmspGL2:     "",
+		IdZUzmsGL2:     "",
+		ZLokkGL2:       "",
+		IdZPrekVN:      "",
+		IdZDisREZ:      "",
+		IdZKvarREZ:     "",
+		IdZPrstREZ:     "",
+		IdZZmspREZ:     "",
+		IdZNel1:        "44",
+		IdZNel2:        "",
+		IdZNel3:        "",
+		IdZPrekNN:      "",
+		IdZSabzSAB:     "",
+		IdZOtprSAB:     "",
+		IdSVremUSL:     "",
+		IdZJpsVN:       "",
+		IdZJpsNN:       "",
+		IdZTelePocGL1:  "",
+		IdZTeleKrajGL1: "",
+		IdZTelePocGL2:  "",
+		IdZTeleKrajGL2: "",
+		SynsoftId:      "123",
+	}
+
+	err := testRepo.UpdateUnfinishedEventsP(pipiddn)
+	if err != nil {
+		t.Errorf("error updating PiPiDDNIsklj  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetUnfinishedEventsByIDP(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "16.05.2023 00:04:00" {
+		t.Errorf("expected updated record to have vrezav 16.05.2023 00:04:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
 func TestOracleDBRepoInsertDDNInterruptionOfDelivery(t *testing.T) {
 
 	pipiddn := models.DDNInterruptionOfDelivery{
@@ -548,6 +848,39 @@ func TestOracleDBRepoInsertDDNInterruptionOfDelivery(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoInsertDDNInterruptionOfDeliveryP(t *testing.T) {
+
+	pipiddn := models.DDNInterruptionOfDelivery{
+		IdSMrc:            "8",
+		IdSTipd:           "12",
+		IdSVrpd:           "",
+		IdTipob:           "6",
+		ObId:              "149",
+		Vrepoc:            "26.03.2023 12:46",
+		Vrezav:            "",
+		IdSVrPrek:         "2",
+		IdSUzrokPrek:      "2",
+		Snaga:             "",
+		Opis:              "Problem sa ležajevima podbudilice.",
+		KorUneo:           "NBRALUSIC",
+		IdSMernaMesta:     "",
+		BrojMesta:         "",
+		Ind:               "P",
+		P2TrafId:          "5391",
+		Bi:                "",
+		IdSPoduzrokPrek:   "",
+		IdDogPrekidP:      "",
+		IdTipObjektaNdc:   "",
+		IdTipDogadjajaNdc: "",
+		SynsoftId:         "12361",
+	}
+
+	err := testRepo.InsertDDNInterruptionOfDeliveryP(pipiddn)
+	if err != nil {
+		t.Errorf("insert InterruptionOfDelivery returned an error: %s", err)
+	}
+}
+
 func TestOracleDBRepoGetDDNInterruptionOfDeliveryNDCByID(t *testing.T) {
 	pipiddn, err := testRepo.GetDDNInterruptionOfDeliveryNDCByID("12361")
 	if err != nil {
@@ -559,6 +892,22 @@ func TestOracleDBRepoGetDDNInterruptionOfDeliveryNDCByID(t *testing.T) {
 	}
 
 	_, err = testRepo.GetDDNInterruptionOfDeliveryNDCByID("124")
+	if err == nil {
+		t.Error("no error reported when getting non existent user by id")
+	}
+}
+
+func TestOracleDBRepoGetDDNInterruptionOfDeliveryNDCByIDP(t *testing.T) {
+	pipiddn, err := testRepo.GetDDNInterruptionOfDeliveryNDCByIDP("12361")
+	if err != nil {
+		t.Errorf("error getting user by id: %s", err)
+	}
+
+	if pipiddn.IdSMrc != "8" {
+		t.Errorf("wrong  returned by GetUnfinishedEventsByID; expected 8 but got %s", pipiddn.IdSMrc)
+	}
+
+	_, err = testRepo.GetDDNInterruptionOfDeliveryNDCByIDP("124")
 	if err == nil {
 		t.Error("no error reported when getting non existent user by id")
 	}
@@ -602,6 +951,44 @@ func TestOracleDBRepoUpdateDDNInterruptionOfDelivery(t *testing.T) {
 	}
 }
 
+func TestOracleDBRepoUpdateDDNInterruptionOfDeliveryP(t *testing.T) {
+
+	pipiddn := models.DDNInterruptionOfDelivery{
+		IdSMrc:            "8",
+		IdSTipd:           "12",
+		IdSVrpd:           "",
+		IdTipob:           "6",
+		ObId:              "149",
+		Vrepoc:            "26.03.2023 12:46",
+		Vrezav:            "27.03.2023 12:46",
+		IdSVrPrek:         "2",
+		IdSUzrokPrek:      "2",
+		Snaga:             "",
+		Opis:              "Problem sa ležajevima podbudilice.",
+		KorUneo:           "NBRALUSIC",
+		IdSMernaMesta:     "",
+		BrojMesta:         "",
+		Ind:               "P",
+		P2TrafId:          "5391",
+		Bi:                "",
+		IdSPoduzrokPrek:   "",
+		IdDogPrekidP:      "",
+		IdTipObjektaNdc:   "",
+		IdTipDogadjajaNdc: "",
+		SynsoftId:         "12361",
+	}
+
+	err := testRepo.UpdateDDNInterruptionOfDeliveryP(pipiddn)
+	if err != nil {
+		t.Errorf("error updating InterruptionOfDelivery  with SynsoftId=12399 returned an error: %s", err)
+	}
+
+	pipiddn_up, _ := testRepo.GetDDNInterruptionOfDeliveryNDCByIDP(pipiddn.SynsoftId)
+	if pipiddn_up.Vrezav != "27.03.2023 12:46:00" {
+		t.Errorf("expected updated record to have vrezav 28.04.2023 00:04:00, but got %s", pipiddn_up.Vrezav)
+	}
+}
+
 func TestOracleDBRepoDeleteDDNInterruptionOfDelivery(t *testing.T) {
 	err := testRepo.DeleteDDNInterruptionOfDelivery("12361")
 	if err != nil {
@@ -609,6 +996,18 @@ func TestOracleDBRepoDeleteDDNInterruptionOfDelivery(t *testing.T) {
 	}
 
 	_, err = testRepo.GetDDNInterruptionOfDeliveryNDCByID("12361")
+	if err == nil {
+		t.Error("retrieved user id 12361, who should have been deleted")
+	}
+}
+
+func TestOracleDBRepoDeleteDDNInterruptionOfDeliveryP(t *testing.T) {
+	err := testRepo.DeleteDDNInterruptionOfDeliveryP("12361")
+	if err != nil {
+		t.Errorf("error deleting user id 12361: %s", err)
+	}
+
+	_, err = testRepo.GetDDNInterruptionOfDeliveryNDCByIDP("12361")
 	if err == nil {
 		t.Error("retrieved user id 12361, who should have been deleted")
 	}

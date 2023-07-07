@@ -2921,6 +2921,52 @@ func (m *OracleDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 	}
 }
 
+func (m *OracleDBRepo) InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_pi_pi_ddn_iskljucenje_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.TipMan,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.IdSGrraz,
+		pipiddn.IdSRazlog,
+		pipiddn.ManTekst,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
 func (m *OracleDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -2930,6 +2976,53 @@ func (m *OracleDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 	var message string
 
 	query := `begin  ddn.synsoft.pi_pi_ddn_iskljucenje_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		pipiddn.IdSMrc,
+		pipiddn.TipMan,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.IdSGrraz,
+		pipiddn.IdSRazlog,
+		pipiddn.ManTekst,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *OracleDBRepo) UpdatePiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_pi_pi_ddn_iskljucenje_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
@@ -3030,6 +3123,150 @@ func (m *OracleDBRepo) GetAllPiPiDDN() ([]*models.PiPiDDN, error) {
                 COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
                 COALESCE(SYNSOFT_ID, '')
 				from PI_PI_DDN_S`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*models.PiPiDDN
+
+	for rows.Next() {
+		var pipiddn models.PiPiDDN
+		err := rows.Scan(
+			&pipiddn.Datizv,
+			&pipiddn.IdSMrc,
+			&pipiddn.IdSTipd,
+			&pipiddn.IdSVrpd,
+			&pipiddn.IdTipob,
+			&pipiddn.ObId,
+			&pipiddn.TrafoId,
+			&pipiddn.Vrepoc,
+			&pipiddn.PocPP,
+			&pipiddn.Vrezav,
+			&pipiddn.ZavPP,
+			&pipiddn.Id1SGruzr,
+			&pipiddn.Id1SUzrok,
+			&pipiddn.IdSGrraz,
+			&pipiddn.IdSRazlog,
+			&pipiddn.Snaga,
+			&pipiddn.Opis,
+			&pipiddn.IdSNap,
+			&pipiddn.P2TrafId,
+			&pipiddn.KorUneo,
+			&pipiddn.Status,
+			&pipiddn.Datpri,
+			&pipiddn.IdZDsdfGL1,
+			&pipiddn.IdZKvarGL1,
+			&pipiddn.IdZRapuGL1,
+			&pipiddn.IdZPrstGL1,
+			&pipiddn.IdZZmspGL1,
+			&pipiddn.IdZUzmsGL1,
+			&pipiddn.ZLokkGL1,
+			&pipiddn.IdZDsdfGL2,
+			&pipiddn.IdZKvarGL2,
+			&pipiddn.IdZRapuGL2,
+			&pipiddn.IdZPrstGL2,
+			&pipiddn.IdZZmspGL2,
+			&pipiddn.IdZUzmsGL2,
+			&pipiddn.ZLokkGL2,
+			&pipiddn.IdZPrekVN,
+			&pipiddn.IdZDisREZ,
+			&pipiddn.IdZKvarREZ,
+			&pipiddn.IdZPrstREZ,
+			&pipiddn.IdZZmspREZ,
+			&pipiddn.IdZNel1,
+			&pipiddn.IdZNel2,
+			&pipiddn.IdZNel3,
+			&pipiddn.IdZPrekNN,
+			&pipiddn.IdZSabzSAB,
+			&pipiddn.IdZOtprSAB,
+			&pipiddn.IdSVremUSL,
+			&pipiddn.UzrokTekst,
+			&pipiddn.IdZJpsVN,
+			&pipiddn.IdZJpsNN,
+			&pipiddn.PoslTekst,
+			&pipiddn.IdZTelePocGL1,
+			&pipiddn.IdZTeleKrajGL1,
+			&pipiddn.IdZTelePocGL2,
+			&pipiddn.IdZTeleKrajGL2,
+			&pipiddn.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &pipiddn)
+	}
+
+	return p, nil
+}
+
+func (m *OracleDBRepo) GetAllPiPiDDNP() ([]*models.PiPiDDN, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+				COALESCE(to_char(ID_S_MRC), ''),
+				COALESCE(to_char(ID_S_TIPD), ''),
+				COALESCE(to_char(ID_S_VRPD), ''),
+				COALESCE(to_char(ID_TIPOB), ''),
+				COALESCE(to_char(OB_ID), ''),
+				COALESCE(to_char(TRAFO_ID), ''),
+				to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+				POC_PP,
+				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+				ZAV_PP,
+				COALESCE(to_char(ID1_S_GRUZR), ''),
+                COALESCE(to_char(ID1_S_UZROK), ''),
+				COALESCE(to_char(ID_S_GRRAZ), ''),
+				COALESCE(to_char(ID_S_RAZLOG), ''),
+				COALESCE(to_char(SNAGA), ''),
+				OPIS,
+				COALESCE(to_char(ID_S_NAP), ''),
+				COALESCE(to_char(P2_TRAF_ID), ''),
+				COALESCE(PGI_KOR, ''),
+                COALESCE(STATUS, ''),
+				to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
+				COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+                COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+                COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+                COALESCE(to_char(ID_Z_PRST_GL1), ''),
+                COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+                COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+                COALESCE(to_char(Z_LOKK_GL1), ''),
+                COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+                COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+                COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+                COALESCE(to_char(ID_Z_PRST_GL2), ''),
+                COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+                COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+                COALESCE(to_char(Z_LOKK_GL2), ''),
+                COALESCE(to_char(ID_Z_PREK_VN), ''),
+                COALESCE(to_char(ID_Z_DIS_REZ), ''),
+                COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+                COALESCE(to_char(ID_Z_PRST_REZ), ''),
+                COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+                COALESCE(to_char(ID_Z_NEL1), ''),
+                COALESCE(to_char(ID_Z_NEL2), ''),
+                COALESCE(to_char(ID_Z_NEL3), ''),
+                COALESCE(to_char(ID_Z_PREK_NN), ''),
+                COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+                COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+                COALESCE(to_char(ID_S_VREM_USL), ''),
+                COALESCE(UZROK_TEKST, ''),
+                COALESCE(to_char(ID_Z_JPS_VN), ''),
+                COALESCE(to_char(ID_Z_JPS_NN), ''),
+                COALESCE(POSL_TEKST, ''),
+                COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+                COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+                COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+                COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+                COALESCE(SYNSOFT_ID, '')
+				from PI_PI_DDN`
 
 	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
@@ -3245,6 +3482,139 @@ func (m *OracleDBRepo) GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error)
 	return &pipiddn, nil
 }
 
+func (m *OracleDBRepo) GetPiPiDDNByIDP(synsoftId string) (*models.PiPiDDN, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+	COALESCE(to_char(ID_S_MRC), ''),
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+	COALESCE(to_char(TRAFO_ID), ''),
+	to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+	POC_PP,
+	to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+	ZAV_PP,
+	COALESCE(to_char(ID1_S_GRUZR), ''),
+	COALESCE(to_char(ID1_S_UZROK), ''),
+	COALESCE(to_char(ID_S_GRRAZ), ''),
+	COALESCE(to_char(ID_S_RAZLOG), ''),
+	COALESCE(to_char(SNAGA), ''),
+	OPIS,
+	COALESCE(to_char(ID_S_NAP), ''),
+	COALESCE(to_char(P2_TRAF_ID), ''),
+	COALESCE(PGI_KOR, ''),
+	COALESCE(STATUS, ''),
+	to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
+	COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+	COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+	COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+	COALESCE(to_char(ID_Z_PRST_GL1), ''),
+	COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+	COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+	COALESCE(to_char(Z_LOKK_GL1), ''),
+	COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+	COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+	COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+	COALESCE(to_char(ID_Z_PRST_GL2), ''),
+	COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+	COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+	COALESCE(to_char(Z_LOKK_GL2), ''),
+	COALESCE(to_char(ID_Z_PREK_VN), ''),
+	COALESCE(to_char(ID_Z_DIS_REZ), ''),
+	COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+	COALESCE(to_char(ID_Z_PRST_REZ), ''),
+	COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+	COALESCE(to_char(ID_Z_NEL1), ''),
+	COALESCE(to_char(ID_Z_NEL2), ''),
+	COALESCE(to_char(ID_Z_NEL3), ''),
+	COALESCE(to_char(ID_Z_PREK_NN), ''),
+	COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+	COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+	COALESCE(to_char(ID_S_VREM_USL), ''),
+	COALESCE(UZROK_TEKST, ''),
+	COALESCE(to_char(ID_Z_JPS_VN), ''),
+	COALESCE(to_char(ID_Z_JPS_NN), ''),
+	COALESCE(POSL_TEKST, ''),
+	COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+	COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+	COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+	COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+	COALESCE(SYNSOFT_ID, '')
+	from PI_PI_DDN where SYNSOFT_ID = :1`
+
+	row := m.DB.QueryRowContext(ctx, query, synsoftId)
+
+	var pipiddn models.PiPiDDN
+	err := row.Scan(
+		&pipiddn.Datizv,
+		&pipiddn.IdSMrc,
+		&pipiddn.IdSTipd,
+		&pipiddn.IdSVrpd,
+		&pipiddn.IdTipob,
+		&pipiddn.ObId,
+		&pipiddn.TrafoId,
+		&pipiddn.Vrepoc,
+		&pipiddn.PocPP,
+		&pipiddn.Vrezav,
+		&pipiddn.ZavPP,
+		&pipiddn.Id1SGruzr,
+		&pipiddn.Id1SUzrok,
+		&pipiddn.IdSGrraz,
+		&pipiddn.IdSRazlog,
+		&pipiddn.Snaga,
+		&pipiddn.Opis,
+		&pipiddn.IdSNap,
+		&pipiddn.P2TrafId,
+		&pipiddn.KorUneo,
+		&pipiddn.Status,
+		&pipiddn.Datpri,
+		&pipiddn.IdZDsdfGL1,
+		&pipiddn.IdZKvarGL1,
+		&pipiddn.IdZRapuGL1,
+		&pipiddn.IdZPrstGL1,
+		&pipiddn.IdZZmspGL1,
+		&pipiddn.IdZUzmsGL1,
+		&pipiddn.ZLokkGL1,
+		&pipiddn.IdZDsdfGL2,
+		&pipiddn.IdZKvarGL2,
+		&pipiddn.IdZRapuGL2,
+		&pipiddn.IdZPrstGL2,
+		&pipiddn.IdZZmspGL2,
+		&pipiddn.IdZUzmsGL2,
+		&pipiddn.ZLokkGL2,
+		&pipiddn.IdZPrekVN,
+		&pipiddn.IdZDisREZ,
+		&pipiddn.IdZKvarREZ,
+		&pipiddn.IdZPrstREZ,
+		&pipiddn.IdZZmspREZ,
+		&pipiddn.IdZNel1,
+		&pipiddn.IdZNel2,
+		&pipiddn.IdZNel3,
+		&pipiddn.IdZPrekNN,
+		&pipiddn.IdZSabzSAB,
+		&pipiddn.IdZOtprSAB,
+		&pipiddn.IdSVremUSL,
+		&pipiddn.UzrokTekst,
+		&pipiddn.IdZJpsVN,
+		&pipiddn.IdZJpsNN,
+		&pipiddn.PoslTekst,
+		&pipiddn.IdZTelePocGL1,
+		&pipiddn.IdZTeleKrajGL1,
+		&pipiddn.IdZTelePocGL2,
+		&pipiddn.IdZTeleKrajGL2,
+		&pipiddn.SynsoftId,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pipiddn, nil
+}
+
 func (m *OracleDBRepo) GetAllUnfinishedEventsNDC() ([]*models.UnfinishedEvents, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -3301,6 +3671,139 @@ func (m *OracleDBRepo) GetAllUnfinishedEventsNDC() ([]*models.UnfinishedEvents, 
    COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
    COALESCE(SYNSOFT_ID, '')
    from nezavrseni_dog_s
+   where id_s_mrc=8`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*models.UnfinishedEvents
+
+	for rows.Next() {
+		var ue models.UnfinishedEvents
+		err := rows.Scan(
+			&ue.Datizv,
+			&ue.IdSMrc,
+			&ue.IdSTipd,
+			&ue.IdSVrpd,
+			&ue.IdTipob,
+			&ue.ObId,
+			&ue.TrafoId,
+			&ue.Vrepoc,
+			&ue.Vrezav,
+			&ue.Id1SGruzr,
+			&ue.Id1SUzrok,
+			&ue.Snaga,
+			&ue.Opis,
+			&ue.IdSNap,
+			&ue.P2TrafId,
+			&ue.PgiKor,
+			&ue.IdZDsdfGL1,
+			&ue.IdZKvarGL1,
+			&ue.IdZRapuGL1,
+			&ue.IdZPrstGL1,
+			&ue.IdZZmspGL1,
+			&ue.IdZUzmsGL1,
+			&ue.ZLokkGL1,
+			&ue.IdZDsdfGL2,
+			&ue.IdZKvarGL2,
+			&ue.IdZRapuGL2,
+			&ue.IdZPrstGL2,
+			&ue.IdZZmspGL2,
+			&ue.IdZUzmsGL2,
+			&ue.ZLokkGL2,
+			&ue.IdZPrekVN,
+			&ue.IdZDisREZ,
+			&ue.IdZKvarREZ,
+			&ue.IdZPrstREZ,
+			&ue.IdZZmspREZ,
+			&ue.IdZNel1,
+			&ue.IdZNel2,
+			&ue.IdZNel3,
+			&ue.IdZPrekNN,
+			&ue.IdZSabzSAB,
+			&ue.IdZOtprSAB,
+			&ue.IdSVremUSL,
+			&ue.UzrokTekst,
+			&ue.IdZJpsVN,
+			&ue.IdZJpsNN,
+			&ue.PoslTekst,
+			&ue.IdZTelePocGL1,
+			&ue.IdZTeleKrajGL1,
+			&ue.IdZTelePocGL2,
+			&ue.IdZTeleKrajGL2,
+			&ue.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &ue)
+	}
+
+	return p, nil
+}
+
+func (m *OracleDBRepo) GetAllUnfinishedEventsNDCP() ([]*models.UnfinishedEvents, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+	COALESCE(to_char(ID_S_MRC), ''),
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+	COALESCE(to_char(TRAFO_ID), ''),
+   to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID1_S_GRUZR), ''),
+   COALESCE(to_char(ID1_S_UZROK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(to_char(ID_S_NAP), ''),
+   COALESCE(to_char(P2_TRAF_ID), ''),
+   COALESCE(PGI_KOR, ''),
+   COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+   COALESCE(to_char(ID_Z_PRST_GL1), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+   COALESCE(to_char(Z_LOKK_GL1), ''),
+   COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+   COALESCE(to_char(ID_Z_PRST_GL2), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+   COALESCE(to_char(Z_LOKK_GL2), ''),
+   COALESCE(to_char(ID_Z_PREK_VN), ''),
+   COALESCE(to_char(ID_Z_DIS_REZ), ''),
+   COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+   COALESCE(to_char(ID_Z_PRST_REZ), ''),
+   COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+   COALESCE(to_char(ID_Z_NEL1), ''),
+   COALESCE(to_char(ID_Z_NEL2), ''),
+   COALESCE(to_char(ID_Z_NEL3), ''),
+   COALESCE(to_char(ID_Z_PREK_NN), ''),
+   COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+   COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+   COALESCE(to_char(ID_S_VREM_USL), ''),
+   COALESCE(UZROK_TEKST, ''),
+   COALESCE(to_char(ID_Z_JPS_VN), ''),
+   COALESCE(to_char(ID_Z_JPS_NN), ''),
+   COALESCE(POSL_TEKST, ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from nezavrseni_dog
    where id_s_mrc=8`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -3499,6 +4002,127 @@ func (m *OracleDBRepo) GetUnfinishedEventsByID(synsoftId string) (*models.Unfini
 	return &ue, nil
 }
 
+func (m *OracleDBRepo) GetUnfinishedEventsByIDP(synsoftId string) (*models.UnfinishedEvents, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+	COALESCE(to_char(ID_S_MRC), ''),
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+	COALESCE(to_char(TRAFO_ID), ''),
+   to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID1_S_GRUZR), ''),
+   COALESCE(to_char(ID1_S_UZROK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(to_char(ID_S_NAP), ''),
+   COALESCE(to_char(P2_TRAF_ID), ''),
+   COALESCE(PGI_KOR, ''),
+   COALESCE(to_char(ID_Z_DSDF_GL1), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL1), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL1), ''),
+   COALESCE(to_char(ID_Z_PRST_GL1), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL1), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL1), ''),
+   COALESCE(to_char(Z_LOKK_GL1), ''),
+   COALESCE(to_char(ID_Z_DSDF_GL2), ''),
+   COALESCE(to_char(ID_Z_KVAR_GL2), ''),
+   COALESCE(to_char(ID_Z_RAPU_GL2), ''),
+   COALESCE(to_char(ID_Z_PRST_GL2), ''),
+   COALESCE(to_char(ID_Z_ZMSP_GL2), ''),
+   COALESCE(to_char(ID_Z_UZMS_GL2), ''),
+   COALESCE(to_char(Z_LOKK_GL2), ''),
+   COALESCE(to_char(ID_Z_PREK_VN), ''),
+   COALESCE(to_char(ID_Z_DIS_REZ), ''),
+   COALESCE(to_char(ID_Z_KVAR_REZ), ''),
+   COALESCE(to_char(ID_Z_PRST_REZ), ''),
+   COALESCE(to_char(ID_Z_ZMSP_REZ), ''),
+   COALESCE(to_char(ID_Z_NEL1), ''),
+   COALESCE(to_char(ID_Z_NEL2), ''),
+   COALESCE(to_char(ID_Z_NEL3), ''),
+   COALESCE(to_char(ID_Z_PREK_NN), ''),
+   COALESCE(to_char(ID_Z_SABZ_SAB), ''),
+   COALESCE(to_char(ID_Z_OTPR_SAB), ''),
+   COALESCE(to_char(ID_S_VREM_USL), ''),
+   COALESCE(UZROK_TEKST, ''),
+   COALESCE(to_char(ID_Z_JPS_VN), ''),
+   COALESCE(to_char(ID_Z_JPS_NN), ''),
+   COALESCE(POSL_TEKST, ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL1), ''),
+   COALESCE(to_char(ID_Z_TELE_POC_GL2), ''),
+   COALESCE(to_char(ID_Z_TELE_KRAJ_GL2), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from nezavrseni_dog where SYNSOFT_ID = :1`
+
+	row := m.DB.QueryRowContext(ctx, query, synsoftId)
+
+	var ue models.UnfinishedEvents
+	err := row.Scan(
+		&ue.Datizv,
+		&ue.IdSMrc,
+		&ue.IdSTipd,
+		&ue.IdSVrpd,
+		&ue.IdTipob,
+		&ue.ObId,
+		&ue.TrafoId,
+		&ue.Vrepoc,
+		&ue.Vrezav,
+		&ue.Id1SGruzr,
+		&ue.Id1SUzrok,
+		&ue.Snaga,
+		&ue.Opis,
+		&ue.IdSNap,
+		&ue.P2TrafId,
+		&ue.PgiKor,
+		&ue.IdZDsdfGL1,
+		&ue.IdZKvarGL1,
+		&ue.IdZRapuGL1,
+		&ue.IdZPrstGL1,
+		&ue.IdZZmspGL1,
+		&ue.IdZUzmsGL1,
+		&ue.ZLokkGL1,
+		&ue.IdZDsdfGL2,
+		&ue.IdZKvarGL2,
+		&ue.IdZRapuGL2,
+		&ue.IdZPrstGL2,
+		&ue.IdZZmspGL2,
+		&ue.IdZUzmsGL2,
+		&ue.ZLokkGL2,
+		&ue.IdZPrekVN,
+		&ue.IdZDisREZ,
+		&ue.IdZKvarREZ,
+		&ue.IdZPrstREZ,
+		&ue.IdZZmspREZ,
+		&ue.IdZNel1,
+		&ue.IdZNel2,
+		&ue.IdZNel3,
+		&ue.IdZPrekNN,
+		&ue.IdZSabzSAB,
+		&ue.IdZOtprSAB,
+		&ue.IdSVremUSL,
+		&ue.UzrokTekst,
+		&ue.IdZJpsVN,
+		&ue.IdZJpsNN,
+		&ue.PoslTekst,
+		&ue.IdZTelePocGL1,
+		&ue.IdZTeleKrajGL1,
+		&ue.IdZTelePocGL2,
+		&ue.IdZTeleKrajGL2,
+		&ue.SynsoftId,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &ue, nil
+}
+
 func (m *OracleDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -3508,6 +4132,73 @@ func (m *OracleDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) 
 	var message string
 
 	query := `begin  ddn.synsoft.nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ue.DatSmene,
+		ue.TipSmene,
+		ue.Vrezav,
+		ue.Id1SGruzr,
+		ue.Id1SUzrok,
+		ue.Opis,
+		ue.IdZDsdfGL1,
+		ue.IdZKvarGL1,
+		ue.IdZRapuGL1,
+		ue.IdZPrstGL1,
+		ue.IdZZmspGL1,
+		ue.IdZUzmsGL1,
+		ue.ZLokkGL1,
+		ue.IdZDsdfGL2,
+		ue.IdZKvarGL2,
+		ue.IdZRapuGL2,
+		ue.IdZPrstGL2,
+		ue.IdZZmspGL2,
+		ue.IdZUzmsGL2,
+		ue.ZLokkGL2,
+		ue.IdZPrekVN,
+		ue.IdZDisREZ,
+		ue.IdZKvarREZ,
+		ue.IdZPrstREZ,
+		ue.IdZZmspREZ,
+		ue.IdZNel1,
+		ue.IdZNel2,
+		ue.IdZNel3,
+		ue.IdZPrekNN,
+		ue.IdZSabzSAB,
+		ue.IdZOtprSAB,
+		ue.IdSVremUSL,
+		ue.IdZJpsVN,
+		ue.IdZJpsNN,
+		ue.IdZTelePocGL1,
+		ue.IdZTeleKrajGL1,
+		ue.IdZTelePocGL2,
+		ue.IdZTeleKrajGL2,
+		ue.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *OracleDBRepo) UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
@@ -3580,6 +4271,20 @@ func (m *OracleDBRepo) DeletePiPiDDN(synsoftId string) error {
 	return nil
 }
 
+func (m *OracleDBRepo) DeletePiPiDDNP(synsoftId string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `delete from pi_pi_ddn where synsoft_id = :1`
+
+	_, err := m.DB.ExecContext(ctx, stmt, synsoftId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *OracleDBRepo) InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -3589,6 +4294,86 @@ func (m *OracleDBRepo) InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 	var message string
 
 	query := `begin  ddn.synsoft.pi_pi_ddn_ispad_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.IdSTipd,
+		pipiddn.IdSVrpd,
+		pipiddn.IdRadAPU,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.Id1SGruzr,
+		pipiddn.Id1SUzrok,
+		pipiddn.Snaga,
+		pipiddn.Opis,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.IdZDsdfGL1,
+		pipiddn.IdZKvarGL1,
+		pipiddn.IdZRapuGL1,
+		pipiddn.IdZPrstGL1,
+		pipiddn.IdZZmspGL1,
+		pipiddn.IdZUzmsGL1,
+		pipiddn.ZLokkGL1,
+		pipiddn.IdZDsdfGL2,
+		pipiddn.IdZKvarGL2,
+		pipiddn.IdZRapuGL2,
+		pipiddn.IdZPrstGL2,
+		pipiddn.IdZZmspGL2,
+		pipiddn.IdZUzmsGL2,
+		pipiddn.ZLokkGL2,
+		pipiddn.IdZPrekVN,
+		pipiddn.IdZDisREZ,
+		pipiddn.IdZKvarREZ,
+		pipiddn.IdZPrstREZ,
+		pipiddn.IdZZmspREZ,
+		pipiddn.IdZNel1,
+		pipiddn.IdZNel2,
+		pipiddn.IdZNel3,
+		pipiddn.IdZPrekNN,
+		pipiddn.IdZSabzSAB,
+		pipiddn.IdZOtprSAB,
+		pipiddn.IdSVremUSL,
+		pipiddn.UzrokTekst,
+		pipiddn.IdZJpsVN,
+		pipiddn.IdZJpsNN,
+		pipiddn.PoslTekst,
+		pipiddn.IdZTelePocGL1,
+		pipiddn.IdZTeleKrajGL1,
+		pipiddn.IdZTelePocGL2,
+		pipiddn.IdZTeleKrajGL2,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *OracleDBRepo) InsertPiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_pi_pi_ddn_ispad_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
@@ -3740,6 +4525,86 @@ func (m *OracleDBRepo) UpdatePiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 	}
 }
 
+func (m *OracleDBRepo) UpdatePiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_pi_pi_ddn_ispad_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42, :43, :44, :45, :46, :47, :48, :49, :50, :51, :52, :53, :54); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		pipiddn.DatSmene,
+		8,
+		pipiddn.IdSTipd,
+		pipiddn.IdSVrpd,
+		pipiddn.IdRadAPU,
+		pipiddn.IdTipob,
+		pipiddn.ObId,
+		pipiddn.TrafoId,
+		pipiddn.Vrepoc,
+		pipiddn.Vrezav,
+		pipiddn.Id1SGruzr,
+		pipiddn.Id1SUzrok,
+		pipiddn.Snaga,
+		pipiddn.Opis,
+		pipiddn.IdSNap,
+		pipiddn.P2TrafId,
+		pipiddn.KorUneo,
+		pipiddn.IdZDsdfGL1,
+		pipiddn.IdZKvarGL1,
+		pipiddn.IdZRapuGL1,
+		pipiddn.IdZPrstGL1,
+		pipiddn.IdZZmspGL1,
+		pipiddn.IdZUzmsGL1,
+		pipiddn.ZLokkGL1,
+		pipiddn.IdZDsdfGL2,
+		pipiddn.IdZKvarGL2,
+		pipiddn.IdZRapuGL2,
+		pipiddn.IdZPrstGL2,
+		pipiddn.IdZZmspGL2,
+		pipiddn.IdZUzmsGL2,
+		pipiddn.ZLokkGL2,
+		pipiddn.IdZPrekVN,
+		pipiddn.IdZDisREZ,
+		pipiddn.IdZKvarREZ,
+		pipiddn.IdZPrstREZ,
+		pipiddn.IdZZmspREZ,
+		pipiddn.IdZNel1,
+		pipiddn.IdZNel2,
+		pipiddn.IdZNel3,
+		pipiddn.IdZPrekNN,
+		pipiddn.IdZSabzSAB,
+		pipiddn.IdZOtprSAB,
+		pipiddn.IdSVremUSL,
+		pipiddn.UzrokTekst,
+		pipiddn.IdZJpsVN,
+		pipiddn.IdZJpsNN,
+		pipiddn.PoslTekst,
+		pipiddn.IdZTelePocGL1,
+		pipiddn.IdZTeleKrajGL1,
+		pipiddn.IdZTelePocGL2,
+		pipiddn.IdZTeleKrajGL2,
+		pipiddn.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
 func (m *OracleDBRepo) GetAllPiPiDDNIspad() ([]*models.PiPiDDN, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -3765,6 +4630,77 @@ func (m *OracleDBRepo) GetAllPiPiDDNIspad() ([]*models.PiPiDDN, error) {
 				to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
 				SYNSOFT_ID
 				from PI_PI_DDN_S
+				WHERE ID_S_TIPD=1`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*models.PiPiDDN
+
+	for rows.Next() {
+		var pipiddn models.PiPiDDN
+		err := rows.Scan(
+			&pipiddn.Datizv,
+			&pipiddn.IdSMrc,
+			&pipiddn.IdSTipd,
+			&pipiddn.IdSVrpd,
+			&pipiddn.IdTipob,
+			&pipiddn.ObId,
+			&pipiddn.TrafoId,
+			&pipiddn.Vrepoc,
+			&pipiddn.PocPP,
+			&pipiddn.Vrezav,
+			&pipiddn.ZavPP,
+			&pipiddn.IdSGrraz,
+			&pipiddn.IdSRazlog,
+			&pipiddn.Opis,
+			&pipiddn.IdSNap,
+			&pipiddn.P2TrafId,
+			&pipiddn.KorUneo,
+			&pipiddn.Status,
+			&pipiddn.Datpri,
+			&pipiddn.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &pipiddn)
+	}
+
+	return p, nil
+}
+
+func (m *OracleDBRepo) GetAllPiPiDDNIspadP() ([]*models.PiPiDDN, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
+				COALESCE(to_char(ID_S_MRC), ''),
+				COALESCE(to_char(ID_S_TIPD), ''),
+				COALESCE(to_char(ID_S_VRPD), ''),
+				COALESCE(to_char(ID_TIPOB), ''),
+				COALESCE(to_char(OB_ID), ''),
+				COALESCE(to_char(TRAFO_ID), ''),
+				to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+				POC_PP,
+				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+				ZAV_PP,
+				COALESCE(to_char(ID_S_GRRAZ), ''),
+				COALESCE(to_char(ID_S_RAZLOG), ''),
+				OPIS,
+				COALESCE(to_char(ID_S_NAP), ''),
+				COALESCE(to_char(P2_TRAF_ID), ''),
+				PGI_KOR,
+				STATUS,
+				to_char(DATPRI, 'dd.mm.yyyy HH24:MI:SS'),
+				SYNSOFT_ID
+				from PI_PI_DDN
 				WHERE ID_S_TIPD=1`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -3864,6 +4800,59 @@ func (m *OracleDBRepo) InsertDDNInterruptionOfDelivery(ddnintd models.DDNInterru
 	}
 }
 
+func (m *OracleDBRepo) InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_ddn_prekid_isp_insert(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ddnintd.IdSMrc,
+		ddnintd.IdSTipd,
+		ddnintd.IdSVrpd,
+		ddnintd.IdTipob,
+		ddnintd.ObId,
+		ddnintd.Vrepoc,
+		ddnintd.Vrezav,
+		ddnintd.IdSVrPrek,
+		ddnintd.IdSUzrokPrek,
+		ddnintd.Snaga,
+		ddnintd.Opis,
+		ddnintd.KorUneo,
+		ddnintd.IdSMernaMesta,
+		ddnintd.BrojMesta,
+		ddnintd.Ind,
+		ddnintd.P2TrafId,
+		ddnintd.Bi,
+		ddnintd.IdSPoduzrokPrek,
+		ddnintd.IdDogPrekidP,
+		ddnintd.IdTipObjektaNdc,
+		ddnintd.IdTipDogadjajaNdc,
+		ddnintd.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
 func (m *OracleDBRepo) UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -3873,6 +4862,60 @@ func (m *OracleDBRepo) UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterru
 	var message string
 
 	query := `begin  ddn.synsoft.ddn_prekid_isp_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ddnintd.IdSMrc,
+		ddnintd.IdSTipd,
+		ddnintd.IdSVrpd,
+		ddnintd.IdTipob,
+		ddnintd.ObId,
+		ddnintd.Vrepoc,
+		ddnintd.Vrezav,
+		ddnintd.IdSVrPrek,
+		ddnintd.IdSUzrokPrek,
+		ddnintd.Snaga,
+		ddnintd.Opis,
+		ddnintd.KorUneo,
+		ddnintd.IdSMernaMesta,
+		ddnintd.BrojMesta,
+		ddnintd.Ind,
+		ddnintd.P2TrafId,
+		ddnintd.Bi,
+		ddnintd.IdSPoduzrokPrek,
+		ddnintd.IdDogPrekidP,
+		ddnintd.IdTipObjektaNdc,
+		ddnintd.IdTipDogadjajaNdc,
+		ddnintd.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *OracleDBRepo) UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_ddn_prekid_isp_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
@@ -3932,6 +4975,20 @@ func (m *OracleDBRepo) DeleteDDNInterruptionOfDelivery(synsoftId string) error {
 	return nil
 }
 
+func (m *OracleDBRepo) DeleteDDNInterruptionOfDeliveryP(synsoftId string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `delete from ddn_prekid_isp where synsoft_id = :1`
+
+	_, err := m.DB.ExecContext(ctx, stmt, synsoftId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterruptionOfDelivery, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -3959,6 +5016,81 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterrupt
    COALESCE(to_char(ID_TIP_DOGADJAJA_NDC), ''),
    COALESCE(SYNSOFT_ID, '')
    from ddn_prekid_isp_s
+   where id_s_mrc=8`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*models.DDNInterruptionOfDelivery
+
+	for rows.Next() {
+		var ue models.DDNInterruptionOfDelivery
+		err := rows.Scan(
+			&ue.IdSMrc,
+			&ue.IdSTipd,
+			&ue.IdSVrpd,
+			&ue.IdTipob,
+			&ue.ObId,
+			&ue.Vrepoc,
+			&ue.Vrezav,
+			&ue.IdSVrPrek,
+			&ue.IdSUzrokPrek,
+			&ue.Snaga,
+			&ue.Opis,
+			&ue.KorUneo,
+			&ue.IdSMernaMesta,
+			&ue.BrojMesta,
+			&ue.Ind,
+			&ue.P2TrafId,
+			&ue.Bi,
+			&ue.IdSPoduzrokPrek,
+			&ue.IdDogPrekidP,
+			&ue.IdTipObjektaNdc,
+			&ue.IdTipDogadjajaNdc,
+			&ue.SynsoftId,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &ue)
+	}
+
+	return p, nil
+}
+
+func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCP() ([]*models.DDNInterruptionOfDelivery, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select ID_S_MRC,
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+   to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID_S_VR_PREK), ''),
+   COALESCE(to_char(ID_S_UZROK_PREK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(DDN_KOR, ''),
+   COALESCE(to_char(ID_S_MERNA_MESTA), ''),
+   COALESCE(to_char(BROJ_MMESTA), ''),
+   COALESCE(IND, ''),
+   COALESCE(to_char(ID_P2_TRAF), ''),
+   COALESCE(to_char(BI), ''),
+   COALESCE(to_char(ID_S_PODUZROK_PREK), ''),
+   COALESCE(to_char(ID_DOG_PREKID_P), ''),
+   COALESCE(to_char(ID_TIP_OBJEKTA_NDC), ''),
+   COALESCE(to_char(ID_TIP_DOGADJAJA_NDC), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from ddn_prekid_isp
    where id_s_mrc=8`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -4070,6 +5202,98 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*m
 
 	return &ue, nil
 }
+
+func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*models.DDNInterruptionOfDelivery, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	query := `select ID_S_MRC,
+	COALESCE(to_char(ID_S_TIPD), ''),
+	COALESCE(to_char(ID_S_VRPD), ''),
+	COALESCE(to_char(ID_TIPOB), ''),
+	COALESCE(to_char(OB_ID), ''),
+   to_char(VREPOC,'dd.mm.yyyy HH24:MI:SS'),
+   to_char(VREZAV,'dd.mm.yyyy HH24:MI:SS'),
+   COALESCE(to_char(ID_S_VR_PREK), ''),
+   COALESCE(to_char(ID_S_UZROK_PREK), ''),
+   COALESCE(to_char(SNAGA), ''),
+   COALESCE(OPIS, ''),
+   COALESCE(DDN_KOR, ''),
+   COALESCE(to_char(ID_S_MERNA_MESTA), ''),
+   COALESCE(to_char(BROJ_MMESTA), ''),
+   COALESCE(IND, ''),
+   COALESCE(to_char(ID_P2_TRAF), ''),
+   COALESCE(to_char(BI), ''),
+   COALESCE(to_char(ID_S_PODUZROK_PREK), ''),
+   COALESCE(to_char(ID_DOG_PREKID_P), ''),
+   COALESCE(to_char(ID_TIP_OBJEKTA_NDC), ''),
+   COALESCE(to_char(ID_TIP_DOGADJAJA_NDC), ''),
+   COALESCE(SYNSOFT_ID, '')
+   from ddn_prekid_isp
+   where synsoft_id=:1`
+
+	row := m.DB.QueryRowContext(ctx, query, synsoftId)
+
+	var ue models.DDNInterruptionOfDelivery
+	err := row.Scan(
+		&ue.IdSMrc,
+		&ue.IdSTipd,
+		&ue.IdSVrpd,
+		&ue.IdTipob,
+		&ue.ObId,
+		&ue.Vrepoc,
+		&ue.Vrezav,
+		&ue.IdSVrPrek,
+		&ue.IdSUzrokPrek,
+		&ue.Snaga,
+		&ue.Opis,
+		&ue.KorUneo,
+		&ue.IdSMernaMesta,
+		&ue.BrojMesta,
+		&ue.Ind,
+		&ue.P2TrafId,
+		&ue.Bi,
+		&ue.IdSPoduzrokPrek,
+		&ue.IdDogPrekidP,
+		&ue.IdTipObjektaNdc,
+		&ue.IdTipDogadjajaNdc,
+		&ue.SynsoftId,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &ue, nil
+}
+
+/** start Check for PI_DOK **/
+func (m *OracleDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+    var num int
+	stmt := `select count(*) from pgi.pi_dok where id_s_mrc = :1 and datizv = to_date(:2,'dd.mm.yyyy')-1 and tx_rx = 'O'`
+
+	err := m.DB.QueryRowContext(ctx, stmt, idSMrc, datIzv).Scan(&num)
+	if err != nil {
+		return -1,err
+	}
+	return num,nil
+}
+
+func (m *OracleDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+    var num int
+	stmt := `select count(*) from pgi.pi_dok where id_s_mrc = :1 and datizv = to_date(:2,'dd.mm.yyyy') and tx_rx = 'O'`
+
+	err := m.DB.QueryRowContext(ctx, stmt, idSMrc, datIzv).Scan(&num)
+	if err != nil {
+		return -1,err
+	}
+	return num,nil
+}
+/** end Check for PI_DOK **/
 
 /** start NOVITA ***/
 func (m *OracleDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error) {

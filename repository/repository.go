@@ -65,25 +65,43 @@ type DatabaseRepo interface {
 	GetOutages(year string) ([]*models.Outage, error)
 	GetExclusions(year string) ([]*models.Exclusion, error)
 	GetPlans(year string) ([]*models.Plan, error)
-	GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error) 
+	GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error)
 	Authenticate(username, testPassword string) error
 	GetUserByUsername(username string) (*models.User, error)
 	GetUserByID(id int) (*models.User, error)
 	InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error
+	InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error
 	UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error
+	UpdatePiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error
 	GetAllPiPiDDN() ([]*models.PiPiDDN, error)
+	GetAllPiPiDDNP() ([]*models.PiPiDDN, error)
 	GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error)
+	GetPiPiDDNByIDP(synsoftId string) (*models.PiPiDDN, error)
 	GetAllUnfinishedEventsNDC() ([]*models.UnfinishedEvents, error)
+	GetAllUnfinishedEventsNDCP() ([]*models.UnfinishedEvents, error)
 	GetUnfinishedEventsByID(synsoftId string) (*models.UnfinishedEvents, error)
+	GetUnfinishedEventsByIDP(synsoftId string) (*models.UnfinishedEvents, error)
 	UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) error
+	UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate) error
 	DeletePiPiDDN(synsoftId string) error
+	DeletePiPiDDNP(synsoftId string) error
 	InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error
+	InsertPiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error
 	UpdatePiPiDDNIspad(pipiddn models.PiPiDDNIspad) error
+	UpdatePiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error
 	GetAllPiPiDDNIspad() ([]*models.PiPiDDN, error)
+	GetAllPiPiDDNIspadP() ([]*models.PiPiDDN, error)
 	InsertDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error
+	InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error
 	UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error
+	UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error
 	DeleteDDNInterruptionOfDelivery(synsoftId string) error
+	DeleteDDNInterruptionOfDeliveryP(synsoftId string) error
 	GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterruptionOfDelivery, error)
+	GetDDNInterruptionOfDeliveryNDCP() ([]*models.DDNInterruptionOfDelivery, error)
 	GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*models.DDNInterruptionOfDelivery, error)
+	GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*models.DDNInterruptionOfDelivery, error)
+	CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error)
+	CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error)
 	GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error)
 }

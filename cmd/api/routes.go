@@ -41,6 +41,7 @@ func (app *application) routes() http.Handler {
 	mux.Get("/logout", app.logout)
 
 	mux.Get("/status", app.statusHandler)
+	mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
 	mux.Post("/signin", app.Signin)
 
 	//mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)

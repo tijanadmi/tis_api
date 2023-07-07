@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -884,6 +885,21 @@ func (app *application) getAllPiPiDDN(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getAllPiPiDDNP(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.DB.GetAllPiPiDDNP()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getPiPiDDNByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -895,6 +911,28 @@ func (app *application) getPiPiDDNByID(w http.ResponseWriter, r *http.Request) {
 	}*/
 
 	p, err := app.DB.GetPiPiDDNByID(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getPiPiDDNByIDP(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	/*pipiddnID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}*/
+
+	p, err := app.DB.GetPiPiDDNByIDP(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -939,6 +977,39 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) insertPiPiDDNIskljP(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIsklj
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.InsertPiPiDDNIskljP(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted",
+		}
+	}
+	//err = app.writeJSON(w, http.StatusOK, m)
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIsklj
 
@@ -953,6 +1024,37 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		return
 	} else {
 		err := app.DB.UpdatePiPiDDNIsklj(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updatePiPiDDNIskljP(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIsklj
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdSGrraz == "" || payload.IdSRazlog == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.TipMan == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.UpdatePiPiDDNIskljP(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1004,6 +1106,40 @@ func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) insertPiPiDDNIspadP(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIspad
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+	//fmt.Printf("Izgleda da je TipMan %s\n", payload.TipMan)
+
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdRadAPU == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" || payload.Vrepoc == "" || payload.IdSTipd == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.IdSVrpd == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err = app.DB.InsertPiPiDDNIspadP(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted",
+		}
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Request) {
 	var payload models.PiPiDDNIspad
 
@@ -1035,6 +1171,37 @@ func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (app *application) updatePiPiDDNIspadP(w http.ResponseWriter, r *http.Request) {
+	var payload models.PiPiDDNIspad
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.DatSmene == "" || payload.IdRadAPU == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" || payload.Vrepoc == "" || payload.IdSTipd == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.IdSVrpd == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.UpdatePiPiDDNIspadP(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	/*id, err := strconv.Atoi(chi.URLParam(r, "id"))
@@ -1042,8 +1209,30 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}*/
-	
+
 	err := app.DB.DeletePiPiDDN(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "pipiddn deleted",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+}
+
+func (app *application) deletePiPiDDNP(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	/*id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}*/
+
+	err := app.DB.DeletePiPiDDNP(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1065,6 +1254,21 @@ func (app *application) getAllUnfinishedEventsNDC(w http.ResponseWriter, r *http
 	//year := chi.URLParam(r, "year")
 
 	p, err := app.DB.GetAllUnfinishedEventsNDC()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getAllUnfinishedEventsNDCP(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.DB.GetAllUnfinishedEventsNDCP()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1098,6 +1302,28 @@ func (app *application) getUnfinishedEventsByID(w http.ResponseWriter, r *http.R
 	}
 }
 
+func (app *application) getUnfinishedEventsByIDP(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	/*pipiddnID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}*/
+
+	p, err := app.DB.GetUnfinishedEventsByIDP(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Request) {
 	var payload models.UnfinishedEventsUpdate
 
@@ -1112,6 +1338,37 @@ func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Re
 		return
 	} else {
 		err := app.DB.UpdateUnfinishedEvents(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updateUnfinishedEventsP(w http.ResponseWriter, r *http.Request) {
+	var payload models.UnfinishedEventsUpdate
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.DatSmene == "" || payload.TipSmene == "" || payload.SynsoftId == "" || payload.Id1SGruzr == "" || payload.Id1SUzrok == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.UpdateUnfinishedEventsP(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1165,6 +1422,39 @@ func (app *application) insertDDNInterruptionOfDelivery(w http.ResponseWriter, r
 	}
 }
 
+func (app *application) insertDDNInterruptionOfDeliveryP(w http.ResponseWriter, r *http.Request) {
+	var payload models.DDNInterruptionOfDelivery
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+
+	var resp JSONResponse
+	if payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.Ind == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.InsertDDNInterruptionOfDeliveryP(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted",
+		}
+	}
+	//err = app.writeJSON(w, http.StatusOK, m)
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) updateDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
 	var payload models.DDNInterruptionOfDelivery
 
@@ -1179,6 +1469,37 @@ func (app *application) updateDDNInterruptionOfDelivery(w http.ResponseWriter, r
 		return
 	} else {
 		err := app.DB.UpdateDDNInterruptionOfDelivery(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updateDDNInterruptionOfDeliveryP(w http.ResponseWriter, r *http.Request) {
+	var payload models.DDNInterruptionOfDelivery
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.Ind == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.UpdateDDNInterruptionOfDeliveryP(payload)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1218,6 +1539,28 @@ func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r
 	app.writeJSON(w, http.StatusAccepted, resp)
 }
 
+func (app *application) deleteDDNInterruptionOfDeliveryP(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	/*id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}*/
+
+	err := app.DB.DeleteDDNInterruptionOfDeliveryP(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "DDNInterruptionOfDelivery deleted",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+}
+
 func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r *http.Request) {
 	//year := chi.URLParam(r, "year")
 
@@ -1233,10 +1576,40 @@ func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r
 	}
 }
 
+func (app *application) getDDNInterruptionOfDeliveryNDCP(w http.ResponseWriter, r *http.Request) {
+	//year := chi.URLParam(r, "year")
+
+	p, err := app.DB.GetDDNInterruptionOfDeliveryNDCP()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getDDNInterruptionOfDeliveryByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
 	p, err := app.DB.GetDDNInterruptionOfDeliveryNDCByID(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, p)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getDDNInterruptionOfDeliveryByIDP(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	p, err := app.DB.GetDDNInterruptionOfDeliveryNDCByIDP(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1265,6 +1638,51 @@ func (app *application) getAllUnbalancedTrader(w http.ResponseWriter, r *http.Re
 }
 
 /*** end NOVITA ***/
+
+/** start Check for PI_DOK **/
+
+func (app *application) checkForPiDokP(w http.ResponseWriter, r *http.Request) {
+	datSmene := chi.URLParam(r, "datsmene")
+
+	idSMmrc, err := strconv.Atoi(chi.URLParam(r, "mrc"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	num, err := app.DB.CheckForPiDokYesterdayP(datSmene, idSMmrc)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	if num > 0 {
+		app.errorJSON(w, errors.New(fmt.Sprintf("Morate prvo zatvoriti Pogonski izvestaj za dan pre %s", datSmene)))
+		return
+	}
+
+	num, err = app.DB.CheckForPiDokTodayP(datSmene, idSMmrc)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	if num == 0 {
+		app.errorJSON(w, errors.New(fmt.Sprintf("Greska - Pogonski izvestaj za dan %s mora biti otvoren!", datSmene)))
+		return
+	}
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "Regular status",
+	}
+
+	err = app.writeJSON(w, http.StatusOK, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+/** end Check for PI_DOK **/
 
 /****** end DDN_PREKID_ISP ****/
 
