@@ -1656,7 +1656,7 @@ func (app *application) checkForPiDokP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if num > 0 {
-		app.errorJSON(w, errors.New(fmt.Sprintf("Morate prvo zatvoriti Pogonski izvestaj za dan pre %s", datSmene)))
+		app.errorJSON(w, fmt.Errorf("morate prvo zatvoriti Pogonski izvestaj za dan pre %s", datSmene))
 		return
 	}
 
@@ -1666,7 +1666,7 @@ func (app *application) checkForPiDokP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if num == 0 {
-		app.errorJSON(w, errors.New(fmt.Sprintf("Greska - Pogonski izvestaj za dan %s mora biti otvoren!", datSmene)))
+		app.errorJSON(w, fmt.Errorf("greska - Pogonski izvestaj za dan %s mora biti otvoren", datSmene))
 		return
 	}
 
