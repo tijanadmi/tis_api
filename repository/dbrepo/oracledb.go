@@ -554,6 +554,41 @@ func (m *OracleDBRepo) GetEarthfaultOCSP() ([]*models.Signal, error) {
 	return signals, nil
 }
 
+// Get returns all zas_tr_rez_zms_all_v and error, if any
+func (m *OracleDBRepo) GetEarthfaultOCTRR() ([]*models.Signal, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select infor_id,infor_naziv,status from zas_tr_rez_zms_all_v
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var signals []*models.Signal
+
+	for rows.Next() {
+		var signal models.Signal
+		err := rows.Scan(
+			&signal.ID,
+			&signal.Name,
+			&signal.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		signals = append(signals, &signal)
+	}
+
+	return signals, nil
+}
+
 // Get returns all zas_dv_uzms_all_v and error, if any
 func (m *OracleDBRepo) GetDirEarthfaultOC() ([]*models.Signal, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -5268,31 +5303,93 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*
 }
 
 /** start Check for PI_DOK **/
-func (m *OracleDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error) {
+func (m *OracleDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-    var num int
+	var num int
 	stmt := `select count(*) from pgi.pi_dok where id_s_mrc = :1 and datizv = to_date(:2,'dd.mm.yyyy')-1 and tx_rx = 'O'`
 
 	err := m.DB.QueryRowContext(ctx, stmt, idSMrc, datIzv).Scan(&num)
 	if err != nil {
-		return -1,err
+		return -1, err
 	}
-	return num,nil
+	return num, nil
 }
 
-func (m *OracleDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error) {
+func (m *OracleDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-    var num int
+	var num int
 	stmt := `select count(*) from pgi.pi_dok where id_s_mrc = :1 and datizv = to_date(:2,'dd.mm.yyyy') and tx_rx = 'O'`
 
 	err := m.DB.QueryRowContext(ctx, stmt, idSMrc, datIzv).Scan(&num)
 	if err != nil {
-		return -1,err
+		return -1, err
 	}
-	return num,nil
+	return num, nil
 }
+
+func (m *OracleDBRepo) ClosePgiP(datIzv string, idSMrc string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.zatvori_pogizv(:1, :2, :3, :4); end;`
+
+	_, err := m.DB.ExecContext(ctx, query,
+		datIzv,
+		idSMrc,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *OracleDBRepo) TransferInPgiP(datIzv string, idSMrc string, Tip string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.prenos_u_pi(:1, :2, :3, :4, :5); end;`
+
+	_, err := m.DB.ExecContext(ctx, query,
+		datIzv,
+		idSMrc,
+		Tip,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
 /** end Check for PI_DOK **/
 
 /** start NOVITA ***/

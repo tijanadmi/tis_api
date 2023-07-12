@@ -135,6 +135,17 @@ func (m *TestDBRepo) GetEarthfaultOCSP() ([]*models.Signal, error) {
 	return signals, nil
 }
 
+// Get returns all zas_tr_rez_zms_all_v and error, if any
+func (m *TestDBRepo) GetEarthfaultOCTRR() ([]*models.Signal, error) {
+	
+
+	var signals []*models.Signal
+
+
+	return signals, nil
+}
+
+
 // Get returns all zas_dv_uzms_all_v and error, if any
 func (m *TestDBRepo) GetDirEarthfaultOC() ([]*models.Signal, error) {
 
@@ -785,18 +796,31 @@ func (m *TestDBRepo) GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*mo
 }
 
 /** start Check for PI_DOK **/
-func (m *TestDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error) {
-	
-    var num int
-	
-	return num,nil
+func (m *TestDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int, error) {
+
+	var num int
+
+	return num, nil
 }
 
-func (m *TestDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error) {
+func (m *TestDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int, error) {
+
+	var num int
+
+	return num, nil
+}
+
+func (m *TestDBRepo) ClosePgiP(datIzv string, idSMrc string) error {
+
 	
-    var num int
+
+	return nil
+}
+
+func (m *TestDBRepo) TransferInPgiP(datIzv string, idSMrc string, Tip string) error {
 	
-	return num,nil
+		return nil
+	
 }
 /** start Check for PI_DOK **/
 

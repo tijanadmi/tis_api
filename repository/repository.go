@@ -24,6 +24,7 @@ type DatabaseRepo interface {
 	GetEarthfaultOCDV() ([]*models.Signal, error)
 	GetEarthfaultOCTR() ([]*models.Signal, error)
 	GetEarthfaultOCSP() ([]*models.Signal, error)
+	GetEarthfaultOCTRR() ([]*models.Signal, error) 
 	GetDirEarthfaultOC() ([]*models.Signal, error)
 	GetTPSendRcdv() ([]*models.Signal, error)
 	GetCircuitbreaker() ([]*models.Signal, error)
@@ -103,5 +104,7 @@ type DatabaseRepo interface {
 	GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*models.DDNInterruptionOfDelivery, error)
 	CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error)
 	CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error)
+	ClosePgiP(datIzv string, idSMrc string) error
+	TransferInPgiP(datIzv string, idSMrc string, Tip string) error 
 	GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error)
 }

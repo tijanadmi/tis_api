@@ -247,6 +247,19 @@ func (app *application) getEarthfaultOCSP(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (app *application) getEarthfaultOCTRR(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.DB.GetEarthfaultOCTRR()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getDirEarthfaultOC(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.DB.GetDirEarthfaultOC()
 	if err != nil {
@@ -1676,6 +1689,83 @@ func (app *application) checkForPiDokP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = app.writeJSON(w, http.StatusOK, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
+	type Payload struct {
+		datsmene string `json:"datsmene"`
+		mrc      string `json:"mrc"`
+	}
+
+	var payload Payload
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+
+	var resp JSONResponse
+	if payload.datsmene == "" || payload.mrc == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.ClosePgiP(payload.datsmene, payload.mrc)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "PGI is closed",
+		}
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
+	type Payload struct {
+		datsmene string `json:"datsmene"`
+		mrc      string `json:"mrc"`
+		tip      string `json:"mrc"`
+	}
+
+	var payload Payload
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
+
+	var resp JSONResponse
+	if payload.datsmene == "" || payload.mrc == "" || payload.tip == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.TransferInPgiP(payload.datsmene, payload.mrc, payload.tip)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		resp = JSONResponse{
+			Error:   false,
+			Message: "PGI is closed",
+		}
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return

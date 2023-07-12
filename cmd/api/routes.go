@@ -42,6 +42,8 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/status", app.statusHandler)
 	mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
+	mux.Put("/closepgi", app.closePgiP)
+	mux.Put("/transferinpgi", app.transferInPgiP)
 	mux.Post("/signin", app.Signin)
 
 	//mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
@@ -103,6 +105,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/signals/dvearthfaultoc", app.getEarthfaultOCDV)
 		mux.Get("/signals/trearthfaultoc", app.getEarthfaultOCTR)
 		mux.Get("/signals/spearthfaultoc", app.getEarthfaultOCSP)
+		mux.Get("/signals/trrearthfaultoc", app.getEarthfaultOCTRR)
 		mux.Get("/signals/direarthfaultoc", app.getDirEarthfaultOC)
 		mux.Get("/signals/tpsendrcvd", app.getTPSendRcdv)
 		mux.Get("/signals/circuitbreaker", app.getCircuitbreaker)
