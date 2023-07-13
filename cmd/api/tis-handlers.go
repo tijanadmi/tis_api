@@ -1697,8 +1697,8 @@ func (app *application) checkForPiDokP(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
 	type Payload struct {
-		datsmene string `json:"datsmene"`
-		mrc      string `json:"mrc"`
+		Datsmene string `json:"datsmene"`
+		Mrc      string `json:"mrc"`
 	}
 
 	var payload Payload
@@ -1711,11 +1711,11 @@ func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var resp JSONResponse
-	if payload.datsmene == "" || payload.mrc == "" {
+	if payload.Datsmene == "" || payload.Mrc == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.DB.ClosePgiP(payload.datsmene, payload.mrc)
+		err := app.DB.ClosePgiP(payload.Datsmene, payload.Mrc)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -1735,9 +1735,9 @@ func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
 	type Payload struct {
-		datsmene string `json:"datsmene"`
-		mrc      string `json:"mrc"`
-		tip      string `json:"mrc"`
+		Datsmene string `json:"datsmene"`
+		Mrc      string `json:"mrc"`
+		Tip      string `json:"tip"`
 	}
 
 	var payload Payload
@@ -1750,18 +1750,18 @@ func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var resp JSONResponse
-	if payload.datsmene == "" || payload.mrc == "" || payload.tip == "" {
+	if payload.Datsmene == "" || payload.Mrc == "" || payload.Tip == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.DB.TransferInPgiP(payload.datsmene, payload.mrc, payload.tip)
+		err := app.DB.TransferInPgiP(payload.Datsmene, payload.Mrc, payload.Tip)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
 		}
 		resp = JSONResponse{
 			Error:   false,
-			Message: "PGI is closed",
+			Message: "Transfer in PGI is complete",
 		}
 	}
 

@@ -164,6 +164,12 @@ func (app *application) routes() http.Handler {
 		/**** NOVITA   ****/
 		mux.Get("/unbalancestraders", app.getAllUnbalancedTrader)
 		/**** NOVITA   ****/
+
+		/*** start transfer and close pgi ***/
+		/*mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
+		mux.Put("/closepgi", app.closePgiP)
+		mux.Put("/transferinpgi", app.transferInPgiP)*/
+		/*** end transfer and close pgi ***/
 	})
 
 	return mux
