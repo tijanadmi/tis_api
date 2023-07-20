@@ -41,6 +41,8 @@ func (app *application) routes() http.Handler {
 	mux.Get("/logout", app.logout)
 
 	mux.Get("/status", app.statusHandler)
+
+	mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
 	//mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
 	/*mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
 	mux.Put("/closepgi", app.closePgiP)
@@ -141,29 +143,50 @@ func (app *application) routes() http.Handler {
 		mux.Get("/request2gr", app.getRequest2Gr)
 		mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
 
-		mux.Get("/unfinishedevents/ndc", app.getAllUnfinishedEventsNDC)
-		mux.Get("/unfinishedevents/{id}", app.getUnfinishedEventsByID)
-		mux.Patch("/unfinishedevents/{id}", app.updateUnfinishedEvents)
+		// mux.Get("/unfinishedevents/ndc", app.getAllUnfinishedEventsNDC)
+		// mux.Get("/unfinishedevents/{id}", app.getUnfinishedEventsByID)
+		// mux.Patch("/unfinishedevents/{id}", app.updateUnfinishedEvents)
 
-		mux.Get("/interruptionofdelivery/ndc", app.getDDNInterruptionOfDeliveryNDC)
-		mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByID)
+		// mux.Get("/interruptionofdelivery/ndc", app.getDDNInterruptionOfDeliveryNDC)
+		// mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByID)
 
-		mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
+		// mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
 
+		mux.Get("/unfinishedevents/ndc", app.getAllUnfinishedEventsNDCP)
+		mux.Get("/unfinishedevents/{id}", app.getUnfinishedEventsByIDP)
+		mux.Patch("/unfinishedevents/{id}", app.updateUnfinishedEventsP)
+
+		mux.Get("/interruptionofdelivery/ndc", app.getDDNInterruptionOfDeliveryNDCP)
+		mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByIDP)
+
+		mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDeliveryP)
+
+		/*Old version*/
 		/*mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
 		mux.Patch("/interruptionofdelivery/{id}", app.updateDDNInterruptionOfDelivery)
 		mux.Delete("/interruptionofdelivery/{id}", app.deleteDDNInterruptionOfDelivery)*/
 
-		mux.Get("/pipiddn", app.getAllPiPiDDN)
-		mux.Get("/pipiddn/{id}", app.getPiPiDDNByID)
+		// mux.Get("/pipiddn", app.getAllPiPiDDN)
+		// mux.Get("/pipiddn/{id}", app.getPiPiDDNByID)
 
-		mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
-		mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
+		// mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIsklj)
+		// mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspad)
 
-		mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIsklj)
-		mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
+		// mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIsklj)
+		// mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspad)
 
-		mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
+		// mux.Delete("/pipiddn/{id}", app.deletePiPiDDN)
+
+		mux.Get("/pipiddn", app.getAllPiPiDDNP)
+		mux.Get("/pipiddn/{id}", app.getPiPiDDNByIDP)
+
+		mux.Put("/pipiddn/operation/0", app.insertPiPiDDNIskljP)
+		mux.Put("/pipiddn/outage/0", app.insertPiPiDDNIspadP)
+
+		mux.Patch("/pipiddn/operation/{id}", app.updatePiPiDDNIskljP)
+		mux.Patch("/pipiddn/outage/{id}", app.updatePiPiDDNIspadP)
+
+		mux.Delete("/pipiddn/{id}", app.deletePiPiDDNP)
 
 		/**** NOVITA   ****/
 		mux.Get("/unbalancestraders", app.getAllUnbalancedTrader)

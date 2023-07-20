@@ -519,6 +519,7 @@ type UnfinishedEvents struct {
 type UnfinishedEventsUpdate struct {
 	DatSmene       string `json:"dat_smene"`
 	TipSmene       string `json:"tip_smene"`
+	Vrepoc         string `json:"vrepoc"`
 	Vrezav         string `json:"vrezav"`
 	Id1SGruzr      string `json:"id_s_gruzr"`
 	Id1SUzrok      string `json:"id_s_uzrok"`

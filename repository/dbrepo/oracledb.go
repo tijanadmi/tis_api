@@ -2956,6 +2956,9 @@ func (m *OracleDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 	}
 }
 
+
+
+
 func (m *OracleDBRepo) InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -4166,12 +4169,13 @@ func (m *OracleDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) 
 	var status int
 	var message string
 
-	query := `begin  ddn.synsoft.nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41); end;`
+	query := `begin  ddn.synsoft.nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
 		ue.DatSmene,
 		ue.TipSmene,
+		ue.Vrepoc,
 		ue.Vrezav,
 		ue.Id1SGruzr,
 		ue.Id1SUzrok,
@@ -4233,12 +4237,13 @@ func (m *OracleDBRepo) UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate)
 	var status int
 	var message string
 
-	query := `begin  ddn.synsoft.p_nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41); end;`
+	query := `begin  ddn.synsoft.p_nezavrseni_dog_update(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16, :17, :18, :19, :20, :21, :22, :23, :24, :25, :26, :27, :28, :29, :30, :31, :32, :33, :34, :35, :36, :37, :38, :39, :40, :41, :42); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,
 		ue.DatSmene,
 		ue.TipSmene,
+		ue.Vrepoc,
 		ue.Vrezav,
 		ue.Id1SGruzr,
 		ue.Id1SUzrok,
@@ -5019,6 +5024,51 @@ func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNI
 	var message string
 
 	query := `begin  ddn.synsoft.ddn_prekid_isp_iu(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ddnintd.IdSMrc,
+		ddnintd.IdSTipd,
+		ddnintd.IdTipob,
+		ddnintd.ObId,
+		ddnintd.Vrepoc,
+		ddnintd.Vrezav,
+		ddnintd.TipDogadjaja,
+		ddnintd.Uzrok,
+		ddnintd.Snaga,
+		ddnintd.Opis,
+		ddnintd.KorUneo,
+		ddnintd.P2TrafId,
+		ddnintd.TipObjekta,
+		ddnintd.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
+func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDeliveryPayload) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.p_ddn_prekid_isp_iu(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16); end;`
 	//var int status
 	//var string message
 	_, err := m.DB.ExecContext(ctx, query,

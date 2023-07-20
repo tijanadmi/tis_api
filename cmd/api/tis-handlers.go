@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v4"
@@ -1553,6 +1554,80 @@ func (app *application) insertUpdateDDNInterruptionOfDelivery(w http.ResponseWri
 			Error:   false,
 			Message: "Record inserted/updated",
 		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) insertUpdateDDNInterruptionOfDeliveryP(w http.ResponseWriter, r *http.Request) {
+	var payload models.DDNInterruptionOfDeliveryPayload
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.P2TrafId == "" || payload.TipDogadjaja == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.InsertUpdateDDNInterruptionOfDeliveryP(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted/updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) insertUpdateAllDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
+	var payloads []models.DDNInterruptionOfDeliveryPayload
+	dateFormat := "02.01.2006 15:04"
+	err := app.readJSON(w, r, &payloads)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	for _, payload := range payloads {
+		date, err := time.Parse(dateFormat, payload.Vrepoc)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		fmt.Println(date)
+	}
+
+	/*for _, payload := range payloads {
+
+		if payload.SynsoftId == "" || payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.P2TrafId == "" || payload.TipDogadjaja == "" {
+			app.errorJSON(w, errors.New("mandatory data was not passed"))
+			return
+		} else {
+			err := app.DB.InsertUpdateDDNInterruptionOfDelivery(payload)
+			if err != nil {
+				app.errorJSON(w, err)
+				return
+			}
+		}
+	}*/
+
+	//var resp JSONResponse
+	var resp = JSONResponse{
+		Error:   false,
+		Message: "Record inserted/updated",
 	}
 	app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {

@@ -763,6 +763,10 @@ func (m *TestDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNInt
 	return nil
 }
 
+func (m *TestDBRepo) InsertUpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDeliveryPayload) error {
+	return nil
+}
+
 func (m *TestDBRepo) DeleteDDNInterruptionOfDeliveryP(synsoftId string) error {
 
 	return nil
