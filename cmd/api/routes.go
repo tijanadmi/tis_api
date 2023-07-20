@@ -41,9 +41,10 @@ func (app *application) routes() http.Handler {
 	mux.Get("/logout", app.logout)
 
 	mux.Get("/status", app.statusHandler)
-	mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
+	//mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
+	/*mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
 	mux.Put("/closepgi", app.closePgiP)
-	mux.Put("/transferinpgi", app.transferInPgiP)
+	mux.Put("/transferinpgi", app.transferInPgiP)*/
 	mux.Post("/signin", app.Signin)
 
 	//mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
@@ -146,9 +147,12 @@ func (app *application) routes() http.Handler {
 
 		mux.Get("/interruptionofdelivery/ndc", app.getDDNInterruptionOfDeliveryNDC)
 		mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByID)
-		mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
+
+		mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
+
+		/*mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
 		mux.Patch("/interruptionofdelivery/{id}", app.updateDDNInterruptionOfDelivery)
-		mux.Delete("/interruptionofdelivery/{id}", app.deleteDDNInterruptionOfDelivery)
+		mux.Delete("/interruptionofdelivery/{id}", app.deleteDDNInterruptionOfDelivery)*/
 
 		mux.Get("/pipiddn", app.getAllPiPiDDN)
 		mux.Get("/pipiddn/{id}", app.getPiPiDDNByID)
@@ -166,9 +170,9 @@ func (app *application) routes() http.Handler {
 		/**** NOVITA   ****/
 
 		/*** start transfer and close pgi ***/
-		/*mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
+		mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
 		mux.Put("/closepgi", app.closePgiP)
-		mux.Put("/transferinpgi", app.transferInPgiP)*/
+		mux.Put("/transferinpgi", app.transferInPgiP)
 		/*** end transfer and close pgi ***/
 	})
 

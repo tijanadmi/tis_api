@@ -5010,6 +5010,51 @@ func (m *OracleDBRepo) DeleteDDNInterruptionOfDelivery(synsoftId string) error {
 	return nil
 }
 
+func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDeliveryPayload) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var status int
+	var message string
+
+	query := `begin  ddn.synsoft.ddn_prekid_isp_iu(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15, :16); end;`
+	//var int status
+	//var string message
+	_, err := m.DB.ExecContext(ctx, query,
+		ddnintd.IdSMrc,
+		ddnintd.IdSTipd,
+		ddnintd.IdTipob,
+		ddnintd.ObId,
+		ddnintd.Vrepoc,
+		ddnintd.Vrezav,
+		ddnintd.TipDogadjaja,
+		ddnintd.Uzrok,
+		ddnintd.Snaga,
+		ddnintd.Opis,
+		ddnintd.KorUneo,
+		ddnintd.P2TrafId,
+		ddnintd.TipObjekta,
+		ddnintd.SynsoftId,
+		sql.Out{Dest: &status},
+		sql.Out{Dest: &message},
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	//fmt.Println(pipiddn.TipMan)
+	//fmt.Println(pipiddn.DatSmene)
+	//fmt.Println(status)
+	//fmt.Println(message)
+	if status != 0 {
+		return errors.New(message)
+	} else {
+		return nil
+	}
+}
+
 func (m *OracleDBRepo) DeleteDDNInterruptionOfDeliveryP(synsoftId string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

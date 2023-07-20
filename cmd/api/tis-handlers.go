@@ -1530,6 +1530,37 @@ func (app *application) updateDDNInterruptionOfDeliveryP(w http.ResponseWriter, 
 	}
 }
 
+func (app *application) insertUpdateDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
+	var payload models.DDNInterruptionOfDeliveryPayload
+
+	err := app.readJSON(w, r, &payload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	var resp JSONResponse
+	if payload.SynsoftId == "" || payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.P2TrafId == "" || payload.TipDogadjaja == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"))
+		return
+	} else {
+		err := app.DB.InsertUpdateDDNInterruptionOfDelivery(payload)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+
+		resp = JSONResponse{
+			Error:   false,
+			Message: "Record inserted/updated",
+		}
+	}
+	app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	/*id, err := strconv.Atoi(chi.URLParam(r, "id"))
@@ -1710,12 +1741,32 @@ func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	idSMmrc, err := strconv.Atoi(payload.Mrc)
 	var resp JSONResponse
 	if payload.Datsmene == "" || payload.Mrc == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
 		return
 	} else {
-		err := app.DB.ClosePgiP(payload.Datsmene, payload.Mrc)
+
+		num, err := app.DB.CheckForPiDokYesterdayP(payload.Datsmene, idSMmrc)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		if num > 0 {
+			app.errorJSON(w, fmt.Errorf("morate prvo zatvoriti Pogonski izvestaj za dan pre %s", payload.Datsmene))
+			return
+		}
+		num, err = app.DB.CheckForPiDokTodayP(payload.Datsmene, idSMmrc)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
+		if num == 0 {
+			app.errorJSON(w, fmt.Errorf("greska - Pogonski izvestaj za dan %s mora biti otvoren", payload.Datsmene))
+			return
+		}
+		err = app.DB.ClosePgiP(payload.Datsmene, payload.Mrc)
 		if err != nil {
 			app.errorJSON(w, err)
 			return

@@ -137,14 +137,11 @@ func (m *TestDBRepo) GetEarthfaultOCSP() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_rez_zms_all_v and error, if any
 func (m *TestDBRepo) GetEarthfaultOCTRR() ([]*models.Signal, error) {
-	
 
 	var signals []*models.Signal
 
-
 	return signals, nil
 }
-
 
 // Get returns all zas_dv_uzms_all_v and error, if any
 func (m *TestDBRepo) GetDirEarthfaultOC() ([]*models.Signal, error) {
@@ -762,6 +759,10 @@ func (m *TestDBRepo) DeleteDDNInterruptionOfDelivery(synsoftId string) error {
 	return nil
 }
 
+func (m *TestDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDeliveryPayload) error {
+	return nil
+}
+
 func (m *TestDBRepo) DeleteDDNInterruptionOfDeliveryP(synsoftId string) error {
 
 	return nil
@@ -812,16 +813,15 @@ func (m *TestDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int, error)
 
 func (m *TestDBRepo) ClosePgiP(datIzv string, idSMrc string) error {
 
-	
-
 	return nil
 }
 
 func (m *TestDBRepo) TransferInPgiP(datIzv string, idSMrc string, Tip string) error {
-	
-		return nil
-	
+
+	return nil
+
 }
+
 /** start Check for PI_DOK **/
 
 /** start NOVITA ***/

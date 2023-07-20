@@ -566,6 +566,8 @@ type DDNInterruptionOfDelivery struct {
 	ObId              string `json:"ob_id"`
 	Vrepoc            string `json:"vrepoc"`
 	Vrezav            string `json:"vrezav"`
+	TipDogadjaja      string `json:"tip_dogadjaja"`
+	Uzrok             string `json:"uzrok"`
 	IdSVrPrek         string `json:"id_s_vr_prek"`
 	IdSUzrokPrek      string `json:"id_s_uzrok_prek"`
 	Snaga             string `json:"snaga"`
@@ -581,6 +583,23 @@ type DDNInterruptionOfDelivery struct {
 	IdTipObjektaNdc   string `json:"id_tip_objekta_ndc"`
 	IdTipDogadjajaNdc string `json:"id_tip_dogadjaja_ndc"`
 	SynsoftId         string `json:"ed_id"`
+}
+
+type DDNInterruptionOfDeliveryPayload struct {
+	IdSMrc       string `json:"id_s_mrc"`
+	IdSTipd      string `json:"id_s_tipd"`
+	IdTipob      string `json:"id_tipob"`
+	ObId         string `json:"ob_id"`
+	Vrepoc       string `json:"vrepoc"`
+	Vrezav       string `json:"vrezav"`
+	TipDogadjaja string `json:"tip_dogadjaja"`
+	Uzrok        string `json:"uzrok"`
+	Snaga        string `json:"snaga"`
+	Opis         string `json:"opis"`
+	KorUneo      string `json:"kor_uneo"`
+	P2TrafId     string `json:"p2_traf_id"`
+	TipObjekta   string `json:"tip_objekta"`
+	SynsoftId    string `json:"ed_id"`
 }
 
 type WeatherData struct {

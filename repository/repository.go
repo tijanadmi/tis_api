@@ -96,6 +96,7 @@ type DatabaseRepo interface {
 	InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error
 	UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error
 	UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error
+	InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDeliveryPayload) error
 	DeleteDDNInterruptionOfDelivery(synsoftId string) error
 	DeleteDDNInterruptionOfDeliveryP(synsoftId string) error
 	GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterruptionOfDelivery, error)
