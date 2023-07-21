@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -1593,6 +1594,19 @@ func (app *application) insertUpdateDDNInterruptionOfDeliveryP(w http.ResponseWr
 	}
 }
 
+/**** definition of slice and sort  ****/
+type Item struct {
+	p    models.DDNInterruptionOfDeliveryPayload
+	Date time.Time
+}
+type ByDate []Item
+
+func (a ByDate) Len() int           { return len(a) }
+func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
+
+/**** end definition of slice and sort  ****/
+
 func (app *application) insertUpdateAllDDNInterruptionOfDelivery(w http.ResponseWriter, r *http.Request) {
 	var payloads []models.DDNInterruptionOfDeliveryPayload
 	dateFormat := "02.01.2006 15:04"
@@ -1601,15 +1615,31 @@ func (app *application) insertUpdateAllDDNInterruptionOfDelivery(w http.Response
 		app.errorJSON(w, err)
 		return
 	}
+	var items []Item
 	for _, payload := range payloads {
 		date, err := time.Parse(dateFormat, payload.Vrepoc)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
 		}
-		fmt.Println(date)
+		item := Item{payload, date}
+		items = append(items, item)
+		/*fmt.Println(date)*/
 	}
-
+	sort.Sort(ByDate(items))
+	for _, item := range items {
+		/*fmt.Println(item.Date)*/
+		if item.p.SynsoftId == "" || item.p.IdSTipd == "" || item.p.Vrepoc == "" || item.p.IdTipob == "" || item.p.ObId == "" || item.p.IdSMrc == "" || item.p.P2TrafId == "" || item.p.TipDogadjaja == "" {
+			app.errorJSON(w, errors.New("mandatory data was not passed"))
+			return
+		} else {
+			err := app.DB.InsertUpdateDDNInterruptionOfDelivery(item.p)
+			if err != nil {
+				app.errorJSON(w, err)
+				return
+			}
+		}
+	}
 	/*for _, payload := range payloads {
 
 		if payload.SynsoftId == "" || payload.IdSTipd == "" || payload.Vrepoc == "" || payload.IdTipob == "" || payload.ObId == "" || payload.IdSMrc == "" || payload.P2TrafId == "" || payload.TipDogadjaja == "" {
