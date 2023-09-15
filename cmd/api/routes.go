@@ -42,7 +42,7 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/status", app.statusHandler)
 
-	mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
+	//mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
 	//mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
 	/*mux.Get("/pidokstatus/{mrc}/{datsmene}", app.checkForPiDokP)
 	mux.Put("/closepgi", app.closePgiP)
@@ -160,6 +160,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByIDP)
 
 		mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDeliveryP)
+		mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
 
 		/*Old version*/
 		/*mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
