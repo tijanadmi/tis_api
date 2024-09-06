@@ -21,7 +21,7 @@ func (m *OracleDBRepo) Connection() *sql.DB {
 }
 
 func (m *OracleDBRepo) OneSignal(id int) (*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, naziv, status
@@ -47,7 +47,7 @@ func (m *OracleDBRepo) OneSignal(id int) (*models.Signal, error) {
 
 // Get returns all zas_dv_didf_all_v and error, if any
 func (m *OracleDBRepo) GetDvDidf() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id, infor_naziv, status from ted.zas_dv_didf_all_v
@@ -82,7 +82,7 @@ func (m *OracleDBRepo) GetDvDidf() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_gldif_all_v and error, if any
 func (m *OracleDBRepo) GetDiffTr() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id, infor_naziv, status from ted.zas_tr_gldif_all_v
@@ -117,7 +117,7 @@ func (m *OracleDBRepo) GetDiffTr() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_rez_dis_all_v and error, if any
 func (m *OracleDBRepo) GetDisTrRes() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id, infor_naziv, status from ted.zas_tr_rez_dis_all_v
@@ -152,7 +152,7 @@ func (m *OracleDBRepo) GetDisTrRes() ([]*models.Signal, error) {
 
 // Get returns all ted.zas_spp_didf_all_v and error, if any
 func (m *OracleDBRepo) GetDisDiffSp() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id, infor_naziv, status from ted.zas_spp_didf_all_v
@@ -187,7 +187,7 @@ func (m *OracleDBRepo) GetDisDiffSp() ([]*models.Signal, error) {
 
 // Get returns all pgd.zas_pd_kk_v and error, if any
 func (m *OracleDBRepo) GetMalfunctionIn() ([]*models.MalfunctionIn, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id_pd_kk,naziv_edd,RED from pgd.zas_pd_kk_v
@@ -221,7 +221,7 @@ func (m *OracleDBRepo) GetMalfunctionIn() ([]*models.MalfunctionIn, error) {
 }
 
 func (m *OracleDBRepo) OneMalfunctionIn(id int) (*models.MalfunctionIn, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id_pd_kk,naziv_edd,RED
@@ -247,7 +247,7 @@ func (m *OracleDBRepo) OneMalfunctionIn(id int) (*models.MalfunctionIn, error) {
 
 // Get returns all ddn.s_rapu and error, if any
 func (m *OracleDBRepo) GetAPU() ([]*models.Apu, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id,naziv,SKR_NAZ,SIFRA, status from ddn.s_rapu
@@ -283,7 +283,7 @@ func (m *OracleDBRepo) GetAPU() ([]*models.Apu, error) {
 }
 
 func (m *OracleDBRepo) OneAPU(id int) (*models.Apu, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id,naziv,SKR_NAZ,SIFRA, status
@@ -311,7 +311,7 @@ func (m *OracleDBRepo) OneAPU(id int) (*models.Apu, error) {
 
 // Get returns all zas_dv_pres_all_v and error, if any
 func (m *OracleDBRepo) GetOCDV() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_dv_pres_all_v
@@ -346,7 +346,7 @@ func (m *OracleDBRepo) GetOCDV() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_glprs_all_v and error, if any
 func (m *OracleDBRepo) GetOCTR12() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_tr_glprs_all_v
@@ -381,7 +381,7 @@ func (m *OracleDBRepo) GetOCTR12() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_rez_prs_all_v and error, if any
 func (m *OracleDBRepo) GetOCTRR() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_tr_rez_prs_all_v
@@ -416,7 +416,7 @@ func (m *OracleDBRepo) GetOCTRR() ([]*models.Signal, error) {
 
 // Get returns all zas_spp_prs_all_v and error, if any
 func (m *OracleDBRepo) GetOCSP() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_spp_prs_all_v
@@ -451,7 +451,7 @@ func (m *OracleDBRepo) GetOCSP() ([]*models.Signal, error) {
 
 // Get returns all zas_dv_zmsp_all_v and error, if any
 func (m *OracleDBRepo) GetEarthfaultOCDV() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_dv_zmsp_all_v
@@ -486,7 +486,7 @@ func (m *OracleDBRepo) GetEarthfaultOCDV() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_glzms_all_v and error, if any
 func (m *OracleDBRepo) GetEarthfaultOCTR() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_tr_glzms_all_v
@@ -521,7 +521,7 @@ func (m *OracleDBRepo) GetEarthfaultOCTR() ([]*models.Signal, error) {
 
 // Get returns all zas_spp_zms_all_v and error, if any
 func (m *OracleDBRepo) GetEarthfaultOCSP() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_spp_zms_all_v
@@ -556,7 +556,7 @@ func (m *OracleDBRepo) GetEarthfaultOCSP() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_rez_zms_all_v and error, if any
 func (m *OracleDBRepo) GetEarthfaultOCTRR() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_tr_rez_zms_all_v
@@ -591,7 +591,7 @@ func (m *OracleDBRepo) GetEarthfaultOCTRR() ([]*models.Signal, error) {
 
 // Get returns all zas_dv_uzms_all_v and error, if any
 func (m *OracleDBRepo) GetDirEarthfaultOC() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_dv_uzms_all_v
@@ -626,7 +626,7 @@ func (m *OracleDBRepo) GetDirEarthfaultOC() ([]*models.Signal, error) {
 
 // Get returns all ZAS_DV_TELE_ALL_V and error, if any
 func (m *OracleDBRepo) GetTPSendRcdv() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from ZAS_DV_TELE_ALL_V
@@ -661,7 +661,7 @@ func (m *OracleDBRepo) GetTPSendRcdv() ([]*models.Signal, error) {
 
 // Get returns all zas_prek_all_v and error, if any
 func (m *OracleDBRepo) GetCircuitbreaker() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_prek_all_v
@@ -696,7 +696,7 @@ func (m *OracleDBRepo) GetCircuitbreaker() ([]*models.Signal, error) {
 
 // Get returns all zas_jps_all_v and error, if any
 func (m *OracleDBRepo) GetBBPBFtrip() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_jps_all_v
@@ -731,7 +731,7 @@ func (m *OracleDBRepo) GetBBPBFtrip() ([]*models.Signal, error) {
 
 // Get returns all zas_tr_neel_all_v and error, if any
 func (m *OracleDBRepo) GetNonElectrical() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_tr_neel_all_v
@@ -766,7 +766,7 @@ func (m *OracleDBRepo) GetNonElectrical() ([]*models.Signal, error) {
 
 // Get returns all zas_sab_sbr_all_v and error, if any
 func (m *OracleDBRepo) GetBBPBBtrip() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_sab_sbr_all_v
@@ -801,7 +801,7 @@ func (m *OracleDBRepo) GetBBPBBtrip() ([]*models.Signal, error) {
 
 // Get returns all zas_sab_opr_all_v and error, if any
 func (m *OracleDBRepo) GetBFtrip() ([]*models.Signal, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select infor_id,infor_naziv,status from zas_sab_opr_all_v
@@ -836,7 +836,7 @@ func (m *OracleDBRepo) GetBFtrip() ([]*models.Signal, error) {
 
 // Get returns all groups of causes and error, if any
 func (m *OracleDBRepo) GetGroupsOfCauses() ([]*models.GroupOfCause, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, sifra, naziv, skr, status, sif_ddn, sortr
@@ -875,7 +875,7 @@ func (m *OracleDBRepo) GetGroupsOfCauses() ([]*models.GroupOfCause, error) {
 }
 
 func (m *OracleDBRepo) OneGroupOfCauses(id int) (*models.GroupOfCause, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, sifra, naziv, skr, status, sif_ddn, sortr
@@ -905,7 +905,7 @@ func (m *OracleDBRepo) OneGroupOfCauses(id int) (*models.GroupOfCause, error) {
 
 // Get returns all causes and error, if any
 func (m *OracleDBRepo) GetCauses() ([]*models.Cause, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select u.id, u.id_s_gruzr, u.sifra, u.naziv, u.skr, u.status, u.sortr, gu.id, gu.sifra, gu.naziv, gu.skr, gu.status, gu.sif_ddn, gu.sortr
@@ -952,7 +952,7 @@ func (m *OracleDBRepo) GetCauses() ([]*models.Cause, error) {
 }
 
 func (m *OracleDBRepo) OneCause(id int) (*models.Cause, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select u.id, u.id_s_gruzr, u.sifra, u.naziv, u.skr, u.status, u.sortr, gu.id, gu.sifra, gu.naziv, gu.skr, gu.status, gu.sif_ddn, gu.sortr
@@ -990,7 +990,7 @@ func (m *OracleDBRepo) OneCause(id int) (*models.Cause, error) {
 
 // Get returns all groups of reasons and error, if any
 func (m *OracleDBRepo) GetGroupOfReasons() ([]*models.GroupOfReason, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, sifra, naziv, skr, status, sortr
@@ -1028,7 +1028,7 @@ func (m *OracleDBRepo) GetGroupOfReasons() ([]*models.GroupOfReason, error) {
 }
 
 func (m *OracleDBRepo) OneGroupOfReasons(id int) (*models.GroupOfReason, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, sifra, naziv, skr, status, sortr
@@ -1057,7 +1057,7 @@ func (m *OracleDBRepo) OneGroupOfReasons(id int) (*models.GroupOfReason, error) 
 
 // Get returns all  reasons and error, if any
 func (m *OracleDBRepo) GetReasons() ([]*models.Reason, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select r.id, r.id_s_grraz, r.sifra, r.naziv, r.skr, r.status, r.sortr,gr.id, gr.sifra, gr.naziv, gr.skr, gr.status, gr.sortr
@@ -1103,7 +1103,7 @@ func (m *OracleDBRepo) GetReasons() ([]*models.Reason, error) {
 }
 
 func (m *OracleDBRepo) OneReason(id int) (*models.Reason, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select r.id, r.id_s_grraz, r.sifra, r.naziv, r.skr, r.status, r.sortr,gr.id, gr.sifra, gr.naziv, gr.skr, gr.status, gr.sortr
@@ -1140,7 +1140,7 @@ func (m *OracleDBRepo) OneReason(id int) (*models.Reason, error) {
 
 // Get returns all weather conditions and error, if any
 func (m *OracleDBRepo) GetWeatherConditions() ([]*models.WeatherCondition, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, sifra, naziv, status from DDN.S_VREM_USL
@@ -1175,7 +1175,7 @@ func (m *OracleDBRepo) GetWeatherConditions() ([]*models.WeatherCondition, error
 }
 
 func (m *OracleDBRepo) OneWeatherCondition(id int) (*models.WeatherCondition, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, sifra, naziv, status
@@ -1202,7 +1202,7 @@ func (m *OracleDBRepo) OneWeatherCondition(id int) (*models.WeatherCondition, er
 
 // Get returns all categories of events and error, if any
 func (m *OracleDBRepo) GetCategoriesOfEvents() ([]*models.CategoryOfEvent, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, id_s_tipd, sifra, naziv, skr, status, sortr
@@ -1242,7 +1242,7 @@ func (m *OracleDBRepo) GetCategoriesOfEvents() ([]*models.CategoryOfEvent, error
 }
 
 func (m *OracleDBRepo) OneCategoryOfEvents(id int) (*models.CategoryOfEvent, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, id_s_tipd, sifra, naziv, skr, status, sortr
@@ -1272,7 +1272,7 @@ func (m *OracleDBRepo) OneCategoryOfEvents(id int) (*models.CategoryOfEvent, err
 
 // Get returns all weather conditions and error, if any
 func (m *OracleDBRepo) GetOHL() ([]*models.OverheadLine, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID_DV,IPS_ID_DV,SAP_ID_DV,ID_DAL,NAZIV_IPS,OPIS_PO_KATEGORIZACIJI,ID_NAP,NAPON_NAZIV,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),TIS_ID_PT_POLJA,IPS_ID_PT_POLJA,
@@ -1336,7 +1336,7 @@ func (m *OracleDBRepo) GetOHL() ([]*models.OverheadLine, error) {
 
 // Get returns all power_cables and error, if any
 func (m *OracleDBRepo) GetPowerCables() ([]*models.PowerCable, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID_KB,IPS_ID_KB,SAP_ID_KB,ID_KAB,NAZIV_IPS,OPIS_PO_KATEGORIZACIJI,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),TIS_ID_PT_POLJA,IPS_ID_PT_POLJA,
@@ -1398,7 +1398,7 @@ func (m *OracleDBRepo) GetPowerCables() ([]*models.PowerCable, error) {
 
 // Get returns all substations and error, if any
 func (m *OracleDBRepo) GetSubstations() ([]*models.Substation, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID,IPS_ID,SAP_ID,NAZIV_TS,NAZIV_PO_KATEGORIZACIJI,TIPOB,TIPOB_SIFRA,TIPOB_NAZIV,COALESCE(to_char(ID_S_MRC1), ''),COALESCE(MRC1, ''),COALESCE(to_char(ID_S_MRC2), ''),COALESCE(MRC2, ''), ID_S_ORG, NAZIV_ORG
@@ -1445,7 +1445,7 @@ func (m *OracleDBRepo) GetSubstations() ([]*models.Substation, error) {
 
 // Get returns all feeders and error, if any
 func (m *OracleDBRepo) GetFeeders() ([]*models.Feeder, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID_POLJA,IPS_ID_POLJA,SAP_ID_POLJA,TIS_ID_TRAFOSTANICE,IPS_ID_TRAFOSTANICE,SAP_ID_TRAFOSTANICE,NAZIV_TRAFOSTANICE,
@@ -1500,7 +1500,7 @@ func (m *OracleDBRepo) GetFeeders() ([]*models.Feeder, error) {
 
 // Get returns all protection devices and error, if any
 func (m *OracleDBRepo) GetProtectionDevices() ([]*models.ProtectionDevice, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID_OPREME, IPS_ID_OPREME, TIS_ID_POLJA, IPS_ID_POLJA, SAP_ID_POLJA, PROIZVODJAC, TIP, VRSTA_OPR, IND_GL,
@@ -1549,7 +1549,7 @@ func (m *OracleDBRepo) GetProtectionDevices() ([]*models.ProtectionDevice, error
 
 // Get returns all power transformers and error, if any
 func (m *OracleDBRepo) GetPowerTransformers() ([]*models.PowerTransformer, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID_TRANSFORMATORA, IPS_ID_TRANSFORMATORA, SAP_ID_TRANSFORMATORA, TIS_ID_TRAFOSTANICE, IPS_ID_TRAFOSTANICE, SAP_ID_TRAFOSTANICE, NAZIV_TRAFOSTANICE,
@@ -1613,7 +1613,7 @@ func (m *OracleDBRepo) GetPowerTransformers() ([]*models.PowerTransformer, error
 
 // Get returns all disconnectors and error, if any
 func (m *OracleDBRepo) GetDisconnectors() ([]*models.Disconnector, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select TIS_ID_RASTAVLJACA, IPS_ID_RASTAVLJACA, SAP_ID_RASTAVLJACA, TIS_ID_POLJA, IPS_ID_POLJA, SAP_ID_POLJA, NAZIV_POLJA, OPIS_PO_KATEGORIZACIJI,
@@ -1659,7 +1659,7 @@ func (m *OracleDBRepo) GetDisconnectors() ([]*models.Disconnector, error) {
 
 // Get returns all permissions and error, if any
 func (m *OracleDBRepo) GetWorkPermissions() ([]*models.WorkPermission, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select RBR, COALESCE(to_char(BROJ_RAD1), ''), COALESCE(to_char(BROJ_RAD2), ''), COALESCE(PL_VREME_OD, ''), 
@@ -1702,7 +1702,7 @@ func (m *OracleDBRepo) GetWorkPermissions() ([]*models.WorkPermission, error) {
 
 // Get returns all permissionsAll and error, if any
 func (m *OracleDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select ID_ZAHTEVA,
@@ -1786,7 +1786,7 @@ func (m *OracleDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, err
 
 // Get returns all Request1Gr and error, if any
 func (m *OracleDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select ID_ZAHTEVA,
@@ -1846,7 +1846,7 @@ func (m *OracleDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
 
 // Get returns all Request2Gr and error, if any
 func (m *OracleDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select ID_ZAHTEVA,
@@ -1910,7 +1910,7 @@ func (m *OracleDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
 
 // Get returns all permissions and error, if any
 func (m *OracleDBRepo) GetWorkInEENetwork() ([]*models.WorkInEENetwork, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select  COALESCE(to_char(MAX_RB), ''), COALESCE(to_char(BROJ), ''),  COALESCE(EE_ELEMENTI, ''), COALESCE(MESTO_RADA, ''), 
@@ -2788,7 +2788,7 @@ func (m *OracleDBRepo) GetUnopenedPermitForDay(day string, org string) ([]*model
 
 // Authenticate authenticates a user
 func (m *OracleDBRepo) Authenticate(username, testPassword string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	/*var id int
@@ -2814,7 +2814,7 @@ func (m *OracleDBRepo) Authenticate(username, testPassword string) error {
 }
 
 func (m *OracleDBRepo) GetUserByUsername(username string) (*models.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, username, password from tis_services_users where username = :1`
@@ -2862,7 +2862,7 @@ func (m *OracleDBRepo) GetUserByUsername(username string) (*models.User, error) 
 }
 
 func (m *OracleDBRepo) GetUserByID(id int) (*models.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select id, username, password from tis_services_users where id = :1`
@@ -2912,7 +2912,7 @@ func (m *OracleDBRepo) GetUserByID(id int) (*models.User, error) {
 
 func (m *OracleDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -2956,12 +2956,9 @@ func (m *OracleDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 	}
 }
 
-
-
-
 func (m *OracleDBRepo) InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -3007,7 +3004,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
 
 func (m *OracleDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -3054,7 +3051,7 @@ func (m *OracleDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 
 func (m *OracleDBRepo) UpdatePiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -3388,7 +3385,7 @@ func (m *OracleDBRepo) GetAllPiPiDDNP() ([]*models.PiPiDDN, error) {
 }
 
 func (m *OracleDBRepo) GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
@@ -3521,7 +3518,7 @@ func (m *OracleDBRepo) GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error)
 }
 
 func (m *OracleDBRepo) GetPiPiDDNByIDP(synsoftId string) (*models.PiPiDDN, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
@@ -3920,7 +3917,7 @@ func (m *OracleDBRepo) GetAllUnfinishedEventsNDCP() ([]*models.UnfinishedEvents,
 }
 
 func (m *OracleDBRepo) GetUnfinishedEventsByID(synsoftId string) (*models.UnfinishedEvents, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
@@ -4041,7 +4038,7 @@ func (m *OracleDBRepo) GetUnfinishedEventsByID(synsoftId string) (*models.Unfini
 }
 
 func (m *OracleDBRepo) GetUnfinishedEventsByIDP(synsoftId string) (*models.UnfinishedEvents, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `select to_char(DATIZV, 'dd.mm.yyyy'),
@@ -4163,7 +4160,7 @@ func (m *OracleDBRepo) GetUnfinishedEventsByIDP(synsoftId string) (*models.Unfin
 
 func (m *OracleDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4231,7 +4228,7 @@ func (m *OracleDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) 
 
 func (m *OracleDBRepo) UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4298,7 +4295,7 @@ func (m *OracleDBRepo) UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate)
 }
 
 func (m *OracleDBRepo) DeletePiPiDDN(synsoftId string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	stmt := `delete from pi_pi_ddn_s where synsoft_id = :1`
@@ -4312,7 +4309,7 @@ func (m *OracleDBRepo) DeletePiPiDDN(synsoftId string) error {
 }
 
 func (m *OracleDBRepo) DeletePiPiDDNP(synsoftId string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	stmt := `delete from pi_pi_ddn where synsoft_id = :1`
@@ -4327,7 +4324,7 @@ func (m *OracleDBRepo) DeletePiPiDDNP(synsoftId string) error {
 
 func (m *OracleDBRepo) InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4407,7 +4404,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 
 func (m *OracleDBRepo) InsertPiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4487,7 +4484,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
 
 func (m *OracleDBRepo) UpdatePiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4567,7 +4564,7 @@ func (m *OracleDBRepo) UpdatePiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 
 func (m *OracleDBRepo) UpdatePiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4789,7 +4786,7 @@ func (m *OracleDBRepo) GetAllPiPiDDNIspadP() ([]*models.PiPiDDN, error) {
 
 func (m *OracleDBRepo) InsertDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4842,7 +4839,7 @@ func (m *OracleDBRepo) InsertDDNInterruptionOfDelivery(ddnintd models.DDNInterru
 
 func (m *OracleDBRepo) InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4895,7 +4892,7 @@ func (m *OracleDBRepo) InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterr
 
 func (m *OracleDBRepo) UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDelivery) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -4949,7 +4946,7 @@ func (m *OracleDBRepo) UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterru
 
 func (m *OracleDBRepo) UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDelivery) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -5002,7 +4999,7 @@ func (m *OracleDBRepo) UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterr
 }
 
 func (m *OracleDBRepo) DeleteDDNInterruptionOfDelivery(synsoftId string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	stmt := `delete from ddn_prekid_isp_s where synsoft_id = :1`
@@ -5017,7 +5014,7 @@ func (m *OracleDBRepo) DeleteDDNInterruptionOfDelivery(synsoftId string) error {
 
 func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterruptionOfDeliveryPayload) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -5062,7 +5059,7 @@ func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNI
 
 func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterruptionOfDeliveryPayload) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var status int
@@ -5106,7 +5103,7 @@ func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDeliveryP(ddnintd models.DDN
 }
 
 func (m *OracleDBRepo) DeleteDDNInterruptionOfDeliveryP(synsoftId string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	stmt := `delete from ddn_prekid_isp where synsoft_id = :1`
@@ -5399,7 +5396,7 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*
 
 /** start Check for PI_DOK **/
 func (m *OracleDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var num int
 	stmt := `select count(*) from pgi.pi_dok where id_s_mrc = :1 and datizv = to_date(:2,'dd.mm.yyyy')-1 and tx_rx = 'O'`
@@ -5412,7 +5409,7 @@ func (m *OracleDBRepo) CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int, 
 }
 
 func (m *OracleDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var num int
 	stmt := `select count(*) from pgi.pi_dok where id_s_mrc = :1 and datizv = to_date(:2,'dd.mm.yyyy') and tx_rx = 'O'`
@@ -5425,7 +5422,7 @@ func (m *OracleDBRepo) CheckForPiDokTodayP(datIzv string, idSMrc int) (int, erro
 }
 
 func (m *OracleDBRepo) ClosePgiP(datIzv string, idSMrc string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var status int
 	var message string
@@ -5455,7 +5452,7 @@ func (m *OracleDBRepo) ClosePgiP(datIzv string, idSMrc string) error {
 }
 
 func (m *OracleDBRepo) TransferInPgiP(datIzv string, idSMrc string, Tip string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var status int
 	var message string
