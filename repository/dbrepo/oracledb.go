@@ -2621,6 +2621,68 @@ func (m *OracleDBRepo) GetOutages(year string) ([]*models.Outage, error) {
 	return o, nil
 }
 
+func (m *OracleDBRepo) GetTransmissionLineFailure(ipsId string, vremeOd string, vremeDo string) ([]*models.GisOutage, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	query := `select to_char(v.VREPOC,'dd.mm.yyyy HH24:MI:SS'),
+		to_char(v.VREZAV,'dd.mm.yyyy HH24:MI:SS'),
+		v.TRAJ,
+		v.IPS_ID,
+		v.TIPOB,
+		v.OPIS,
+		v.IME_DALEKOVODA,
+		v.POLJE_TRAFO,
+		v.ORG1,
+		v.ORG2,
+		v.NAZVRPD,
+		v.UZROK,
+		v.VRM_USL,
+		v.TEKST
+ 		from PGI.PI_BI_ISPADI_V v
+ 		where v.ips_id= :1
+		and v.VREPOC is not null
+		and v.datizv between to_date(:2,'dd.mm.yyyy') and to_date(:3,'dd.mm.yyyy')
+		and v.datizv = (select max(datizv) from PGI.PI_DD_ISPADI_MV dr where (dr.id_seq=v.id_seq or v.id_seq is null) and (dr.id_stavke=v.id_stavke or v.id_stavke is null))`
+
+	rows, err := m.DB.QueryContext(ctx, query, ipsId, vremeOd, vremeDo)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var d []*models.GisOutage
+
+	for rows.Next() {
+		var data models.GisOutage
+		err := rows.Scan(
+			&data.Vrepoc,
+			&data.Vrezav,
+			&data.Traj,
+			&data.IpsId,
+			&data.TipOb,
+			&data.Opis,
+			&data.ImeDalekovoda,
+			&data.PoljeTrafo,
+			&data.Org1,
+			&data.Org2,
+			&data.Nazvrpd,
+			&data.Uzrok,
+			&data.VrmUsl,
+			&data.Tekst,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		d = append(d, &data)
+	}
+
+	return d, nil
+}
+
 func (m *OracleDBRepo) GetExclusions(year string) ([]*models.Exclusion, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -2653,6 +2715,67 @@ func (m *OracleDBRepo) GetExclusions(year string) ([]*models.Exclusion, error) {
 
 	for rows.Next() {
 		var data models.Exclusion
+		err := rows.Scan(
+			&data.Datizv,
+			&data.Vrepoc,
+			&data.Vrezav,
+			&data.Traj,
+			&data.IpsId,
+			&data.TipOb,
+			&data.Opis,
+			&data.ImeDalekovoda,
+			&data.PoljeTrafo,
+			&data.Org1,
+			&data.Org2,
+			&data.Nazvrpd,
+			&data.Razlog,
+			&data.Tekst,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		d = append(d, &data)
+	}
+
+	return d, nil
+}
+
+func (m *OracleDBRepo) GetTransmissionLineOutage(ipsId string, vremeOd string, vremeDo string) ([]*models.GisExclusion, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	query := `select to_char(v.DATIZV,'dd.mm.yyyy'),
+		to_char(v.VREPOC,'dd.mm.yyyy HH24:MI:SS'),
+		to_char(v.VREZAV,'dd.mm.yyyy HH24:MI:SS'),
+		v.TRAJ,
+		v.IPS_ID,
+		v.TIPOB,
+		v.OPIS,
+		v.IME_DALEKOVODA,
+		v.POLJE_TRAFO,
+		v.ORG1,
+		v.ORG2,
+		v.NAZVRPD,
+		v.RAZLOG,
+		v.TEKST
+ 		from PGI.PI_BI_ISKLJUCENJA_V  v
+ 		where v.ips_id= :1
+		and v.VREPOC is not null
+		and v.datizv between to_date(:2,'dd.mm.yyyy') and to_date(:3,'dd.mm.yyyy')`
+
+	rows, err := m.DB.QueryContext(ctx, query, ipsId, vremeOd, vremeDo)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var d []*models.GisExclusion
+
+	for rows.Next() {
+		var data models.GisExclusion
 		err := rows.Scan(
 			&data.Datizv,
 			&data.Vrepoc,
@@ -5520,3 +5643,7 @@ func (m *OracleDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, err
 }
 
 /** end NOVITA ***/
+
+/*** start with GIS ***/
+
+/**** end GIS ***/

@@ -41,6 +41,8 @@ func (app *application) routes() http.Handler {
 	mux.Get("/logout", app.logout)
 
 	mux.Get("/status", app.statusHandler)
+	// mux.Post("/gettransmissionlineoutage", app.getTransmissionLineOutage)
+	// mux.Post("/gettransmissionlinefailure", app.GetTransmissionLineFailure)
 
 	//mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
 	//mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDelivery)
@@ -87,6 +89,9 @@ func (app *application) routes() http.Handler {
 		mux.Get("/ispadi/{year}", app.getOutages)
 		mux.Get("/iskljucenja/{year}", app.getExclusions)
 		mux.Get("/planovi/{year}", app.getPlans)
+
+		mux.Post("/gettransmissionlineoutage", app.getTransmissionLineOutage)
+		mux.Post("/gettransmissionlinefailure", app.GetTransmissionLineFailure)
 	})
 
 	mux.Route("/admin", func(mux chi.Router) {

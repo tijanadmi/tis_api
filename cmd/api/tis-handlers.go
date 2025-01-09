@@ -837,6 +837,55 @@ func (app *application) getOutages(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) GetTransmissionLineFailure(w http.ResponseWriter, r *http.Request) {
+	var requestPayload struct {
+		TransmissionLineID string `json:"transmission_line_ID"`
+		DateFrom           string `json:"date_from"`
+		DateTo             string `json:"date_to"`
+	}
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if requestPayload.TransmissionLineID == "" || requestPayload.DateTo == "" || requestPayload.DateFrom == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"), http.StatusBadRequest)
+		return
+	}
+	// Validacija i konverzija DateFrom
+	dateFrom, err := validateAndConvertDate(requestPayload.DateFrom)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest) // Loš format datuma
+		return
+	}
+	// Validacija i konverzija DateTo
+	dateTo, err := validateAndConvertDate(requestPayload.DateTo)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest) // Loš format datuma
+		return
+	}
+
+	if validateDuration(dateFrom, dateTo) {
+		app.errorJSON(w, errors.New("the search period must not exceed one year"), http.StatusBadRequest)
+		return
+	}
+
+	//fmt.Println(requestPayload.TransmissionLineID, dateFrom, dateTo)
+
+	failureData, err := app.DB.GetTransmissionLineFailure(requestPayload.TransmissionLineID, dateFrom, dateTo)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, failureData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getExclusions(w http.ResponseWriter, r *http.Request) {
 	year := chi.URLParam(r, "year")
 
@@ -846,6 +895,75 @@ func (app *application) getExclusions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err = app.writeJSON(w, http.StatusOK, weatherData)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func validateAndConvertDate(dateStr string) (string, error) {
+	// Proveri format "yyyy-mm-dd"
+	layout := "2006-01-02"
+	t, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return "", err
+	}
+	// Konvertuj u "dd.mm.yyyy"
+	return t.Format("02.01.2006"), nil
+}
+
+func validateDuration(dateFrom, dateTo string) bool {
+	layout := "02.01.2006"
+	t1, _ := time.Parse(layout, dateFrom)
+	t2, _ := time.Parse(layout, dateTo)
+	oneYear := time.Hour * 24 * 365 * 1
+
+	return t2.Sub(t1) > oneYear
+}
+
+func (app *application) getTransmissionLineOutage(w http.ResponseWriter, r *http.Request) {
+	var requestPayload struct {
+		TransmissionLineID string `json:"transmission_line_ID"`
+		DateFrom           string `json:"date_from"`
+		DateTo             string `json:"date_to"`
+	}
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if requestPayload.TransmissionLineID == "" || requestPayload.DateTo == "" || requestPayload.DateFrom == "" {
+		app.errorJSON(w, errors.New("mandatory data was not passed"), http.StatusBadRequest)
+		return
+	}
+	// Validacija i konverzija DateFrom
+	dateFrom, err := validateAndConvertDate(requestPayload.DateFrom)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest) // Loš format datuma
+		return
+	}
+	// Validacija i konverzija DateTo
+	dateTo, err := validateAndConvertDate(requestPayload.DateTo)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest) // Loš format datuma
+		return
+	}
+
+	if validateDuration(dateFrom, dateTo) {
+		app.errorJSON(w, errors.New("the search period must not exceed one year"), http.StatusBadRequest)
+		return
+	}
+
+	//fmt.Println(requestPayload.TransmissionLineID, dateFrom, dateTo)
+
+	outageData, err := app.DB.GetTransmissionLineOutage(requestPayload.TransmissionLineID, dateFrom, dateTo)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, outageData)
 	if err != nil {
 		app.errorJSON(w, err)
 		return

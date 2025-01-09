@@ -446,6 +446,18 @@ func (m *TestDBRepo) GetExclusions(year string) ([]*models.Exclusion, error) {
 	return d, nil
 }
 
+func (m *TestDBRepo) GetTransmissionLineOutage(ipsId string, vremeOd string, vremeDo string) ([]*models.GisExclusion, error) {
+	var d []*models.GisExclusion
+
+	return d, nil
+}
+
+func (m *TestDBRepo) GetTransmissionLineFailure(ipsId string, vremeOd string, vremeDo string) ([]*models.GisOutage, error) {
+	var d []*models.GisOutage
+
+	return d, nil
+}
+
 func (m *TestDBRepo) GetPlans(year string) ([]*models.Plan, error) {
 
 	var p []*models.Plan

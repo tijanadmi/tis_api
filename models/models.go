@@ -787,6 +787,23 @@ type Outage struct {
 	IdSeq         string `json:"id_seq"`
 }
 
+type GisOutage struct {
+	Vrepoc        string `json:"date_time_from"`
+	Vrezav        string `json:"date_time_to"`
+	Traj          string `json:"duration"`
+	IpsId         string `json:"-"`
+	TipOb         string `json:"-"`
+	Opis          string `json:"facility_name"`
+	ImeDalekovoda string `json:"-"`
+	PoljeTrafo    string `json:"facility"`
+	Org1          string `json:"object_belongs_to1"`
+	Org2          string `json:"object_belongs_to2"`
+	Nazvrpd       string `json:"event_type"`
+	Uzrok         string `json:"event_cause_type"`
+	VrmUsl        string `json:"weather_conditions"`
+	Tekst         string `json:"description"`
+}
+
 type Exclusion struct {
 	Datizv        string `json:"datizv"`
 	Vrepoc        string `json:"vrepoc"`
@@ -802,6 +819,23 @@ type Exclusion struct {
 	Nazvrpd       string `json:"nazvrpd"`
 	Razlog        string `json:"razlog"`
 	Tekst         string `json:"tekst"`
+}
+
+type GisExclusion struct {
+	Datizv        string `json:"-"`
+	Vrepoc        string `json:"date_time_from"`
+	Vrezav        string `json:"-"`
+	Traj          string `json:"duration"`
+	IpsId         string `json:"-"`
+	TipOb         string `json:"-"`
+	Opis          string `json:"facility"`
+	ImeDalekovoda string `json:"-"`
+	PoljeTrafo    string `json:"-"`
+	Org1          string `json:"object_belongs_to1"`
+	Org2          string `json:"object_belongs_to2"`
+	Nazvrpd       string `json:"event_type"`
+	Razlog        string `json:"event_cause_type"`
+	Tekst         string `json:"description"`
 }
 
 type Plan struct {

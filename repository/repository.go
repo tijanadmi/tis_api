@@ -65,6 +65,8 @@ type DatabaseRepo interface {
 	GetRequests23(year string) ([]*models.Request, error)
 	GetOutages(year string) ([]*models.Outage, error)
 	GetExclusions(year string) ([]*models.Exclusion, error)
+	GetTransmissionLineOutage(ipsId string, vremeOd string, vremeDo string) ([]*models.GisExclusion, error)
+	GetTransmissionLineFailure(ipsId string, vremeOd string, vremeDo string) ([]*models.GisOutage, error) 
 	GetPlans(year string) ([]*models.Plan, error)
 	GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error)
 	Authenticate(username, testPassword string) error
