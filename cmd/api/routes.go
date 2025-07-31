@@ -94,6 +94,15 @@ func (app *application) routes() http.Handler {
 		mux.Post("/gettransmissionlinefailure", app.GetTransmissionLineFailure)
 	})
 
+	mux.Route("/doz", func(mux chi.Router) {
+		mux.Use(app.authRequiredDOZ)
+
+		mux.Get("/planovi/{year}", app.getPlans)
+
+		mux.Post("/insert", app.insertDozvola)
+		mux.Delete("/delete/{id}", app.deleteDozvola)
+	})
+
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(app.authRequiredNDC)
 

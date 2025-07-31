@@ -24,7 +24,7 @@ type DatabaseRepo interface {
 	GetEarthfaultOCDV() ([]*models.Signal, error)
 	GetEarthfaultOCTR() ([]*models.Signal, error)
 	GetEarthfaultOCSP() ([]*models.Signal, error)
-	GetEarthfaultOCTRR() ([]*models.Signal, error) 
+	GetEarthfaultOCTRR() ([]*models.Signal, error)
 	GetDirEarthfaultOC() ([]*models.Signal, error)
 	GetTPSendRcdv() ([]*models.Signal, error)
 	GetCircuitbreaker() ([]*models.Signal, error)
@@ -66,7 +66,7 @@ type DatabaseRepo interface {
 	GetOutages(year string) ([]*models.Outage, error)
 	GetExclusions(year string) ([]*models.Exclusion, error)
 	GetTransmissionLineOutage(ipsId string, vremeOd string, vremeDo string) ([]*models.GisExclusion, error)
-	GetTransmissionLineFailure(ipsId string, vremeOd string, vremeDo string) ([]*models.GisOutage, error) 
+	GetTransmissionLineFailure(ipsId string, vremeOd string, vremeDo string) ([]*models.GisOutage, error)
 	GetPlans(year string) ([]*models.Plan, error)
 	GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error)
 	Authenticate(username, testPassword string) error
@@ -106,9 +106,14 @@ type DatabaseRepo interface {
 	GetDDNInterruptionOfDeliveryNDCP() ([]*models.DDNInterruptionOfDelivery, error)
 	GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*models.DDNInterruptionOfDelivery, error)
 	GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*models.DDNInterruptionOfDelivery, error)
-	CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int,error)
-	CheckForPiDokTodayP(datIzv string, idSMrc int) (int,error)
+	CheckForPiDokYesterdayP(datIzv string, idSMrc int) (int, error)
+	CheckForPiDokTodayP(datIzv string, idSMrc int) (int, error)
 	ClosePgiP(datIzv string, idSMrc string) error
-	TransferInPgiP(datIzv string, idSMrc string, Tip string) error 
+	TransferInPgiP(datIzv string, idSMrc string, Tip string) error
 	GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error)
+
+	GetDozvolaById(id string) (bool, error)
+	InsertDozvola(d *models.Dozvola) error
+	DeleteDozvolaByID(dozvolaID string) error
+	InsertLog(operacija, status, poruka string) error
 }

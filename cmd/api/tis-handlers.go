@@ -2050,6 +2050,91 @@ func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
 
 /****** end DDN_PREKID_ISP ****/
 
+/***** start TDN ***/
+func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
+	var dozvola models.Dozvola
+
+	err := json.NewDecoder(r.Body).Decode(&dozvola)
+	if err != nil {
+		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %w", err))
+		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		return
+	}
+
+	// Osnovna validacija — možeš dodati još ako želiš
+	if dozvola.BrojZahteva == "" || dozvola.BrojDozvole == "" || dozvola.TipDozvole == "" {
+		_ = app.DB.InsertLog("insert_dozvola", "error", "nedostaju obavezna polja")
+		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
+		return
+	}
+
+	/****** provera da li postoji u bazi dozvola sa istim id *****/
+	da, err := app.DB.GetDozvolaById(dozvola.DozvolaID)
+	if da {
+		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
+		app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID)))
+		return
+	}
+	if err != nil {
+		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+	/***** kraj provera da li postoji u bazi dozvola sa istim id *****/
+
+	err = app.DB.InsertDozvola(&dozvola)
+	if err != nil {
+		// Loguj grešku u tabelu
+		_ = app.DB.InsertLog("insert_dozvola", "error", err.Error())
+		app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
+		return
+	}
+
+	// Uspešan log
+	_ = app.DB.InsertLog("insert_dozvola", "success", fmt.Sprintf("Dozvola %s uspešno uneta", dozvola.BrojDozvole))
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "Dozvola uspešno uneta",
+	}
+
+	app.writeJSON(w, http.StatusCreated, resp)
+}
+
+func (app *application) deleteDozvola(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	da, err := app.DB.GetDozvolaById(id)
+	if !da {
+		_ = app.DB.InsertLog("delete_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
+		app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
+		return
+	}
+	if err != nil {
+		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.DB.DeleteDozvolaByID(id)
+	if err != nil {
+		_ = app.DB.InsertLog("delete_dozvola", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+
+	// Uspešan log
+	_ = app.DB.InsertLog("delete_dozvola", "success", fmt.Sprintf("Dozvola sa id %s uspešno obrisana", id))
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "Dozvola deleted",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
+}
+
+/***** end TDN  ***/
+
 /**************** the another method ***********/
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload

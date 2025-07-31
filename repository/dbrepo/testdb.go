@@ -849,3 +849,25 @@ func (m *TestDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error
 }
 
 /** end NOVITA ***/
+
+func (m *TestDBRepo) InsertDozvola(d *models.Dozvola) error {
+
+	return nil
+}
+
+func (m *TestDBRepo) DeleteDozvolaByID(dozvolaID string) error {
+
+	return nil
+}
+
+func (m *TestDBRepo) InsertLog(operacija, status, poruka string) error {
+
+	return nil
+}
+
+func (m *TestDBRepo) GetDozvolaById(id string) (bool, error) {
+
+	return true, nil
+}
+
+/*** end TDN ***/

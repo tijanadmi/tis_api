@@ -893,3 +893,29 @@ type UnbalancedTrader struct {
 	Code      string `json:"code"`
 	Deviation string `json:"deviation"`
 }
+
+type Lice struct {
+	LiceID         string `json:"lice_id"`
+	Ime            string `json:"ime"`
+	Prezime        string `json:"prezime"`
+	NazivPreduzeca string `json:"naziv_preduzeca"`
+	BrLicneKarte   string `json:"br_licne_karte"`
+}
+
+type Dozvola struct {
+	DozvolaID           string   `json:"dozvola_id"`
+	BrojZahteva         string   `json:"broj_zahteva"`
+	BrojDozvole         string   `json:"broj_dozvole"`
+	DatumDozvole        string   `json:"datum_dozvole"`
+	TipDozvole          string   `json:"tip_dozvole"` // D2, D3, osnovna dozvola - službene posete
+	RCO                 string   `json:"rco"`
+	RadoviNa            string   `json:"radovi_na"` // opis radova
+	Objekti             []string `json:"objekti"`   // lista objekata (za D3)
+	VremePocetka        string   `json:"vreme_pocetka"`
+	VremeZavrsetka      string   `json:"vreme_zavrsetka"`
+	BrojOsoba           int      `json:"broj_osoba"`
+	StrucnoLice         string   `json:"strucno_lice"`         // ime i prezime
+	RegistracijaIVozilo string   `json:"registracija_i_model"` // registracioni broj i model vozila
+	KontaktTelefon      string   `json:"kontakt_telefon"`
+	Lica                []Lice   `json:"lica"` // podaci o licima koja učestvuju
+}
