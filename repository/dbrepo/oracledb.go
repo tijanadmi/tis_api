@@ -5650,6 +5650,91 @@ func (m *OracleDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, err
 
 /*** start TDN***/
 
+func (m *OracleDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+	tx, err := m.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Insert u AAMS_DOZVOLE
+	queryDozvola := `
+		INSERT INTO AAMS_D2D3_DOZVOLEE (
+             AAMS_D2D3_ID, BROJ_DOZVOLE, TIP_DOZVOLE , DATPOC, DATZAV, STRUCNO_LICE,
+             STATUS , VOZILO , TELEFON , DATPRI, DATIZM, ID_OSNOVNE_DOZ , BROJ_OSNOVNE_DOZ
+        ) VALUES (
+            :1, :2, :3, TO_DATE(:4, 'DD.MM.YYYY HH24:MI'), TO_DATE(:5, 'DD.MM.YYYY HH24:MI'),
+			:6, :7, :8, :9, SYSDATE, SYSDATE,:10,:11
+        )
+	`
+
+	_, err = tx.ExecContext(ctx, queryDozvola,
+		d.DozvolaID,
+		d.BrojDozvole,
+		d.TipDozvole,
+		d.DatumPocetka,
+		d.DatumZavrsetka,
+		d.StrucnoLice,
+		d.Status,
+		d.RegistracijaVozilo,
+		d.KontaktTelefon,
+		d.OsnovnaDozvolaID,
+		d.BrojOsnovneDozole,
+	)
+	if err != nil {
+		return fmt.Errorf("insert dozvola: %w", err)
+	}
+
+	// Insert lica u AAMS_D2D3_LICA
+	for _, lice := range d.Lica {
+		imePrezime := fmt.Sprintf("%s %s", lice.Ime, lice.Prezime)
+
+		queryLice := `
+			INSERT INTO TDN.AAMS_D2D3_LICA (
+				AAMS_LICA_ID, AAMS_D2D3_DOZ_ID, LICE_NAZIV, PREDUZECE, LICNA_KARTA
+			) VALUES (:1, :2, :3, :4, :5)
+		`
+
+		_, err := tx.ExecContext(ctx, queryLice,
+			lice.LiceID,
+			d.DozvolaID,
+			imePrezime,
+			lice.NazivPreduzeca,
+			lice.BrLicneKarte,
+		)
+		if err != nil {
+			return fmt.Errorf("insert lice: %w", err)
+		}
+	}
+
+	// Insert objekata u AAMS_DOZ_OBJEKTI
+	for _, obj := range d.Objekti {
+
+		queryObj := `
+			INSERT INTO TDN.AAMS_D2D3_OBJEKTI (
+				AAMS_D2D3_DOZ_ID,  AAMS_OBJEKAT
+			) VALUES (:1, :2)
+		`
+
+		_, err := tx.ExecContext(ctx, queryObj,
+			d.DozvolaID,
+			obj,
+		)
+		if err != nil {
+			return fmt.Errorf("insert objekat: %w", err)
+		}
+	}
+
+	// Commit
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit failed: %w", err)
+	}
+
+	return nil
+}
+
 func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
@@ -5662,27 +5747,26 @@ func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 	// Insert u AAMS_DOZVOLE
 	queryDozvola := `
 		INSERT INTO TDN.AAMS_DOZVOLE (
-			AAMS_DOZVOLA_ID, BROJ_ZAHTEVA, BROJ_DOZVOLE, DATUM_DOZVOLE, TIP_DOZVOLE, RCO,
-			DATPOC, DATZAV, BROJ_OSOBA, STRUCNO_LICE, VOZILO, TELEFON, DATPRI, DATIZM
-		) VALUES (
-			:1, :2, :3, TO_DATE(:4, 'DD.MM.YYYY'), :5, :6,
-			TO_DATE(:7, 'DD.MM.YYYY HH24:MI'), TO_DATE(:8, 'DD.MM.YYYY HH24:MI'), :9, :10, :11, :12, SYSDATE, SYSDATE
-		)
+            AAMS_DOZVOLA_ID,  BROJ_DOZVOLE, TIP_DOZVOLE, DATPOC, DATZAV, 
+            DATUM_POSETE, PRIMA_LICE, VOZILO, TELEFON, DATPRI, DATIZM, RAZLOG_POSETE, STATUS
+        ) VALUES (
+            :1, :2, :3,  TO_DATE(:4, 'DD.MM.YYYY HH24:MI'), TO_DATE(:5, 'DD.MM.YYYY HH24:MI'), 
+            TO_DATE(:6, 'DD.MM.YYYY'), :7, :8, :9, SYSDATE, SYSDATE, :10, :11
+        )
 	`
 
 	_, err = tx.ExecContext(ctx, queryDozvola,
 		d.DozvolaID,
-		d.BrojZahteva,
 		d.BrojDozvole,
-		d.DatumDozvole,
 		d.TipDozvole,
-		d.RCO,
-		d.VremePocetka,
-		d.VremeZavrsetka,
-		fmt.Sprintf("%d", d.BrojOsoba),
-		d.StrucnoLice,
-		d.RegistracijaIVozilo,
+		d.DatumPocetka,
+		d.DatumZavrsetka,
+		d.DatumPosete,
+		d.Primalac,
+		d.RegistracijaVozilo,
 		d.KontaktTelefon,
+		d.RazlogPosete,
+		d.Status,
 	)
 	if err != nil {
 		return fmt.Errorf("insert dozvola: %w", err)
@@ -5736,6 +5820,149 @@ func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 	return nil
 }
 
+func (m *OracleDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	query := `select COALESCE(AAMS_DOZVOLA_ID, ''),
+  				COALESCE(BROJ_DOZVOLE, ''),
+  				COALESCE(TIP_DOZVOLE, ''),
+				to_char(DATPOC, 'dd.mm.yyyy HH24:MI:SS'),
+  				to_char(DATZAV, 'dd.mm.yyyy HH24:MI:SS'),
+  				to_char(DATUM_POSETE, 'dd.mm.yyyy'),
+  				COALESCE(PRIMA_LICE, '') ,
+  				COALESCE(VOZILO, ''),
+  				COALESCE(TELEFON, '') ,
+  				COALESCE(RAZLOG_POSETE, ''),
+  				COALESCE(STATUS, '') 
+				FROM TDN.AAMS_DOZVOLE`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ds []*models.Dozvola
+
+	for rows.Next() {
+		var d models.Dozvola
+		err := rows.Scan(
+			d.DozvolaID,
+			d.BrojDozvole,
+			d.TipDozvole,
+			d.DatumPocetka,
+			d.DatumZavrsetka,
+			d.DatumPosete,
+			d.Primalac,
+			d.RegistracijaVozilo,
+			d.KontaktTelefon,
+			d.RazlogPosete,
+			d.Status,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		ds = append(ds, &d)
+	}
+
+	return ds, nil
+}
+
+func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	query := `select COALESCE(AAMS_D2D3_ID, ''),
+                  COALESCE(BROJ_DOZVOLE, ''),
+                  COALESCE(TIP_DOZVOLE, ''),
+                  to_char(DATPOC, 'dd.mm.yyyy HH24:MI:SS'),
+                  to_char(DATZAV, 'dd.mm.yyyy HH24:MI:SS'),
+                  COALESCE(STRUCNO_LICE, '') ,
+                  COALESCE(STATUS, '') ,
+                  COALESCE(VOZILO, ''),
+                  COALESCE(TELEFON, '') ,
+                  COALESCE(ID_OSNOVNE_DOZ, ''),
+                  COALESCE(BROJ_OSNOVNE_DOZ, '')
+                FROM TDN.AAMS_D2D3_DOZVOLE`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ds []*models.D2D3Dozvola
+
+	for rows.Next() {
+		var d models.D2D3Dozvola
+		err := rows.Scan(
+			d.DozvolaID,
+			d.BrojDozvole,
+			d.TipDozvole,
+			d.DatumPocetka,
+			d.DatumZavrsetka,
+			d.StrucnoLice,
+			d.Status,
+			d.RegistracijaVozilo,
+			d.KontaktTelefon,
+			d.OsnovnaDozvolaID,
+			d.BrojOsnovneDozole,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		ds = append(ds, &d)
+	}
+
+	return ds, nil
+}
+
+func (m *OracleDBRepo) DeleteD2D3DozvolaByID(dozvolaID string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+	tx, err := m.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("error starting transaction: %w", err)
+	}
+
+	// 1. Briši lica
+	_, err = tx.Exec(`DELETE FROM TDN.AAMS_D2D3_LICA WHERE AAMS_D2D3_DOZ_ID = :1`, dozvolaID)
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting lica: %w", err)
+	}
+
+	// 2. Briši objekte
+	_, err = tx.Exec(`DELETE FROM TDN.AAMS_D2D3_OBJEKTI WHERE AAMS_D2D3_DOZ_ID = :1`, dozvolaID)
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting objekti: %w", err)
+	}
+
+	// 3. Briši dozvolu
+	_, err = tx.Exec(`DELETE FROM TDN.AAMS_D2D3_DOZVOLE WHERE AAMS_DOZVOLA_ID = :1`, dozvolaID)
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting dozvola: %w", err)
+	}
+
+	// Commit transakcije
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("error committing transaction: %w", err)
+	}
+
+	return nil
+}
+
 func (m *OracleDBRepo) DeleteDozvolaByID(dozvolaID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
@@ -5771,6 +5998,21 @@ func (m *OracleDBRepo) DeleteDozvolaByID(dozvolaID string) error {
 	}
 
 	return nil
+}
+
+func (m *OracleDBRepo) GetD2D3DozvolaById(id string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	query := `SELECT COUNT(*) FROM TDN.AAMS_D2D3_DOZVOLE WHERE AAMS_D2D3_ID  = :1`
+
+	var count int
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
 }
 
 func (m *OracleDBRepo) GetDozvolaById(id string) (bool, error) {

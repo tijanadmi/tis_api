@@ -850,7 +850,17 @@ func (m *TestDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error
 
 /** end NOVITA ***/
 
+func (m *TestDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
+
+	return nil
+}
+
 func (m *TestDBRepo) InsertDozvola(d *models.Dozvola) error {
+
+	return nil
+}
+
+func (m *TestDBRepo) DeleteD2D3DozvolaByID(dozvolaID string) error {
 
 	return nil
 }
@@ -865,9 +875,28 @@ func (m *TestDBRepo) InsertLog(operacija, status, poruka string) error {
 	return nil
 }
 
+func (m *TestDBRepo) GetD2D3DozvolaById(id string) (bool, error) {
+
+	return true, nil
+}
+
 func (m *TestDBRepo) GetDozvolaById(id string) (bool, error) {
 
 	return true, nil
+}
+
+func (m *TestDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
+
+	var ds []*models.D2D3Dozvola
+
+	return ds, nil
+}
+
+func (m *TestDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
+
+	var ds []*models.Dozvola
+
+	return ds, nil
 }
 
 /*** end TDN ***/

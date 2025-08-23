@@ -112,8 +112,13 @@ type DatabaseRepo interface {
 	TransferInPgiP(datIzv string, idSMrc string, Tip string) error
 	GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error)
 
+	GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error)
+	GetAllDozvola() ([]*models.Dozvola, error)
+	GetD2D3DozvolaById(id string) (bool, error)
 	GetDozvolaById(id string) (bool, error)
+	InsertD2D3Dozvola(d *models.D2D3Dozvola) error
 	InsertDozvola(d *models.Dozvola) error
+	DeleteD2D3DozvolaByID(dozvolaID string) error
 	DeleteDozvolaByID(dozvolaID string) error
 	InsertLog(operacija, status, poruka string) error
 }

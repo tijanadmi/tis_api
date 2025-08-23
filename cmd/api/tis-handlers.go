@@ -2051,6 +2051,83 @@ func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
 /****** end DDN_PREKID_ISP ****/
 
 /***** start TDN ***/
+
+func (app *application) getAllD2D3Dozvola(w http.ResponseWriter, r *http.Request) {
+	d2d3s, err := app.DB.GetAllD2D3Dozvola()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, d2d3s)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getAllDozvola(w http.ResponseWriter, r *http.Request) {
+	posetas, err := app.DB.GetAllDozvola()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, posetas)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request) {
+	var dozvola models.D2D3Dozvola
+
+	err := json.NewDecoder(r.Body).Decode(&dozvola)
+	if err != nil {
+		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %w", err))
+		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		return
+	}
+
+	// Osnovna validacija — možeš dodati još ako želiš
+	if dozvola.DozvolaID == "" || dozvola.BrojDozvole == "" || dozvola.TipDozvole == "" {
+		_ = app.DB.InsertLog("insert_dozvola", "error", "nedostaju obavezna polja")
+		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
+		return
+	}
+
+	/****** provera da li postoji u bazi dozvola sa istim id *****/
+	da, err := app.DB.GetD2D3DozvolaById(dozvola.DozvolaID)
+	if da {
+		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
+		app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID)))
+		return
+	}
+	if err != nil {
+		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+	/***** kraj provera da li postoji u bazi dozvola sa istim id *****/
+
+	err = app.DB.InsertD2D3Dozvola(&dozvola)
+	if err != nil {
+		// Loguj grešku u tabelu
+		_ = app.DB.InsertLog("insert_dozvola", "error", err.Error())
+		app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
+		return
+	}
+
+	// Uspešan log
+	_ = app.DB.InsertLog("insert_dozvola", "success", fmt.Sprintf("Dozvola %s uspešno uneta", dozvola.BrojDozvole))
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "Dozvola uspešno uneta",
+	}
+
+	app.writeJSON(w, http.StatusCreated, resp)
+}
+
 func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
 	var dozvola models.Dozvola
 
@@ -2062,7 +2139,7 @@ func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Osnovna validacija — možeš dodati još ako želiš
-	if dozvola.BrojZahteva == "" || dozvola.BrojDozvole == "" || dozvola.TipDozvole == "" {
+	if dozvola.DozvolaID == "" || dozvola.BrojDozvole == "" || dozvola.TipDozvole == "" {
 		_ = app.DB.InsertLog("insert_dozvola", "error", "nedostaju obavezna polja")
 		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
 		return
@@ -2099,6 +2176,38 @@ func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.writeJSON(w, http.StatusCreated, resp)
+}
+
+func (app *application) deleteD2D3Dozvola(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	da, err := app.DB.GetD2D3DozvolaById(id)
+	if !da {
+		_ = app.DB.InsertLog("delete_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
+		app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
+		return
+	}
+	if err != nil {
+		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.DB.DeleteD2D3DozvolaByID(id)
+	if err != nil {
+		_ = app.DB.InsertLog("delete_dozvola", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+
+	// Uspešan log
+	_ = app.DB.InsertLog("delete_dozvola", "success", fmt.Sprintf("Dozvola sa id %s uspešno obrisana", id))
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: "Dozvola deleted",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, resp)
 }
 
 func (app *application) deleteDozvola(w http.ResponseWriter, r *http.Request) {

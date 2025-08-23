@@ -903,19 +903,33 @@ type Lice struct {
 }
 
 type Dozvola struct {
-	DozvolaID           string   `json:"dozvola_id"`
-	BrojZahteva         string   `json:"broj_zahteva"`
-	BrojDozvole         string   `json:"broj_dozvole"`
-	DatumDozvole        string   `json:"datum_dozvole"`
-	TipDozvole          string   `json:"tip_dozvole"` // D2, D3, osnovna dozvola - službene posete
-	RCO                 string   `json:"rco"`
-	RadoviNa            string   `json:"radovi_na"` // opis radova
-	Objekti             []string `json:"objekti"`   // lista objekata (za D3)
-	VremePocetka        string   `json:"vreme_pocetka"`
-	VremeZavrsetka      string   `json:"vreme_zavrsetka"`
-	BrojOsoba           int      `json:"broj_osoba"`
-	StrucnoLice         string   `json:"strucno_lice"`         // ime i prezime
-	RegistracijaIVozilo string   `json:"registracija_i_model"` // registracioni broj i model vozila
-	KontaktTelefon      string   `json:"kontakt_telefon"`
-	Lica                []Lice   `json:"lica"` // podaci o licima koja učestvuju
+	DozvolaID          string   `json:"dozvola_id"`          // AAMS_DOZVOLA_ID
+	BrojDozvole        string   `json:"broj_dozvole"`        // BROJ_DOZVOLE
+	TipDozvole         string   `json:"tip_dozvole"`         // TIP_DOZVOLE
+	DatumPocetka       string   `json:"datum_pocetka"`       // DATPOC
+	DatumZavrsetka     string   `json:"datum_zavrsetka"`     // DATZAV
+	DatumPosete        string   `json:"datum_posete"`        // DATUM_POSETE
+	Primalac           string   `json:"primalac"`            // PRIMA_LICE
+	RegistracijaVozilo string   `json:"registracija_vozilo"` // VOZILO
+	KontaktTelefon     string   `json:"kontakt_telefon"`     // TELEFON
+	RazlogPosete       string   `json:"razlog_posete"`       // RAZLOG_POSETE
+	Status             string   `json:"status"`              // STATUS
+	Objekti            []string `json:"objekti"`             // lista objekata (za D3)
+	Lica               []Lice   `json:"lica"`                // podaci o licima koja učestvuju
+}
+
+type D2D3Dozvola struct {
+	DozvolaID          string   `json:"dozvola_id"`          // AAMS_D2D3_ID
+	BrojDozvole        string   `json:"broj_dozvole"`        // BROJ_DOZVOLE
+	TipDozvole         string   `json:"tip_dozvole"`         // TIP_DOZVOLE (D2, D3, osnovna)
+	DatumPocetka       string   `json:"datum_pocetka"`       // DATPOC
+	DatumZavrsetka     string   `json:"datum_zavrsetka"`     // DATZAV
+	StrucnoLice        string   `json:"strucno_lice"`        // STRUCNO_LICE
+	Status             string   `json:"status"`              // STATUS
+	RegistracijaVozilo string   `json:"registracija_vozilo"` // VOZILO
+	KontaktTelefon     string   `json:"kontakt_telefon"`     // TELEFON
+	OsnovnaDozvolaID   string   `json:"osnovna_dozvola_id"`  // ID_OSNOVNE_DOZ
+	BrojOsnovneDozole  string   `json:"broj_osnovne_dozole"` // BROJ_OSNOVNE_DOZ
+	Objekti            []string `json:"objekti"`             // lista objekata (za D3)
+	Lica               []Lice   `json:"lica"`                // eventualna lista lica koja učestvuju
 }
