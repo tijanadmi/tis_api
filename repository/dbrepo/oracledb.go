@@ -5867,7 +5867,7 @@ func (m *OracleDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
 
 	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
-		fmt.Println("Pogresan upit ili nema rezultata upita")
+		// fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
 	defer rows.Close()
@@ -5983,7 +5983,7 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 
 	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
-		fmt.Println("Pogresan upit ili nema rezultata upita")
+		// fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
 	defer rows.Close()
@@ -6115,7 +6115,7 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 		&d.BrojOsnovneDozole,
 	)
 	if err != nil {
-		fmt.Println("Pogresan upit ili nema rezultata upita")
+		// fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
 
@@ -6221,7 +6221,7 @@ func (m *OracleDBRepo) GetByIdDozvola(id string) (*models.Dozvola, error) {
 		&d.Status,
 	)
 	if err != nil {
-		fmt.Println("Pogresan upit ili nema rezultata upita")
+		// fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
 
