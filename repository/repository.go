@@ -113,7 +113,9 @@ type DatabaseRepo interface {
 	GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, error)
 
 	GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error)
+	GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error)
 	GetAllDozvola() ([]*models.Dozvola, error)
+	GetByIdDozvola(id string) (*models.Dozvola, error)
 	GetD2D3DozvolaById(id string) (bool, error)
 	GetDozvolaById(id string) (bool, error)
 	InsertD2D3Dozvola(d *models.D2D3Dozvola) error

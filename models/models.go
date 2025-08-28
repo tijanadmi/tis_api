@@ -277,32 +277,33 @@ type WorkPermission struct {
 }
 
 type WorkPermissionAll struct {
-	IdZahteva       int    `json:"id_zahteva"`
-	Grupa           string `json:"grupa"`
-	Ukljucenost     string `json:"ukljucenost"`
-	IntPl           string `json:"int_pl"`
-	Br1Z1Gr         string `json:"br1_z_1gr"`
-	Br2Z1Gr         string `json:"br2_z_1gr"`
-	BrZRDC2Gr       string `json:"br_z_rdc_2gr"`
-	BrSag           string `json:"br_sag"`
-	PlDatumOdZ      string `json:"pl_datum_od_z"`
-	PlVremeOdZ      string `json:"pl_vreme_od_z"`
-	PlDatumDoZ      string `json:"pl_datum_do_z"`
-	PlVremeDoZ      string `json:"pl_vreme_do_z"`
-	RukRadova       string `json:"ruk_radova"`
-	OpisRadova      string `json:"opis_radova"`
-	NapomenaVeza    string `json:"napomena_veza"`
-	SagUslovi       string `json:"sag_uslovi"`
-	SagNapomenaVeza string `json:"sag_napomena_veza"`
-	IdDozvole       string `json:"id_dozvole"`
-	Br1Doz1Gr       string `json:"br1_doz_1gr"`
-	Br1Doz2Gr       string `json:"br1_doz_2gr"`
-	Br2Doz          string `json:"br2_doz"`
-	PlVremeOd       string `json:"pl_vreme_od"`
-	PlVremeDo       string `json:"pl_vreme_do"`
-	ZavVreme        string `json:"zav_vreme"`
-	ZavDatum        string `json:"zav_datum"`
-	Status          string `json:"status"`
+	IdZahteva       int      `json:"id_zahteva"`
+	Grupa           string   `json:"grupa"`
+	Ukljucenost     string   `json:"ukljucenost"`
+	IntPl           string   `json:"int_pl"`
+	Br1Z1Gr         string   `json:"br1_z_1gr"`
+	Br2Z1Gr         string   `json:"br2_z_1gr"`
+	BrZRDC2Gr       string   `json:"br_z_rdc_2gr"`
+	BrSag           string   `json:"br_sag"`
+	PlDatumOdZ      string   `json:"pl_datum_od_z"`
+	PlVremeOdZ      string   `json:"pl_vreme_od_z"`
+	PlDatumDoZ      string   `json:"pl_datum_do_z"`
+	PlVremeDoZ      string   `json:"pl_vreme_do_z"`
+	RukRadova       string   `json:"ruk_radova"`
+	OpisRadova      string   `json:"opis_radova"`
+	NapomenaVeza    string   `json:"napomena_veza"`
+	SagUslovi       string   `json:"sag_uslovi"`
+	SagNapomenaVeza string   `json:"sag_napomena_veza"`
+	IdDozvole       string   `json:"id_dozvole"`
+	Br1Doz1Gr       string   `json:"br1_doz_1gr"`
+	Br1Doz2Gr       string   `json:"br1_doz_2gr"`
+	Br2Doz          string   `json:"br2_doz"`
+	PlVremeOd       string   `json:"pl_vreme_od"`
+	PlVremeDo       string   `json:"pl_vreme_do"`
+	ZavVreme        string   `json:"zav_vreme"`
+	ZavDatum        string   `json:"zav_datum"`
+	Status          string   `json:"status"`
+	EES             []string `json:"ees"`
 }
 
 type WorkInEENetwork struct {
@@ -897,7 +898,6 @@ type UnbalancedTrader struct {
 type Lice struct {
 	LiceID         string `json:"lice_id"`
 	Ime            string `json:"ime"`
-	Prezime        string `json:"prezime"`
 	NazivPreduzeca string `json:"naziv_preduzeca"`
 	BrLicneKarte   string `json:"br_licne_karte"`
 }
@@ -906,8 +906,8 @@ type Dozvola struct {
 	DozvolaID          string   `json:"dozvola_id"`          // AAMS_DOZVOLA_ID
 	BrojDozvole        string   `json:"broj_dozvole"`        // BROJ_DOZVOLE
 	TipDozvole         string   `json:"tip_dozvole"`         // TIP_DOZVOLE
-	DatumPocetka       string   `json:"datum_pocetka"`       // DATPOC
-	DatumZavrsetka     string   `json:"datum_zavrsetka"`     // DATZAV
+	DatumPocetka       string   `json:"vreme_pocetka"`       // DATPOC
+	DatumZavrsetka     string   `json:"vreme_zavrsetka"`     // DATZAV
 	DatumPosete        string   `json:"datum_posete"`        // DATUM_POSETE
 	Primalac           string   `json:"primalac"`            // PRIMA_LICE
 	RegistracijaVozilo string   `json:"registracija_vozilo"` // VOZILO
@@ -922,8 +922,8 @@ type D2D3Dozvola struct {
 	DozvolaID          string   `json:"dozvola_id"`          // AAMS_D2D3_ID
 	BrojDozvole        string   `json:"broj_dozvole"`        // BROJ_DOZVOLE
 	TipDozvole         string   `json:"tip_dozvole"`         // TIP_DOZVOLE (D2, D3, osnovna)
-	DatumPocetka       string   `json:"datum_pocetka"`       // DATPOC
-	DatumZavrsetka     string   `json:"datum_zavrsetka"`     // DATZAV
+	DatumPocetka       string   `json:"vreme_pocetka"`       // DATPOC
+	DatumZavrsetka     string   `json:"vreme_zavrsetka"`     // DATZAV
 	StrucnoLice        string   `json:"strucno_lice"`        // STRUCNO_LICE
 	Status             string   `json:"status"`              // STATUS
 	RegistracijaVozilo string   `json:"registracija_vozilo"` // VOZILO

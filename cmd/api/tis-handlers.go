@@ -2078,6 +2078,36 @@ func (app *application) getAllDozvola(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getD2D3ById(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	d2d3, err := app.DB.GetByIdD2D3Dozvola(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, d2d3)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getDozvolaById(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	d2d3, err := app.DB.GetByIdDozvola(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, d2d3)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request) {
 	var dozvola models.D2D3Dozvola
 

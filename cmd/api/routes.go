@@ -100,9 +100,11 @@ func (app *application) routes() http.Handler {
 		mux.Get("/planovi/{year}", app.getPlans)
 
 		mux.Get("/poseta", app.getAllDozvola)
+		mux.Get("/poseta/{id}", app.getDozvolaById)
 		mux.Put("/poseta", app.insertDozvola)
 		mux.Delete("/poseta/{id}", app.deleteDozvola)
 		mux.Get("/d2d3", app.getAllD2D3Dozvola)
+		mux.Get("/d2d3/{id}", app.getD2D3ById)
 		mux.Put("/d2d3", app.insertD2D3Dozvola)
 		mux.Delete("/d2d3/{id}", app.deleteD2D3Dozvola)
 	})

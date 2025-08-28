@@ -899,4 +899,18 @@ func (m *TestDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
 	return ds, nil
 }
 
+func (m *TestDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error) {
+
+	var d models.D2D3Dozvola
+
+	return &d, nil
+}
+
+func (m *TestDBRepo) GetByIdDozvola(id string) (*models.Dozvola, error) {
+
+	var d models.Dozvola
+
+	return &d, nil
+}
+
 /*** end TDN ***/
