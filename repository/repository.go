@@ -53,6 +53,7 @@ type DatabaseRepo interface {
 	GetDisconnectors() ([]*models.Disconnector, error)
 	GetWorkPermissions() ([]*models.WorkPermission, error)
 	GetWorkPermissionsAll() ([]*models.WorkPermissionAll, error)
+	GetWorkPermissionElradAll() ([]*models.DozvolaElrad, error)
 	GetRequest1Gr() ([]*models.Request1Gr, error)
 	GetRequest2Gr() ([]*models.Request2Gr, error)
 	GetWorkInEENetwork() ([]*models.WorkInEENetwork, error)

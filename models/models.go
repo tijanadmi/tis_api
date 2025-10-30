@@ -306,6 +306,24 @@ type WorkPermissionAll struct {
 	EES             []string `json:"ees"`
 }
 
+type DozvolaElrad struct {
+	IdZahteva      int    `json:"id_zahteva"`
+	IdDozvole      int    `json:"id_dozvole"`
+	NaSnazi        string `json:"na_snazi"`
+	IpsId          string `json:"ips_id"`
+	Tip            string `json:"tip"`
+	IdElementa     string `json:"id_elementa"`
+	OznakaElementa string `json:"oznaka_elementa"`
+}
+
+type ZahtevElrad struct {
+	IdZahteva      int    `json:"id_zahteva"`
+	IpsId          string `json:"ips_id"`
+	Tip            string `json:"tip"`
+	IdElementa     string `json:"id_elementa"`
+	OznakaElementa string `json:"oznaka_elementa"`
+}
+
 type WorkInEENetwork struct {
 	MaxNum      string `json:"max_num"`
 	Num         string `json:"number"`

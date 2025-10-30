@@ -159,6 +159,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/workineenetwork", app.getWorkInEENetwork)
 
 		mux.Get("/workpermissionsall", app.getWorkPermissionsAll)
+		mux.Get("/workpermissionselradall", app.getWorkPermissionsElradAll)
 		mux.Get("/request1gr", app.getRequest1Gr)
 		mux.Get("/request2gr", app.getRequest2Gr)
 		mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)

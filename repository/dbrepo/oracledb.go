@@ -1813,6 +1813,52 @@ func (m *OracleDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, err
 	return prms, nil
 }
 
+// Get returns all DozvolaElrad and error, if any
+func (m *OracleDBRepo) GetWorkPermissionElradAll() ([]*models.DozvolaElrad, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	query := `select ID_ZAHTEVA,
+			ID_DOZVOLE,
+			COALESCE(NA_SNAZI, ''),
+			COALESCE(IPS_ID, ''),
+			COALESCE(TIP, ''),
+			COALESCE(ID_ELEMENTA, ''),
+			COALESCE(OZNAKA_ELEMENTA, '')
+			from synsoft_dozvole_elrad
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*models.DozvolaElrad
+
+	for rows.Next() {
+		var prm models.DozvolaElrad
+		err := rows.Scan(
+			&prm.IdZahteva,
+			&prm.IdDozvole,
+			&prm.NaSnazi,
+			&prm.IpsId,
+			&prm.Tip,
+			&prm.IdElementa,
+			&prm.OznakaElementa,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
 // Get returns all Request1Gr and error, if any
 func (m *OracleDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)

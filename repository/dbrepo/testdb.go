@@ -359,6 +359,14 @@ func (m *TestDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, error
 	return prms, nil
 }
 
+// Get returns all DozvolaElrad and error, if any
+func (m *TestDBRepo) GetWorkPermissionElradAll() ([]*models.DozvolaElrad, error) {
+
+	var prms []*models.DozvolaElrad
+
+	return prms, nil
+}
+
 // Get returns all Request1Gr and error, if any
 func (m *TestDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
 

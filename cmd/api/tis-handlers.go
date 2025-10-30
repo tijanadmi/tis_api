@@ -680,6 +680,19 @@ func (app *application) getWorkPermissionsAll(w http.ResponseWriter, r *http.Req
 	}
 }
 
+func (app *application) getWorkPermissionsElradAll(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.DB.GetWorkPermissionElradAll()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 func (app *application) getRequest1Gr(w http.ResponseWriter, r *http.Request) {
 	signals, err := app.DB.GetRequest1Gr()
 	if err != nil {
