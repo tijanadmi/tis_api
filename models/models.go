@@ -311,6 +311,7 @@ type DozvolaElrad struct {
 	IdDozvole      int    `json:"id_dozvole"`
 	NaSnazi        string `json:"na_snazi"`
 	IpsId          string `json:"ips_id"`
+	TisId          string `json:"tis_id"`
 	Tip            string `json:"tip"`
 	IdElementa     string `json:"id_elementa"`
 	OznakaElementa string `json:"oznaka_elementa"`

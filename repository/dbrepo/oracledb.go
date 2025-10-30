@@ -1822,6 +1822,7 @@ func (m *OracleDBRepo) GetWorkPermissionElradAll() ([]*models.DozvolaElrad, erro
 			ID_DOZVOLE,
 			COALESCE(NA_SNAZI, ''),
 			COALESCE(IPS_ID, ''),
+			COALESCE(to_char(TIS_ID), ''),
 			COALESCE(TIP, ''),
 			COALESCE(ID_ELEMENTA, ''),
 			COALESCE(OZNAKA_ELEMENTA, '')
@@ -1844,6 +1845,7 @@ func (m *OracleDBRepo) GetWorkPermissionElradAll() ([]*models.DozvolaElrad, erro
 			&prm.IdDozvole,
 			&prm.NaSnazi,
 			&prm.IpsId,
+			&prm.TisId,
 			&prm.Tip,
 			&prm.IdElementa,
 			&prm.OznakaElementa,
