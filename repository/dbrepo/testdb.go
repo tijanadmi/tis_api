@@ -863,7 +863,18 @@ func (m *TestDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
 	return nil
 }
 
-func (m *TestDBRepo) InsertDozvola(d *models.Dozvola) error {
+func (m *TestDBRepo) InsertOsnovnaDozvola(d *models.OsnovnaDozvola) error {
+
+	return nil
+
+}
+
+func (m *TestDBRepo) UpdateOsnovnaDozvolaStatus(id string, status string) error {
+
+	return nil
+}
+
+func (m *TestDBRepo) UpdateD2D3DozvolaStatus(id string, status string) error {
 
 	return nil
 }
@@ -873,7 +884,7 @@ func (m *TestDBRepo) DeleteD2D3DozvolaByID(dozvolaID string) error {
 	return nil
 }
 
-func (m *TestDBRepo) DeleteDozvolaByID(dozvolaID string) error {
+func (m *TestDBRepo) DeleteOsnovnaDozvolaByID(dozvolaID string) error {
 
 	return nil
 }
@@ -888,7 +899,7 @@ func (m *TestDBRepo) GetD2D3DozvolaById(id string) (bool, error) {
 	return true, nil
 }
 
-func (m *TestDBRepo) GetDozvolaById(id string) (bool, error) {
+func (m *TestDBRepo) GetOsnovnaDozvolaById(id string) (bool, error) {
 
 	return true, nil
 }
@@ -900,9 +911,9 @@ func (m *TestDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 	return ds, nil
 }
 
-func (m *TestDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
+func (m *TestDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) {
 
-	var ds []*models.Dozvola
+	var ds []*models.OsnovnaDozvola
 
 	return ds, nil
 }
@@ -914,9 +925,9 @@ func (m *TestDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error) 
 	return &d, nil
 }
 
-func (m *TestDBRepo) GetByIdDozvola(id string) (*models.Dozvola, error) {
+func (m *TestDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola, error) {
 
-	var d models.Dozvola
+	var d models.OsnovnaDozvola
 
 	return &d, nil
 }

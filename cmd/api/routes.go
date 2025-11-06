@@ -99,13 +99,15 @@ func (app *application) routes() http.Handler {
 
 		mux.Get("/planovi/{year}", app.getPlans)
 
-		mux.Get("/poseta", app.getAllDozvola)
-		mux.Get("/poseta/{id}", app.getDozvolaById)
-		mux.Put("/poseta", app.insertDozvola)
-		mux.Delete("/poseta/{id}", app.deleteDozvola)
+		mux.Get("/osnovnadoz", app.getAllOsnovnaDozvola)
+		mux.Get("/osnovnadoz/{id}", app.getOsnovnaDozvolaById)
+		mux.Post("/osnovnadoz", app.insertOsnovnaDozvola)
+		mux.Patch("/osnovnadoz/status", app.updateOsnovnaDozvolaStatus)
+		mux.Delete("/osnovnadoz/{id}", app.deleteOsnovnaDozvola)
 		mux.Get("/d2d3", app.getAllD2D3Dozvola)
 		mux.Get("/d2d3/{id}", app.getD2D3ById)
-		mux.Put("/d2d3", app.insertD2D3Dozvola)
+		mux.Post("/d2d3", app.insertD2D3Dozvola)
+		mux.Patch("/d2d3/status", app.updateD2D3DozvolaStatus)
 		mux.Delete("/d2d3/{id}", app.deleteD2D3Dozvola)
 	})
 

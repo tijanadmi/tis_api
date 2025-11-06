@@ -918,37 +918,38 @@ type Lice struct {
 	LiceID         string `json:"lice_id"`
 	Ime            string `json:"ime"`
 	NazivPreduzeca string `json:"naziv_preduzeca"`
-	BrLicneKarte   string `json:"br_licne_karte"`
+	Dokument       string `json:"dokument"`
 }
 
-type Dozvola struct {
-	DozvolaID          string   `json:"dozvola_id"`          // AAMS_DOZVOLA_ID
-	BrojDozvole        string   `json:"broj_dozvole"`        // BROJ_DOZVOLE
-	TipDozvole         string   `json:"tip_dozvole"`         // TIP_DOZVOLE
-	DatumPocetka       string   `json:"vreme_pocetka"`       // DATPOC
-	DatumZavrsetka     string   `json:"vreme_zavrsetka"`     // DATZAV
-	DatumPosete        string   `json:"datum_posete"`        // DATUM_POSETE
-	Primalac           string   `json:"primalac"`            // PRIMA_LICE
-	RegistracijaVozilo string   `json:"registracija_vozilo"` // VOZILO
-	KontaktTelefon     string   `json:"kontakt_telefon"`     // TELEFON
-	RazlogPosete       string   `json:"razlog_posete"`       // RAZLOG_POSETE
-	Status             string   `json:"status"`              // STATUS
-	Objekti            []string `json:"objekti"`             // lista objekata (za D3)
-	Lica               []Lice   `json:"lica"`                // podaci o licima koja učestvuju
+type OsnovnaDozvola struct {
+	DozvolaID          string   `json:"dozvola_id"`       // AAMS_DOZVOLA_ID
+	BrojDozvole        string   `json:"broj_dozvole"`     // BROJ_DOZVOLE
+	TipZahteva         string   `json:"tip_zahteva"`      // TIP_ZAHTEVA
+	VremePocetka       string   `json:"vreme_pocetka"`    // VREME POCETKA
+	VremeZavrsetka     string   `json:"vreme_zavrsetka"`  // VREME ZAVRSETKA
+	Primalac           string   `json:"prima_prati_lice"` // PRIMA_LICE
+	RegistracijaVozilo string   `json:"vozilo"`           // VOZILO
+	KontaktTelefon     string   `json:"kontakt_telefon"`  // TELEFON
+	RazlogPosete       string   `json:"razlog_posete"`    // RAZLOG_POSETE
+	Status             string   `json:"status"`           // STATUS
+	Objekti            []string `json:"objekti"`          // lista objekata (za D3)
+	Lica               []Lice   `json:"lica"`             // podaci o licima koja učestvuju
 }
 
 type D2D3Dozvola struct {
-	DozvolaID          string   `json:"dozvola_id"`          // AAMS_D2D3_ID
-	BrojDozvole        string   `json:"broj_dozvole"`        // BROJ_DOZVOLE
-	TipDozvole         string   `json:"tip_dozvole"`         // TIP_DOZVOLE (D2, D3, osnovna)
-	DatumPocetka       string   `json:"vreme_pocetka"`       // DATPOC
-	DatumZavrsetka     string   `json:"vreme_zavrsetka"`     // DATZAV
-	StrucnoLice        string   `json:"strucno_lice"`        // STRUCNO_LICE
-	Status             string   `json:"status"`              // STATUS
-	RegistracijaVozilo string   `json:"registracija_vozilo"` // VOZILO
-	KontaktTelefon     string   `json:"kontakt_telefon"`     // TELEFON
-	OsnovnaDozvolaID   string   `json:"osnovna_dozvola_id"`  // ID_OSNOVNE_DOZ
-	BrojOsnovneDozole  string   `json:"broj_osnovne_dozole"` // BROJ_OSNOVNE_DOZ
-	Objekti            []string `json:"objekti"`             // lista objekata (za D3)
-	Lica               []Lice   `json:"lica"`                // eventualna lista lica koja učestvuju
+	D2D3DozvolaID    string   `json:"d2d3_dozvola_id"`    // AAMS_D2D3_ID
+	D2D3BrojDozvole  string   `json:"d2d3_broj_dozvole"`  // BROJ_DOZVOLE
+	OsnovnaDozvolaID string   `json:"osnovna_dozvola_id"` // AAMS_DOZVOLA_ID
+	TipDozvole       string   `json:"tip_dozvole"`        // TIP_DOZVOLE (D2, D3)
+	VremePocetka     string   `json:"vreme_pocetka"`      // VREME POCETKA
+	VremeZavrsetka   string   `json:"vreme_zavrsetka"`    // VREME ZAVRSETKA
+	OpisPosla        string   `json:"opis_posla"`         // OPIS_POSLA
+	StrucnoLice      string   `json:"strucno_lice"`       // STRUCNO_LICE
+	OlRukRadova      string   `json:"ol_ruk_radova"`      // ovlasceno lice rukovodilac radova
+	OlIzvRadova      string   `json:"ol_izv_radova"`      // ovlasceno lice izvodjac radova
+	IzvodjaciRadova  string   `json:"izvodjaci_radova"`   // izvodjaci radova
+	DozvoluIzdao     string   `json:"dozvolu_izdao"`      // dozvolu izdao
+	Status           string   `json:"status"`             // STATUS
+	Objekti          []string `json:"objekti"`            // lista objekata (za D3)
+	Lica             []Lice   `json:"lica"`               // eventualna lista lica koja učestvuju
 }

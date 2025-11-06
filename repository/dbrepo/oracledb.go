@@ -5739,26 +5739,28 @@ func (m *OracleDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
 	// Insert u AAMS_DOZVOLE
 	queryDozvola := `
 		INSERT INTO TDN.AAMS_D2D3_DOZVOLE (
-             AAMS_D2D3_ID, BROJ_DOZVOLE, TIP_DOZVOLE , DATPOC, DATZAV, STRUCNO_LICE,
-             STATUS , VOZILO , TELEFON , DATPRI, DATIZM, ID_OSNOVNE_DOZ , BROJ_OSNOVNE_DOZ
+             AAMS_D2D3_ID, ID_OSNOVNE_DOZ, BROJ_D2D3_DOZVOLE, TIP_DOZVOLE, VREPOC, VREZAV, OPIS_POSLA, STRUCNO_LICE, OL_RUK_RADOVA,
+             OL_IZV_RADOVA, IZVODJACI_RADOVA, DOZVOLU_IZDAO, STATUS, DATPRI, DATIZM
         ) VALUES (
-            :1, :2, :3, TO_DATE(:4, 'DD.MM.YYYY HH24:MI'), TO_DATE(:5, 'DD.MM.YYYY HH24:MI'),
-			:6, :7, :8, :9, SYSDATE, SYSDATE,:10,:11
+            :1, :2, :3, :4, TO_DATE(:5, 'DD.MM.YYYY HH24:MI'), TO_DATE(:6, 'DD.MM.YYYY HH24:MI'),
+			 :7, :8, :9,:10,:11, :12, :13, SYSDATE, SYSDATE
         )
 	`
 
 	_, err = tx.ExecContext(ctx, queryDozvola,
-		d.DozvolaID,
-		d.BrojDozvole,
-		d.TipDozvole,
-		d.DatumPocetka,
-		d.DatumZavrsetka,
-		d.StrucnoLice,
-		d.Status,
-		d.RegistracijaVozilo,
-		d.KontaktTelefon,
+		d.D2D3DozvolaID,
+		d.D2D3BrojDozvole,
 		d.OsnovnaDozvolaID,
-		d.BrojOsnovneDozole,
+		d.TipDozvole,
+		d.VremePocetka,
+		d.VremeZavrsetka,
+		d.OpisPosla,
+		d.StrucnoLice,
+		d.OlRukRadova,
+		d.OlIzvRadova,
+		d.IzvodjaciRadova,
+		d.DozvoluIzdao,
+		d.Status,
 	)
 	if err != nil {
 		return fmt.Errorf("insert dozvola: %w", err)
@@ -5769,16 +5771,16 @@ func (m *OracleDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
 
 		queryLice := `
 			INSERT INTO TDN.AAMS_D2D3_LICA (
-				AAMS_LICA_ID, AAMS_D2D3_DOZ_ID, LICE_NAZIV, PREDUZECE, LICNA_KARTA
+				AAMS_LICA_ID, AAMS_D2D3_DOZ_ID, LICE_NAZIV, PREDUZECE, DOKUMENT
 			) VALUES (:1, :2, :3, :4, :5)
 		`
 
 		_, err := tx.ExecContext(ctx, queryLice,
 			lice.LiceID,
-			d.DozvolaID,
+			d.D2D3DozvolaID,
 			lice.Ime,
 			lice.NazivPreduzeca,
-			lice.BrLicneKarte,
+			lice.Dokument,
 		)
 		if err != nil {
 			return fmt.Errorf("insert lice: %w", err)
@@ -5795,7 +5797,7 @@ func (m *OracleDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
 		`
 
 		_, err := tx.ExecContext(ctx, queryObj,
-			d.DozvolaID,
+			d.D2D3DozvolaID,
 			obj,
 		)
 		if err != nil {
@@ -5811,7 +5813,7 @@ func (m *OracleDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
 	return nil
 }
 
-func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
+func (m *OracleDBRepo) InsertOsnovnaDozvola(d *models.OsnovnaDozvola) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	tx, err := m.DB.BeginTx(ctx, nil)
@@ -5823,25 +5825,23 @@ func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 	// Insert u AAMS_DOZVOLE
 	queryDozvola := `
 		INSERT INTO TDN.AAMS_DOZVOLE (
-            AAMS_DOZVOLA_ID,  BROJ_DOZVOLE, TIP_DOZVOLE, DATPOC, DATZAV, 
-            DATUM_POSETE, PRIMA_LICE, VOZILO, TELEFON, DATPRI, DATIZM, RAZLOG_POSETE, STATUS
+            AAMS_DOZVOLA_ID, BROJ_DOZVOLE, TIP_ZAHTEVA, RAZLOG_POSETE, VREPOC, VREZAV, PRIMA_PRATI_LICE, VOZILO, TELEFON, DATPRI, DATIZM, STATUS
         ) VALUES (
-            :1, :2, :3,  TO_DATE(:4, 'DD.MM.YYYY HH24:MI'), TO_DATE(:5, 'DD.MM.YYYY HH24:MI'), 
-            TO_DATE(:6, 'DD.MM.YYYY'), :7, :8, :9, SYSDATE, SYSDATE, :10, :11
+            :1, :2, :3, :4,  TO_DATE(:5, 'DD.MM.YYYY HH24:MI'), TO_DATE(:6, 'DD.MM.YYYY HH24:MI'), 
+             :7, :8, :9, SYSDATE, SYSDATE, :10
         )
 	`
 
 	_, err = tx.ExecContext(ctx, queryDozvola,
 		d.DozvolaID,
 		d.BrojDozvole,
-		d.TipDozvole,
-		d.DatumPocetka,
-		d.DatumZavrsetka,
-		d.DatumPosete,
+		d.TipZahteva,
+		d.RazlogPosete,
+		d.VremePocetka,
+		d.VremeZavrsetka,
 		d.Primalac,
 		d.RegistracijaVozilo,
 		d.KontaktTelefon,
-		d.RazlogPosete,
 		d.Status,
 	)
 	if err != nil {
@@ -5853,7 +5853,7 @@ func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 
 		queryLice := `
 			INSERT INTO TDN.AAMS_DOZ_LICA (
-				AAMS_LICA_ID, AAMS_DOZVOLA_ID, LICE_NAZIV, PREDUZECE, LICNA_KARTA
+				AAMS_LICA_ID, AAMS_DOZVOLA_ID, LICE_NAZIV, PREDUZECE, DOKUMENT
 			) VALUES (:1, :2, :3, :4, :5)
 		`
 
@@ -5862,7 +5862,7 @@ func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 			d.DozvolaID,
 			lice.Ime,
 			lice.NazivPreduzeca,
-			lice.BrLicneKarte,
+			lice.Dokument,
 		)
 		if err != nil {
 			return fmt.Errorf("insert lice: %w", err)
@@ -5895,21 +5895,94 @@ func (m *OracleDBRepo) InsertDozvola(d *models.Dozvola) error {
 	return nil
 }
 
-func (m *OracleDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
+func (m *OracleDBRepo) UpdateOsnovnaDozvolaStatus(id string, status string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	tx, err := m.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("begin transaction: %w", err)
+	}
+	defer tx.Rollback()
+
+	query := `
+		UPDATE TDN.AAMS_DOZVOLE
+		SET STATUS = :1,
+			DATIZM = SYSDATE
+		WHERE AAMS_DOZVOLA_ID = :2
+	`
+
+	res, err := tx.ExecContext(ctx, query, status, id)
+	if err != nil {
+		return fmt.Errorf("update OSNOVNA dozvola status: %w", err)
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("rows affected: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("nije pronađena OSNOVNA dozvola sa ID: %s", id)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit failed: %w", err)
+	}
+
+	return nil
+}
+
+func (m *OracleDBRepo) UpdateD2D3DozvolaStatus(id string, status string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	tx, err := m.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("begin transaction: %w", err)
+	}
+	defer tx.Rollback()
+
+	query := `
+		UPDATE TDN.AAMS_D2D3_DOZVOLE
+		SET STATUS = :1,
+			DATIZM = SYSDATE
+		WHERE AAMS_D2D3_ID = :2
+	`
+
+	res, err := tx.ExecContext(ctx, query, status, id)
+	if err != nil {
+		return fmt.Errorf("update D2D3 dozvola status: %w", err)
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("rows affected: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("nije pronađena D2D3 dozvola sa ID: %s", id)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit failed: %w", err)
+	}
+
+	return nil
+}
+
+func (m *OracleDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
 	query := `select COALESCE(AAMS_DOZVOLA_ID, ''),
   				COALESCE(BROJ_DOZVOLE, ''),
-  				COALESCE(TIP_DOZVOLE, ''),
-				to_char(DATPOC, 'dd.mm.yyyy HH24:MI:SS'),
-  				to_char(DATZAV, 'dd.mm.yyyy HH24:MI:SS'),
-  				to_char(DATUM_POSETE, 'dd.mm.yyyy'),
-  				COALESCE(PRIMA_LICE, '') ,
+  				COALESCE(TIP_ZAHTEVA, ''),
+				COALESCE(RAZLOG_POSETE, ''),
+				to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+  				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+  				COALESCE( PRIMA_PRATI_LICE, '') ,
   				COALESCE(VOZILO, ''),
   				COALESCE(TELEFON, '') ,
-  				COALESCE(RAZLOG_POSETE, ''),
   				COALESCE(STATUS, '') 
 				FROM TDN.AAMS_DOZVOLE`
 
@@ -5920,21 +5993,19 @@ func (m *OracleDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
 	}
 	defer rows.Close()
 
-	var ds = []*models.Dozvola{}
+	var ds = []*models.OsnovnaDozvola{}
 
 	for rows.Next() {
-		var d models.Dozvola
+		var d models.OsnovnaDozvola
 		err := rows.Scan(
 			&d.DozvolaID,
 			&d.BrojDozvole,
-			&d.TipDozvole,
-			&d.DatumPocetka,
-			&d.DatumZavrsetka,
-			&d.DatumPosete,
+			&d.TipZahteva,
+			&d.VremePocetka,
+			&d.VremeZavrsetka,
 			&d.Primalac,
 			&d.RegistracijaVozilo,
 			&d.KontaktTelefon,
-			&d.RazlogPosete,
 			&d.Status,
 		)
 
@@ -5973,7 +6044,7 @@ func (m *OracleDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
 
 		/***** start part for lica ****/
 
-		query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.licna_karta 
+		query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.dokument 
 				from aams_doz_lica l 
 				where l.aams_dozvola_id  = :1
 			`
@@ -5991,7 +6062,7 @@ func (m *OracleDBRepo) GetAllDozvola() ([]*models.Dozvola, error) {
 				&l.LiceID,
 				&l.Ime,
 				&l.NazivPreduzeca,
-				&l.BrLicneKarte,
+				&l.Dokument,
 			)
 
 			if err != nil {
@@ -6017,16 +6088,18 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 	defer cancel()
 
 	query := `select COALESCE(AAMS_D2D3_ID, ''),
-                  COALESCE(BROJ_DOZVOLE, ''),
-                  COALESCE(TIP_DOZVOLE, ''),
-                  to_char(DATPOC, 'dd.mm.yyyy HH24:MI:SS'),
-                  to_char(DATZAV, 'dd.mm.yyyy HH24:MI:SS'),
-                  COALESCE(STRUCNO_LICE, '') ,
-                  COALESCE(STATUS, '') ,
-                  COALESCE(VOZILO, ''),
-                  COALESCE(TELEFON, '') ,
                   COALESCE(ID_OSNOVNE_DOZ, ''),
-                  COALESCE(BROJ_OSNOVNE_DOZ, '')
+                  COALESCE(BROJ_D2D3_DOZVOLE, ''),
+                  COALESCE(TIP_DOZVOLE, ''),
+                  to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+                  to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+                  COALESCE(OPIS_POSLA, '') ,
+                  COALESCE(STRUCNO_LICE, ''),
+                  COALESCE(OL_RUK_RADOVA, '') ,
+                  COALESCE(OL_IZV_RADOVA, '') ,
+                  COALESCE(IZVODJACI_RADOVA, '') ,
+                  COALESCE(DOZVOLU_IZDAO, '') ,
+                  COALESCE(STATUS, '') 
                 FROM TDN.AAMS_D2D3_DOZVOLE`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -6041,17 +6114,19 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 	for rows.Next() {
 		var d models.D2D3Dozvola
 		err := rows.Scan(
-			&d.DozvolaID,
-			&d.BrojDozvole,
+			&d.D2D3DozvolaID,
+			&d.D2D3BrojDozvole,
+			&d.OsnovnaDozvolaID,
 			&d.TipDozvole,
-			&d.DatumPocetka,
-			&d.DatumZavrsetka,
+			&d.VremePocetka,
+			&d.VremeZavrsetka,
 			&d.StrucnoLice,
 			&d.Status,
-			&d.RegistracijaVozilo,
-			&d.KontaktTelefon,
-			&d.OsnovnaDozvolaID,
-			&d.BrojOsnovneDozole,
+			&d.OlRukRadova,
+			&d.OlIzvRadova,
+			&d.IzvodjaciRadova,
+			&d.DozvoluIzdao,
+			&d.Status,
 		)
 
 		if err != nil {
@@ -6066,7 +6141,7 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 			`
 		var objs = []string{}
 
-		rows1, err := m.DB.QueryContext(ctx, query1, d.DozvolaID)
+		rows1, err := m.DB.QueryContext(ctx, query1, d.D2D3DozvolaID)
 		if err != nil {
 			return nil, err
 		}
@@ -6089,13 +6164,13 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 
 		/***** start part for lica ****/
 
-		query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.licna_karta 
+		query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.dokument 
 				from aams_d2d3_lica l 
 				where l.aams_d2d3_doz_id  = :1
 			`
 		var lica = []models.Lice{}
 
-		rows2, err := m.DB.QueryContext(ctx, query2, d.DozvolaID)
+		rows2, err := m.DB.QueryContext(ctx, query2, d.D2D3DozvolaID)
 		if err != nil {
 			rows1.Close()
 			return nil, err
@@ -6107,7 +6182,7 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 				&l.LiceID,
 				&l.Ime,
 				&l.NazivPreduzeca,
-				&l.BrLicneKarte,
+				&l.Dokument,
 			)
 
 			if err != nil {
@@ -6133,16 +6208,18 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 	defer cancel()
 
 	query := `select COALESCE(AAMS_D2D3_ID, ''),
-                  COALESCE(BROJ_DOZVOLE, ''),
-                  COALESCE(TIP_DOZVOLE, ''),
-                  to_char(DATPOC, 'dd.mm.yyyy HH24:MI:SS'),
-                  to_char(DATZAV, 'dd.mm.yyyy HH24:MI:SS'),
-                  COALESCE(STRUCNO_LICE, '') ,
-                  COALESCE(STATUS, '') ,
-                  COALESCE(VOZILO, ''),
-                  COALESCE(TELEFON, '') ,
                   COALESCE(ID_OSNOVNE_DOZ, ''),
-                  COALESCE(BROJ_OSNOVNE_DOZ, '')
+                  COALESCE(BROJ_D2D3_DOZVOLE, ''),
+                  COALESCE(TIP_DOZVOLE, ''),
+                  to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+                  to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+                  COALESCE(OPIS_POSLA, '') ,
+                  COALESCE(STRUCNO_LICE, ''),
+                  COALESCE(OL_RUK_RADOVA, '') ,
+                  COALESCE(OL_IZV_RADOVA, '') ,
+                  COALESCE(IZVODJACI_RADOVA, '') ,
+                  COALESCE(DOZVOLU_IZDAO, '') ,
+                  COALESCE(STATUS, '') 
                 FROM TDN.AAMS_D2D3_DOZVOLE
 				WHERE AAMS_D2D3_ID=:1`
 
@@ -6150,17 +6227,19 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 
 	var d models.D2D3Dozvola
 	err := row.Scan(
-		&d.DozvolaID,
-		&d.BrojDozvole,
+		&d.D2D3DozvolaID,
+		&d.D2D3BrojDozvole,
+		&d.OsnovnaDozvolaID,
 		&d.TipDozvole,
-		&d.DatumPocetka,
-		&d.DatumZavrsetka,
+		&d.VremePocetka,
+		&d.VremeZavrsetka,
 		&d.StrucnoLice,
 		&d.Status,
-		&d.RegistracijaVozilo,
-		&d.KontaktTelefon,
-		&d.OsnovnaDozvolaID,
-		&d.BrojOsnovneDozole,
+		&d.OlRukRadova,
+		&d.OlIzvRadova,
+		&d.IzvodjaciRadova,
+		&d.DozvoluIzdao,
+		&d.Status,
 	)
 	if err != nil {
 		// fmt.Println("Pogresan upit ili nema rezultata upita")
@@ -6175,7 +6254,7 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 			`
 	var objs = []string{}
 
-	rows1, err := m.DB.QueryContext(ctx, query1, d.DozvolaID)
+	rows1, err := m.DB.QueryContext(ctx, query1, d.D2D3DozvolaID)
 	if err != nil {
 		return nil, err
 	}
@@ -6198,13 +6277,13 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 
 	/***** start part for lica ****/
 
-	query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.licna_karta 
+	query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.dokument 
 				from aams_d2d3_lica l 
 				where l.aams_d2d3_doz_id  = :1
 			`
 	var lica = []models.Lice{}
 
-	rows2, err := m.DB.QueryContext(ctx, query2, d.DozvolaID)
+	rows2, err := m.DB.QueryContext(ctx, query2, d.D2D3DozvolaID)
 	if err != nil {
 		rows1.Close()
 		return nil, err
@@ -6216,7 +6295,7 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 			&l.LiceID,
 			&l.Ime,
 			&l.NazivPreduzeca,
-			&l.BrLicneKarte,
+			&l.Dokument,
 		)
 
 		if err != nil {
@@ -6233,39 +6312,36 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 	return &d, nil
 }
 
-func (m *OracleDBRepo) GetByIdDozvola(id string) (*models.Dozvola, error) {
+func (m *OracleDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
 	query := `select COALESCE(AAMS_DOZVOLA_ID, ''),
   				COALESCE(BROJ_DOZVOLE, ''),
-  				COALESCE(TIP_DOZVOLE, ''),
-				to_char(DATPOC, 'dd.mm.yyyy HH24:MI:SS'),
-  				to_char(DATZAV, 'dd.mm.yyyy HH24:MI:SS'),
-  				to_char(DATUM_POSETE, 'dd.mm.yyyy'),
-  				COALESCE(PRIMA_LICE, '') ,
+  				COALESCE(TIP_ZAHTEVA, ''),
+				COALESCE(RAZLOG_POSETE, ''),
+				to_char(VREPOC, 'dd.mm.yyyy HH24:MI:SS'),
+  				to_char(VREZAV, 'dd.mm.yyyy HH24:MI:SS'),
+  				COALESCE( PRIMA_PRATI_LICE, '') ,
   				COALESCE(VOZILO, ''),
   				COALESCE(TELEFON, '') ,
-  				COALESCE(RAZLOG_POSETE, ''),
   				COALESCE(STATUS, '') 
 				FROM TDN.AAMS_DOZVOLE
 				WHERE AAMS_DOZVOLA_ID=:1`
 
 	row := m.DB.QueryRowContext(ctx, query, id)
 
-	var d models.Dozvola
+	var d models.OsnovnaDozvola
 	err := row.Scan(
 		&d.DozvolaID,
 		&d.BrojDozvole,
-		&d.TipDozvole,
-		&d.DatumPocetka,
-		&d.DatumZavrsetka,
-		&d.DatumPosete,
+		&d.TipZahteva,
+		&d.VremePocetka,
+		&d.VremeZavrsetka,
 		&d.Primalac,
 		&d.RegistracijaVozilo,
 		&d.KontaktTelefon,
-		&d.RazlogPosete,
 		&d.Status,
 	)
 	if err != nil {
@@ -6304,7 +6380,7 @@ func (m *OracleDBRepo) GetByIdDozvola(id string) (*models.Dozvola, error) {
 
 	/***** start part for lica ****/
 
-	query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.licna_karta 
+	query2 := `select l.aams_lica_id, l.lice_naziv,l.preduzece, l.dokument 
 				from aams_doz_lica l 
 				where l.aams_dozvola_id  = :1
 			`
@@ -6322,7 +6398,7 @@ func (m *OracleDBRepo) GetByIdDozvola(id string) (*models.Dozvola, error) {
 			&l.LiceID,
 			&l.Ime,
 			&l.NazivPreduzeca,
-			&l.BrLicneKarte,
+			&l.Dokument,
 		)
 
 		if err != nil {
@@ -6376,7 +6452,7 @@ func (m *OracleDBRepo) DeleteD2D3DozvolaByID(dozvolaID string) error {
 	return nil
 }
 
-func (m *OracleDBRepo) DeleteDozvolaByID(dozvolaID string) error {
+func (m *OracleDBRepo) DeleteOsnovnaDozvolaByID(dozvolaID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	tx, err := m.DB.BeginTx(ctx, nil)
@@ -6428,7 +6504,7 @@ func (m *OracleDBRepo) GetD2D3DozvolaById(id string) (bool, error) {
 	return count > 0, nil
 }
 
-func (m *OracleDBRepo) GetDozvolaById(id string) (bool, error) {
+func (m *OracleDBRepo) GetOsnovnaDozvolaById(id string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 

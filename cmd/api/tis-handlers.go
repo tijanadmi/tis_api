@@ -1116,7 +1116,7 @@ func (app *application) insertPiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 		}
 	}
 	//err = app.writeJSON(w, http.StatusOK, m)
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1149,7 +1149,7 @@ func (app *application) insertPiPiDDNIskljP(w http.ResponseWriter, r *http.Reque
 		}
 	}
 	//err = app.writeJSON(w, http.StatusOK, m)
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1180,7 +1180,7 @@ func (app *application) updatePiPiDDNIsklj(w http.ResponseWriter, r *http.Reques
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1211,7 +1211,7 @@ func (app *application) updatePiPiDDNIskljP(w http.ResponseWriter, r *http.Reque
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1245,7 +1245,7 @@ func (app *application) insertPiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1279,7 +1279,7 @@ func (app *application) insertPiPiDDNIspadP(w http.ResponseWriter, r *http.Reque
 		}
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1310,7 +1310,7 @@ func (app *application) updatePiPiDDNIspad(w http.ResponseWriter, r *http.Reques
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1341,7 +1341,7 @@ func (app *application) updatePiPiDDNIspadP(w http.ResponseWriter, r *http.Reque
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1367,7 +1367,11 @@ func (app *application) deletePiPiDDN(w http.ResponseWriter, r *http.Request) {
 		Message: "pipiddn deleted",
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 func (app *application) deletePiPiDDNP(w http.ResponseWriter, r *http.Request) {
@@ -1389,7 +1393,11 @@ func (app *application) deletePiPiDDNP(w http.ResponseWriter, r *http.Request) {
 		Message: "pipiddn deleted",
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 /*** end PiPiDDN api  ***/
@@ -1494,7 +1502,7 @@ func (app *application) updateUnfinishedEvents(w http.ResponseWriter, r *http.Re
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1525,7 +1533,7 @@ func (app *application) updateUnfinishedEventsP(w http.ResponseWriter, r *http.R
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1561,7 +1569,7 @@ func (app *application) insertDDNInterruptionOfDelivery(w http.ResponseWriter, r
 		}
 	}
 	//err = app.writeJSON(w, http.StatusOK, m)
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1594,7 +1602,7 @@ func (app *application) insertDDNInterruptionOfDeliveryP(w http.ResponseWriter, 
 		}
 	}
 	//err = app.writeJSON(w, http.StatusOK, m)
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1625,7 +1633,7 @@ func (app *application) updateDDNInterruptionOfDelivery(w http.ResponseWriter, r
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1656,7 +1664,7 @@ func (app *application) updateDDNInterruptionOfDeliveryP(w http.ResponseWriter, 
 			Message: "Record updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1687,7 +1695,7 @@ func (app *application) insertUpdateDDNInterruptionOfDelivery(w http.ResponseWri
 			Message: "Record inserted/updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1718,7 +1726,7 @@ func (app *application) insertUpdateDDNInterruptionOfDeliveryP(w http.ResponseWr
 			Message: "Record inserted/updated",
 		}
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1790,7 +1798,7 @@ func (app *application) insertUpdateAllDDNInterruptionOfDelivery(w http.Response
 		Error:   false,
 		Message: "Record inserted/updated",
 	}
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -1816,7 +1824,11 @@ func (app *application) deleteDDNInterruptionOfDelivery(w http.ResponseWriter, r
 		Message: "DDNInterruptionOfDelivery deleted",
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 func (app *application) deleteDDNInterruptionOfDeliveryP(w http.ResponseWriter, r *http.Request) {
@@ -1838,7 +1850,11 @@ func (app *application) deleteDDNInterruptionOfDeliveryP(w http.ResponseWriter, 
 		Message: "DDNInterruptionOfDelivery deleted",
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 func (app *application) getDDNInterruptionOfDeliveryNDC(w http.ResponseWriter, r *http.Request) {
@@ -1978,6 +1994,11 @@ func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	idSMmrc, err := strconv.Atoi(payload.Mrc)
+	if err != nil {
+
+		app.errorJSON(w, err)
+		return
+	}
 	var resp JSONResponse
 	if payload.Datsmene == "" || payload.Mrc == "" {
 		app.errorJSON(w, errors.New("mandatory data was not passed"))
@@ -2013,7 +2034,7 @@ func (app *application) closePgiP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -2052,7 +2073,7 @@ func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -2078,8 +2099,8 @@ func (app *application) getAllD2D3Dozvola(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) getAllDozvola(w http.ResponseWriter, r *http.Request) {
-	posetas, err := app.DB.GetAllDozvola()
+func (app *application) getAllOsnovnaDozvola(w http.ResponseWriter, r *http.Request) {
+	posetas, err := app.DB.GetAllOsnovnaDozvola()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -2106,10 +2127,10 @@ func (app *application) getD2D3ById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *application) getDozvolaById(w http.ResponseWriter, r *http.Request) {
+func (app *application) getOsnovnaDozvolaById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	d2d3, err := app.DB.GetByIdDozvola(id)
+	d2d3, err := app.DB.GetByIdOsnovnaDozvola(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -2126,23 +2147,40 @@ func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request
 
 	err := json.NewDecoder(r.Body).Decode(&dozvola)
 	if err != nil {
-		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %w", err))
+		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
 		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
 		return
 	}
 
 	// Osnovna validacija — možeš dodati još ako želiš
-	if dozvola.DozvolaID == "" || dozvola.BrojDozvole == "" || dozvola.TipDozvole == "" {
-		_ = app.DB.InsertLog("insert_dozvola", "error", "nedostaju obavezna polja")
+	if dozvola.D2D3DozvolaID == "" || dozvola.D2D3BrojDozvole == "" || dozvola.TipDozvole == "" || dozvola.OsnovnaDozvolaID == "" {
+		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", "nedostaju obavezna polja")
 		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
 		return
 	}
 
 	/****** provera da li postoji u bazi dozvola sa istim id *****/
-	da, err := app.DB.GetD2D3DozvolaById(dozvola.DozvolaID)
+	da, err := app.DB.GetD2D3DozvolaById(dozvola.D2D3DozvolaID)
 	if da {
-		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
-		app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID)))
+		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", fmt.Sprintf("dozvola D2D3 sa ovim id: %s je vec u bazi", dozvola.D2D3DozvolaID))
+		// app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.D2D3DozvolaID)))
+		app.errorJSON(w, fmt.Errorf("dozvola D2D3 sa ovim id: %s je već u bazi", dozvola.D2D3DozvolaID))
+
+		return
+	}
+	if err != nil {
+		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, err)
+		return
+	}
+
+	/****** provera da li postoji u bazi dozvola sa istim id *****/
+	da, err = app.DB.GetOsnovnaDozvolaById(dozvola.OsnovnaDozvolaID)
+	if !da {
+		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", fmt.Sprintf("ne postoji osnovna dozvola sa id: %s ", dozvola.OsnovnaDozvolaID))
+		// app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.D2D3DozvolaID)))
+		app.errorJSON(w, fmt.Errorf("ne postoji osnovna dozvola sa id: %s", dozvola.OsnovnaDozvolaID))
+
 		return
 	}
 	if err != nil {
@@ -2155,44 +2193,48 @@ func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request
 	err = app.DB.InsertD2D3Dozvola(&dozvola)
 	if err != nil {
 		// Loguj grešku u tabelu
-		_ = app.DB.InsertLog("insert_dozvola", "error", err.Error())
+		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", err.Error())
 		app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
 		return
 	}
 
 	// Uspešan log
-	_ = app.DB.InsertLog("insert_dozvola", "success", fmt.Sprintf("Dozvola %s uspešno uneta", dozvola.BrojDozvole))
+	_ = app.DB.InsertLog("insert_D2D3_dozvola", "success", fmt.Sprintf("Dozvola %s uspešno uneta", dozvola.D2D3BrojDozvole))
 
 	resp := JSONResponse{
 		Error:   false,
 		Message: "Dozvola uspešno uneta",
 	}
 
-	app.writeJSON(w, http.StatusCreated, resp)
+	err = app.writeJSON(w, http.StatusCreated, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
-func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
-	var dozvola models.Dozvola
+func (app *application) insertOsnovnaDozvola(w http.ResponseWriter, r *http.Request) {
+	var dozvola models.OsnovnaDozvola
 
 	err := json.NewDecoder(r.Body).Decode(&dozvola)
 	if err != nil {
-		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %w", err))
+		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
 		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
 		return
 	}
 
 	// Osnovna validacija — možeš dodati još ako želiš
-	if dozvola.DozvolaID == "" || dozvola.BrojDozvole == "" || dozvola.TipDozvole == "" {
+	if dozvola.DozvolaID == "" || dozvola.BrojDozvole == "" || dozvola.TipZahteva == "" {
 		_ = app.DB.InsertLog("insert_dozvola", "error", "nedostaju obavezna polja")
 		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
 		return
 	}
 
 	/****** provera da li postoji u bazi dozvola sa istim id *****/
-	da, err := app.DB.GetDozvolaById(dozvola.DozvolaID)
+	da, err := app.DB.GetOsnovnaDozvolaById(dozvola.DozvolaID)
 	if da {
 		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
-		app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID)))
+		app.errorJSON(w, fmt.Errorf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
 		return
 	}
 	if err != nil {
@@ -2202,7 +2244,7 @@ func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
 	}
 	/***** kraj provera da li postoji u bazi dozvola sa istim id *****/
 
-	err = app.DB.InsertDozvola(&dozvola)
+	err = app.DB.InsertOsnovnaDozvola(&dozvola)
 	if err != nil {
 		// Loguj grešku u tabelu
 		_ = app.DB.InsertLog("insert_dozvola", "error", err.Error())
@@ -2218,7 +2260,125 @@ func (app *application) insertDozvola(w http.ResponseWriter, r *http.Request) {
 		Message: "Dozvola uspešno uneta",
 	}
 
-	app.writeJSON(w, http.StatusCreated, resp)
+	err = app.writeJSON(w, http.StatusCreated, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updateOsnovnaDozvolaStatus(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		OsnovnaDozvolaID string `json:"osnovna_dozvola_id"`
+		Status           string `json:"status"`
+	}
+
+	// Parsiranje JSON zahteva
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
+		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		return
+	}
+
+	// Osnovna validacija
+	if req.OsnovnaDozvolaID == "" || req.Status == "" {
+		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", "nedostaju obavezna polja (ID ili status)")
+		app.errorJSON(w, errors.New("nedostaju obavezna polja (ID ili status)"))
+		return
+	}
+
+	// Provera da li dozvola postoji
+	postoji, err := app.DB.GetOsnovnaDozvolaById(req.OsnovnaDozvolaID)
+	if err != nil {
+		_ = app.DB.InsertLog("get_osnovna_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err))
+		return
+	}
+	if !postoji {
+		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", fmt.Sprintf("dozvola sa ID %s ne postoji", req.OsnovnaDozvolaID))
+		app.errorJSON(w, fmt.Errorf("dozvola sa ID %s ne postoji", req.OsnovnaDozvolaID))
+		return
+	}
+
+	// Izvrši update statusa
+	err = app.DB.UpdateOsnovnaDozvolaStatus(req.OsnovnaDozvolaID, req.Status)
+	if err != nil {
+		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", err.Error())
+		app.errorJSON(w, fmt.Errorf("neuspešan update statusa: %w", err))
+		return
+	}
+
+	// Uspešan update
+	_ = app.DB.InsertLog("update_osnovna_dozvola_status", "success", fmt.Sprintf("Status dozvole %s ažuriran na %s", req.OsnovnaDozvolaID, req.Status))
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: fmt.Sprintf("Status dozvole %s uspešno ažuriran na %s", req.OsnovnaDozvolaID, req.Status),
+	}
+
+	err = app.writeJSON(w, http.StatusOK, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) updateD2D3DozvolaStatus(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		D2D3DozvolaID string `json:"d2d3_dozvola_id"`
+		Status        string `json:"status"`
+	}
+
+	// Parsiranje JSON zahteva
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
+		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		return
+	}
+
+	// Osnovna validacija
+	if req.D2D3DozvolaID == "" || req.Status == "" {
+		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", "nedostaju obavezna polja (ID ili status)")
+		app.errorJSON(w, errors.New("nedostaju obavezna polja (ID ili status)"))
+		return
+	}
+
+	// Provera da li dozvola postoji
+	postoji, err := app.DB.GetD2D3DozvolaById(req.D2D3DozvolaID)
+	if err != nil {
+		_ = app.DB.InsertLog("get_D2D3_dozvola_by_id", "error", err.Error())
+		app.errorJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err))
+		return
+	}
+	if !postoji {
+		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", fmt.Sprintf("dozvola sa ID %s ne postoji", req.D2D3DozvolaID))
+		app.errorJSON(w, fmt.Errorf("dozvola sa ID %s ne postoji", req.D2D3DozvolaID))
+		return
+	}
+
+	// Izvrši update statusa
+	err = app.DB.UpdateD2D3DozvolaStatus(req.D2D3DozvolaID, req.Status)
+	if err != nil {
+		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", err.Error())
+		app.errorJSON(w, fmt.Errorf("neuspešan update statusa: %w", err))
+		return
+	}
+
+	// Uspešan update
+	_ = app.DB.InsertLog("update_D2D3_dozvola_status", "success", fmt.Sprintf("Status dozvole %s ažuriran na %s", req.D2D3DozvolaID, req.Status))
+
+	resp := JSONResponse{
+		Error:   false,
+		Message: fmt.Sprintf("Status dozvole %s uspešno ažuriran na %s", req.D2D3DozvolaID, req.Status),
+	}
+
+	err = app.writeJSON(w, http.StatusOK, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 func (app *application) deleteD2D3Dozvola(w http.ResponseWriter, r *http.Request) {
@@ -2250,13 +2410,17 @@ func (app *application) deleteD2D3Dozvola(w http.ResponseWriter, r *http.Request
 		Message: "Dozvola deleted",
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
-func (app *application) deleteDozvola(w http.ResponseWriter, r *http.Request) {
+func (app *application) deleteOsnovnaDozvola(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	da, err := app.DB.GetDozvolaById(id)
+	da, err := app.DB.GetOsnovnaDozvolaById(id)
 	if !da {
 		_ = app.DB.InsertLog("delete_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
 		app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
@@ -2267,7 +2431,7 @@ func (app *application) deleteDozvola(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-	err = app.DB.DeleteDozvolaByID(id)
+	err = app.DB.DeleteOsnovnaDozvolaByID(id)
 	if err != nil {
 		_ = app.DB.InsertLog("delete_dozvola", "error", err.Error())
 		app.errorJSON(w, err)
@@ -2282,7 +2446,11 @@ func (app *application) deleteDozvola(w http.ResponseWriter, r *http.Request) {
 		Message: "Dozvola deleted",
 	}
 
-	app.writeJSON(w, http.StatusAccepted, resp)
+	err = app.writeJSON(w, http.StatusAccepted, resp)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 /***** end TDN  ***/
@@ -2340,7 +2508,11 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)
 
-	app.writeJSON(w, http.StatusAccepted, tokens)
+	err = app.writeJSON(w, http.StatusAccepted, tokens)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 }
 
 func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
@@ -2390,7 +2562,11 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 
 			http.SetCookie(w, app.auth.GetRefreshCookie(tokenPairs.RefreshToken))
 
-			app.writeJSON(w, http.StatusOK, tokenPairs)
+			err = app.writeJSON(w, http.StatusOK, tokenPairs)
+			if err != nil {
+				app.errorJSON(w, err)
+				return
+			}
 
 		}
 	}

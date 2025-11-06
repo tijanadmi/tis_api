@@ -115,13 +115,15 @@ type DatabaseRepo interface {
 
 	GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error)
 	GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error)
-	GetAllDozvola() ([]*models.Dozvola, error)
-	GetByIdDozvola(id string) (*models.Dozvola, error)
+	GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error)
+	GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola, error)
 	GetD2D3DozvolaById(id string) (bool, error)
-	GetDozvolaById(id string) (bool, error)
+	GetOsnovnaDozvolaById(id string) (bool, error)
 	InsertD2D3Dozvola(d *models.D2D3Dozvola) error
-	InsertDozvola(d *models.Dozvola) error
+	InsertOsnovnaDozvola(d *models.OsnovnaDozvola) error
+	UpdateOsnovnaDozvolaStatus(id string, status string) error
+	UpdateD2D3DozvolaStatus(id string, status string) error
 	DeleteD2D3DozvolaByID(dozvolaID string) error
-	DeleteDozvolaByID(dozvolaID string) error
+	DeleteOsnovnaDozvolaByID(dozvolaID string) error
 	InsertLog(operacija, status, poruka string) error
 }
