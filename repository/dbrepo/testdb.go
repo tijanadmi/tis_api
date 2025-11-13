@@ -888,6 +888,10 @@ func (m *TestDBRepo) DeleteOsnovnaDozvolaByID(dozvolaID string) error {
 
 	return nil
 }
+func (m *TestDBRepo) GetD2D3ByOsnovnaId(id string) (bool, error) {
+
+	return true, nil
+}
 
 func (m *TestDBRepo) InsertLog(operacija, status, poruka string) error {
 

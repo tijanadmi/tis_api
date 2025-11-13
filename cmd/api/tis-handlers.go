@@ -2089,12 +2089,14 @@ func (app *application) transferInPgiP(w http.ResponseWriter, r *http.Request) {
 func (app *application) getAllD2D3Dozvola(w http.ResponseWriter, r *http.Request) {
 	d2d3s, err := app.DB.GetAllD2D3Dozvola()
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	err = app.writeJSON(w, http.StatusOK, d2d3s)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2102,12 +2104,14 @@ func (app *application) getAllD2D3Dozvola(w http.ResponseWriter, r *http.Request
 func (app *application) getAllOsnovnaDozvola(w http.ResponseWriter, r *http.Request) {
 	posetas, err := app.DB.GetAllOsnovnaDozvola()
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	err = app.writeJSON(w, http.StatusOK, posetas)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2117,12 +2121,14 @@ func (app *application) getD2D3ById(w http.ResponseWriter, r *http.Request) {
 
 	d2d3, err := app.DB.GetByIdD2D3Dozvola(id)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	err = app.writeJSON(w, http.StatusOK, d2d3)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2132,12 +2138,14 @@ func (app *application) getOsnovnaDozvolaById(w http.ResponseWriter, r *http.Req
 
 	d2d3, err := app.DB.GetByIdOsnovnaDozvola(id)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	err = app.writeJSON(w, http.StatusOK, d2d3)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2148,14 +2156,16 @@ func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request
 	err := json.NewDecoder(r.Body).Decode(&dozvola)
 	if err != nil {
 		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
-		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		//app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a"), 4000)
 		return
 	}
 
 	// Osnovna validacija — možeš dodati još ako želiš
 	if dozvola.D2D3DozvolaID == "" || dozvola.D2D3BrojDozvole == "" || dozvola.TipDozvole == "" || dozvola.OsnovnaDozvolaID == "" {
 		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", "nedostaju obavezna polja")
-		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
+		//app.errorJSON(w, errors.New("nedostaju obavezna polja"))
+		app.errorDozJSON(w, fmt.Errorf("nedostaju obavezna polja"), 4001)
 		return
 	}
 
@@ -2163,14 +2173,14 @@ func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request
 	da, err := app.DB.GetD2D3DozvolaById(dozvola.D2D3DozvolaID)
 	if da {
 		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", fmt.Sprintf("dozvola D2D3 sa ovim id: %s je vec u bazi", dozvola.D2D3DozvolaID))
-		// app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.D2D3DozvolaID)))
-		app.errorJSON(w, fmt.Errorf("dozvola D2D3 sa ovim id: %s je već u bazi", dozvola.D2D3DozvolaID))
-
+		//app.errorJSON(w, fmt.Errorf("dozvola D2D3 sa ovim id: %s je već u bazi", dozvola.D2D3DozvolaID))
+		app.errorDozJSON(w, fmt.Errorf("dozvola D2D3 sa ovim id: %s je već u bazi", dozvola.D2D3DozvolaID), 4002)
 		return
 	}
 	if err != nil {
 		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, err)
+		//app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -2178,14 +2188,14 @@ func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request
 	da, err = app.DB.GetOsnovnaDozvolaById(dozvola.OsnovnaDozvolaID)
 	if !da {
 		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", fmt.Sprintf("ne postoji osnovna dozvola sa id: %s ", dozvola.OsnovnaDozvolaID))
-		// app.errorJSON(w, errors.New(fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.D2D3DozvolaID)))
-		app.errorJSON(w, fmt.Errorf("ne postoji osnovna dozvola sa id: %s", dozvola.OsnovnaDozvolaID))
-
+		//app.errorJSON(w, fmt.Errorf("ne postoji osnovna dozvola sa id: %s", dozvola.OsnovnaDozvolaID))
+		app.errorDozJSON(w, fmt.Errorf("ne postoji osnovna dozvola sa id: %s", dozvola.OsnovnaDozvolaID), 4003)
 		return
 	}
 	if err != nil {
 		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, err)
+		//app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	/***** kraj provera da li postoji u bazi dozvola sa istim id *****/
@@ -2194,21 +2204,24 @@ func (app *application) insertD2D3Dozvola(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		// Loguj grešku u tabelu
 		_ = app.DB.InsertLog("insert_D2D3_dozvola", "error", err.Error())
-		app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
+		//app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err), http.StatusInternalServerError)
 		return
 	}
 
 	// Uspešan log
 	_ = app.DB.InsertLog("insert_D2D3_dozvola", "success", fmt.Sprintf("Dozvola %s uspešno uneta", dozvola.D2D3BrojDozvole))
 
-	resp := JSONResponse{
+	resp := JSONDozResponse{
 		Error:   false,
 		Message: "Dozvola uspešno uneta",
+		Code:    http.StatusCreated,
 	}
 
 	err = app.writeJSON(w, http.StatusCreated, resp)
 	if err != nil {
-		app.errorJSON(w, err)
+		//app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2219,14 +2232,16 @@ func (app *application) insertOsnovnaDozvola(w http.ResponseWriter, r *http.Requ
 	err := json.NewDecoder(r.Body).Decode(&dozvola)
 	if err != nil {
 		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
-		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		//app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a"), 4000)
 		return
 	}
 
 	// Osnovna validacija — možeš dodati još ako želiš
 	if dozvola.DozvolaID == "" || dozvola.BrojDozvole == "" || dozvola.TipZahteva == "" {
 		_ = app.DB.InsertLog("insert_dozvola", "error", "nedostaju obavezna polja")
-		app.errorJSON(w, errors.New("nedostaju obavezna polja"))
+		//app.errorJSON(w, errors.New("nedostaju obavezna polja"))
+		app.errorDozJSON(w, fmt.Errorf("nedostaju obavezna polja"), 4001)
 		return
 	}
 
@@ -2234,12 +2249,14 @@ func (app *application) insertOsnovnaDozvola(w http.ResponseWriter, r *http.Requ
 	da, err := app.DB.GetOsnovnaDozvolaById(dozvola.DozvolaID)
 	if da {
 		_ = app.DB.InsertLog("insert_dozvola", "error", fmt.Sprintf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
-		app.errorJSON(w, fmt.Errorf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
+		//app.errorJSON(w, fmt.Errorf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID))
+		app.errorDozJSON(w, fmt.Errorf("dozvola sa ovim id: %s je vec u bazi", dozvola.DozvolaID), 4002)
 		return
 	}
 	if err != nil {
 		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, err)
+		//app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	/***** kraj provera da li postoji u bazi dozvola sa istim id *****/
@@ -2248,21 +2265,24 @@ func (app *application) insertOsnovnaDozvola(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		// Loguj grešku u tabelu
 		_ = app.DB.InsertLog("insert_dozvola", "error", err.Error())
-		app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
+		//app.errorJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešan unos dozvole: %w", err), http.StatusInternalServerError)
 		return
 	}
 
 	// Uspešan log
 	_ = app.DB.InsertLog("insert_dozvola", "success", fmt.Sprintf("Dozvola %s uspešno uneta", dozvola.BrojDozvole))
 
-	resp := JSONResponse{
+	resp := JSONDozResponse{
 		Error:   false,
 		Message: "Dozvola uspešno uneta",
+		Code:    http.StatusCreated,
 	}
 
 	err = app.writeJSON(w, http.StatusCreated, resp)
 	if err != nil {
-		app.errorJSON(w, err)
+		//app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2277,14 +2297,16 @@ func (app *application) updateOsnovnaDozvolaStatus(w http.ResponseWriter, r *htt
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
-		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		// app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a"), 4000)
 		return
 	}
 
 	// Osnovna validacija
 	if req.OsnovnaDozvolaID == "" || req.Status == "" {
 		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", "nedostaju obavezna polja (ID ili status)")
-		app.errorJSON(w, errors.New("nedostaju obavezna polja (ID ili status)"))
+		// app.errorJSON(w, errors.New("nedostaju obavezna polja (ID ili status)"))
+		app.errorDozJSON(w, fmt.Errorf("nedostaju obavezna polja (ID ili status)"), 4001)
 		return
 	}
 
@@ -2292,12 +2314,14 @@ func (app *application) updateOsnovnaDozvolaStatus(w http.ResponseWriter, r *htt
 	postoji, err := app.DB.GetOsnovnaDozvolaById(req.OsnovnaDozvolaID)
 	if err != nil {
 		_ = app.DB.InsertLog("get_osnovna_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err))
+		// app.errorJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err), http.StatusInternalServerError)
 		return
 	}
 	if !postoji {
 		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", fmt.Sprintf("dozvola sa ID %s ne postoji", req.OsnovnaDozvolaID))
-		app.errorJSON(w, fmt.Errorf("dozvola sa ID %s ne postoji", req.OsnovnaDozvolaID))
+		//app.errorJSON(w, fmt.Errorf("dozvola sa ID %s ne postoji", req.OsnovnaDozvolaID))
+		app.errorDozJSON(w, fmt.Errorf("OSNOVNA dozvola sa ID %s ne postoji", req.OsnovnaDozvolaID), 4003)
 		return
 	}
 
@@ -2305,21 +2329,24 @@ func (app *application) updateOsnovnaDozvolaStatus(w http.ResponseWriter, r *htt
 	err = app.DB.UpdateOsnovnaDozvolaStatus(req.OsnovnaDozvolaID, req.Status)
 	if err != nil {
 		_ = app.DB.InsertLog("update_osnovna_dozvola_status", "error", err.Error())
-		app.errorJSON(w, fmt.Errorf("neuspešan update statusa: %w", err))
+		// app.errorJSON(w, fmt.Errorf("neuspešan update statusa: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešan update statusa: %w", err), http.StatusInternalServerError)
 		return
 	}
 
 	// Uspešan update
 	_ = app.DB.InsertLog("update_osnovna_dozvola_status", "success", fmt.Sprintf("Status dozvole %s ažuriran na %s", req.OsnovnaDozvolaID, req.Status))
 
-	resp := JSONResponse{
+	resp := JSONDozResponse{
 		Error:   false,
 		Message: fmt.Sprintf("Status dozvole %s uspešno ažuriran na %s", req.OsnovnaDozvolaID, req.Status),
+		Code:    http.StatusOK,
 	}
 
 	err = app.writeJSON(w, http.StatusOK, resp)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2334,14 +2361,16 @@ func (app *application) updateD2D3DozvolaStatus(w http.ResponseWriter, r *http.R
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", fmt.Sprintf("neuspešno parsiranje JSON-a: %v", err))
-		app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		// app.errorJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešno parsiranje JSON-a"), 4000)
 		return
 	}
 
 	// Osnovna validacija
 	if req.D2D3DozvolaID == "" || req.Status == "" {
 		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", "nedostaju obavezna polja (ID ili status)")
-		app.errorJSON(w, errors.New("nedostaju obavezna polja (ID ili status)"))
+		// app.errorJSON(w, errors.New("nedostaju obavezna polja (ID ili status)"))
+		app.errorDozJSON(w, fmt.Errorf("nedostaju obavezna polja (ID ili status)"), 4001)
 		return
 	}
 
@@ -2349,12 +2378,14 @@ func (app *application) updateD2D3DozvolaStatus(w http.ResponseWriter, r *http.R
 	postoji, err := app.DB.GetD2D3DozvolaById(req.D2D3DozvolaID)
 	if err != nil {
 		_ = app.DB.InsertLog("get_D2D3_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err))
+		// app.errorJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("greška pri proveri postojanja dozvole: %w", err), http.StatusInternalServerError)
 		return
 	}
 	if !postoji {
 		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", fmt.Sprintf("dozvola sa ID %s ne postoji", req.D2D3DozvolaID))
-		app.errorJSON(w, fmt.Errorf("dozvola sa ID %s ne postoji", req.D2D3DozvolaID))
+		// app.errorJSON(w, fmt.Errorf("dozvola sa ID %s ne postoji", req.D2D3DozvolaID))
+		app.errorDozJSON(w, fmt.Errorf("D2D3 dozvola sa ID %s ne postoji", req.D2D3DozvolaID), 4005)
 		return
 	}
 
@@ -2362,21 +2393,24 @@ func (app *application) updateD2D3DozvolaStatus(w http.ResponseWriter, r *http.R
 	err = app.DB.UpdateD2D3DozvolaStatus(req.D2D3DozvolaID, req.Status)
 	if err != nil {
 		_ = app.DB.InsertLog("update_D2D3_dozvola_status", "error", err.Error())
-		app.errorJSON(w, fmt.Errorf("neuspešan update statusa: %w", err))
+		// app.errorJSON(w, fmt.Errorf("neuspešan update statusa: %w", err))
+		app.errorDozJSON(w, fmt.Errorf("neuspešan update statusa: %w", err), http.StatusInternalServerError)
 		return
 	}
 
 	// Uspešan update
 	_ = app.DB.InsertLog("update_D2D3_dozvola_status", "success", fmt.Sprintf("Status dozvole %s ažuriran na %s", req.D2D3DozvolaID, req.Status))
 
-	resp := JSONResponse{
+	resp := JSONDozResponse{
 		Error:   false,
 		Message: fmt.Sprintf("Status dozvole %s uspešno ažuriran na %s", req.D2D3DozvolaID, req.Status),
+		Code:    http.StatusOK,
 	}
 
 	err = app.writeJSON(w, http.StatusOK, resp)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2386,33 +2420,38 @@ func (app *application) deleteD2D3Dozvola(w http.ResponseWriter, r *http.Request
 
 	da, err := app.DB.GetD2D3DozvolaById(id)
 	if !da {
-		_ = app.DB.InsertLog("delete_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
-		app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
+		_ = app.DB.InsertLog("delete_d2d3_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
+		// app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
+		app.errorDozJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"), 4006)
 		return
 	}
 	if err != nil {
-		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, err)
+		_ = app.DB.InsertLog("get_d2d3_dozvola_by_id", "error", err.Error())
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	err = app.DB.DeleteD2D3DozvolaByID(id)
 	if err != nil {
-		_ = app.DB.InsertLog("delete_dozvola", "error", err.Error())
-		app.errorJSON(w, err)
+		_ = app.DB.InsertLog("delete_d2d3_dozvola", "error", err.Error())
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	// Uspešan log
-	_ = app.DB.InsertLog("delete_dozvola", "success", fmt.Sprintf("Dozvola sa id %s uspešno obrisana", id))
+	_ = app.DB.InsertLog("delete_d2d3_dozvola", "success", fmt.Sprintf("Dozvola sa id %s uspešno obrisana", id))
 
-	resp := JSONResponse{
+	resp := JSONDozResponse{
 		Error:   false,
 		Message: "Dozvola deleted",
+		Code:    http.StatusOK,
 	}
 
 	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -2422,33 +2461,52 @@ func (app *application) deleteOsnovnaDozvola(w http.ResponseWriter, r *http.Requ
 
 	da, err := app.DB.GetOsnovnaDozvolaById(id)
 	if !da {
-		_ = app.DB.InsertLog("delete_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
-		app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
+		_ = app.DB.InsertLog("delete_osnovna_dozvola", "error", "ne mozete obrisati dozvolu koja ne postoji")
+		// app.errorJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"))
+		app.errorDozJSON(w, errors.New("ne mozete obrisati dozvolu koja ne postoji"), 4006)
 		return
 	}
 	if err != nil {
 		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	da, err = app.DB.GetD2D3ByOsnovnaId(id)
+	if da {
+		_ = app.DB.InsertLog("delete_osnovna_dozvola", "error", "ne mozete obrisati osnovnu dozvolu za koju postoje D2/D3 dozvole")
+		// app.errorJSON(w, errors.New("ne mozete obrisati osnovnu dozvolu za koju postoje D2/D3 dozvole"))
+		app.errorDozJSON(w, errors.New("ne mozete obrisati osnovnu dozvolu za koju postoje D2/D3 dozvole"), 4004)
+		return
+	}
+	if err != nil {
+		_ = app.DB.InsertLog("get_dozvola_by_id", "error", err.Error())
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 	err = app.DB.DeleteOsnovnaDozvolaByID(id)
 	if err != nil {
-		_ = app.DB.InsertLog("delete_dozvola", "error", err.Error())
-		app.errorJSON(w, err)
+		_ = app.DB.InsertLog("delete_osnovna_dozvola", "error", err.Error())
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	// Uspešan log
-	_ = app.DB.InsertLog("delete_dozvola", "success", fmt.Sprintf("Dozvola sa id %s uspešno obrisana", id))
+	_ = app.DB.InsertLog("delete_osnovna_dozvola", "success", fmt.Sprintf("Dozvola sa id %s uspešno obrisana", id))
 
-	resp := JSONResponse{
+	resp := JSONDozResponse{
 		Error:   false,
 		Message: "Dozvola deleted",
+		Code:    http.StatusOK,
 	}
 
 	err = app.writeJSON(w, http.StatusAccepted, resp)
 	if err != nil {
-		app.errorJSON(w, err)
+		// app.errorJSON(w, err)
+		app.errorDozJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }

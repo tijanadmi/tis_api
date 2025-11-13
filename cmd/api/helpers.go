@@ -14,7 +14,14 @@ type JSONResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-//WriteJSON takes a response status code arbitrary data and writes json to the client
+type JSONDozResponse struct {
+	Error   bool        `json:"error"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+	Code    int         `json:"code"`
+}
+
+// WriteJSON takes a response status code arbitrary data and writes json to the client
 func (app *application) writeJSON(w http.ResponseWriter, status int, data interface{}, headers ...http.Header) error {
 	out, err := json.Marshal(data)
 	if err != nil {
@@ -36,7 +43,7 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data interf
 	return nil
 }
 
-//ErrorJSON takes an error, & optionally a status code, and generates and sends a JSON error message
+// ErrorJSON takes an error, & optionally a status code, and generates and sends a JSON error message
 func (app *application) errorJSON(w http.ResponseWriter, err error, status ...int) error {
 	statusCode := http.StatusBadRequest
 
@@ -47,6 +54,22 @@ func (app *application) errorJSON(w http.ResponseWriter, err error, status ...in
 	var payload JSONResponse
 	payload.Error = true
 	payload.Message = err.Error()
+
+	return app.writeJSON(w, statusCode, payload)
+}
+
+func (app *application) errorDozJSON(w http.ResponseWriter, err error, appCode ...int) error {
+	statusCode := http.StatusBadRequest // HTTP status
+	code := statusCode                  // interni kod, default isti kao status
+
+	if len(appCode) > 0 {
+		code = appCode[0] // tvoj interni kod za aplikaciju
+	}
+
+	var payload JSONDozResponse
+	payload.Error = true
+	payload.Message = err.Error()
+	payload.Code = code
 
 	return app.writeJSON(w, statusCode, payload)
 }

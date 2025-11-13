@@ -932,6 +932,10 @@ type OsnovnaDozvola struct {
 	KontaktTelefon     string   `json:"kontakt_telefon"`  // TELEFON
 	RazlogPosete       string   `json:"razlog_posete"`    // RAZLOG_POSETE
 	Status             string   `json:"status"`           // STATUS
+	DatumPosete        string   `json:"datum_posete"`     // DATUM POSETE
+	Bzr                string   `json:"bzr"`              // BZR
+	StrucnoLice        string   `json:"strucno_lice"`     // STRUCNO LICE
+	BrojUgovora        string   `json:"broj ugovora"`     // BROJ UGOVORA
 	Objekti            []string `json:"objekti"`          // lista objekata (za D3)
 	Lica               []Lice   `json:"lica"`             // podaci o licima koja učestvuju
 }

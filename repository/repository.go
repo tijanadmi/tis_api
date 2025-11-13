@@ -125,5 +125,6 @@ type DatabaseRepo interface {
 	UpdateD2D3DozvolaStatus(id string, status string) error
 	DeleteD2D3DozvolaByID(dozvolaID string) error
 	DeleteOsnovnaDozvolaByID(dozvolaID string) error
+	GetD2D3ByOsnovnaId(id string) (bool, error)
 	InsertLog(operacija, status, poruka string) error
 }

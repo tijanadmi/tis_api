@@ -5749,8 +5749,8 @@ func (m *OracleDBRepo) InsertD2D3Dozvola(d *models.D2D3Dozvola) error {
 
 	_, err = tx.ExecContext(ctx, queryDozvola,
 		d.D2D3DozvolaID,
-		d.D2D3BrojDozvole,
 		d.OsnovnaDozvolaID,
+		d.D2D3BrojDozvole,
 		d.TipDozvole,
 		d.VremePocetka,
 		d.VremeZavrsetka,
@@ -5825,10 +5825,10 @@ func (m *OracleDBRepo) InsertOsnovnaDozvola(d *models.OsnovnaDozvola) error {
 	// Insert u AAMS_DOZVOLE
 	queryDozvola := `
 		INSERT INTO TDN.AAMS_DOZVOLE (
-            AAMS_DOZVOLA_ID, BROJ_DOZVOLE, TIP_ZAHTEVA, RAZLOG_POSETE, VREPOC, VREZAV, PRIMA_PRATI_LICE, VOZILO, TELEFON, DATPRI, DATIZM, STATUS
+            AAMS_DOZVOLA_ID, BROJ_DOZVOLE, TIP_ZAHTEVA, RAZLOG_POSETE, VREPOC, VREZAV, PRIMA_PRATI_LICE, VOZILO, TELEFON, DATPRI, DATIZM, STATUS, DATUM_POSETE, BZR, STRUCNO_LICE, BROJ_UGOVORA
         ) VALUES (
-            :1, :2, :3, :4,  TO_DATE(:5, 'DD.MM.YYYY HH24:MI'), TO_DATE(:6, 'DD.MM.YYYY HH24:MI'), 
-             :7, :8, :9, SYSDATE, SYSDATE, :10
+            :1, :2, :3, :4,  TO_DATE(:5,'DD.MM.YYYY HH24:MI'), TO_DATE(:6,'DD.MM.YYYY HH24:MI'), 
+             :7, :8, :9, SYSDATE, SYSDATE, :10, TO_DATE(:11,'DD.MM.YYYY HH24:MI'), :12, :13, :14	
         )
 	`
 
@@ -5843,6 +5843,10 @@ func (m *OracleDBRepo) InsertOsnovnaDozvola(d *models.OsnovnaDozvola) error {
 		d.RegistracijaVozilo,
 		d.KontaktTelefon,
 		d.Status,
+		d.DatumPosete,
+		d.Bzr,
+		d.StrucnoLice,
+		d.BrojUgovora,
 	)
 	if err != nil {
 		return fmt.Errorf("insert dozvola: %w", err)
@@ -5983,7 +5987,11 @@ func (m *OracleDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) 
   				COALESCE( PRIMA_PRATI_LICE, '') ,
   				COALESCE(VOZILO, ''),
   				COALESCE(TELEFON, '') ,
-  				COALESCE(STATUS, '') 
+  				COALESCE(STATUS, ''),
+				to_char(DATUM_POSETE, 'dd.mm.yyyy HH24:MI:SS'),
+				COALESCE(BZR, ''),
+				COALESCE(STRUCNO_LICE, ''),
+				COALESCE(BROJ_UGOVORA, '')     
 				FROM TDN.AAMS_DOZVOLE`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -6001,12 +6009,17 @@ func (m *OracleDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) 
 			&d.DozvolaID,
 			&d.BrojDozvole,
 			&d.TipZahteva,
+			&d.RazlogPosete,
 			&d.VremePocetka,
 			&d.VremeZavrsetka,
 			&d.Primalac,
 			&d.RegistracijaVozilo,
 			&d.KontaktTelefon,
 			&d.Status,
+			&d.DatumPosete,
+			&d.Bzr,
+			&d.StrucnoLice,
+			&d.BrojUgovora,
 		)
 
 		if err != nil {
@@ -6115,8 +6128,8 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 		var d models.D2D3Dozvola
 		err := rows.Scan(
 			&d.D2D3DozvolaID,
-			&d.D2D3BrojDozvole,
 			&d.OsnovnaDozvolaID,
+			&d.D2D3BrojDozvole,
 			&d.TipDozvole,
 			&d.VremePocetka,
 			&d.VremeZavrsetka,
@@ -6228,8 +6241,8 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 	var d models.D2D3Dozvola
 	err := row.Scan(
 		&d.D2D3DozvolaID,
-		&d.D2D3BrojDozvole,
 		&d.OsnovnaDozvolaID,
+		&d.D2D3BrojDozvole,
 		&d.TipDozvole,
 		&d.VremePocetka,
 		&d.VremeZavrsetka,
@@ -6242,6 +6255,10 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 		&d.Status,
 	)
 	if err != nil {
+		// if errors.Is(err, sql.ErrNoRows) {
+		// 	// nema rezultata — vrati nil bez greške
+		// 	return nil, nil
+		// }
 		// fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
@@ -6326,7 +6343,11 @@ func (m *OracleDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola,
   				COALESCE( PRIMA_PRATI_LICE, '') ,
   				COALESCE(VOZILO, ''),
   				COALESCE(TELEFON, '') ,
-  				COALESCE(STATUS, '') 
+  				COALESCE(STATUS, ''),
+				to_char(DATUM_POSETE, 'dd.mm.yyyy HH24:MI:SS'),
+				COALESCE(BZR, ''),
+				COALESCE(STRUCNO_LICE, ''),
+				COALESCE(BROJ_UGOVORA, '')  
 				FROM TDN.AAMS_DOZVOLE
 				WHERE AAMS_DOZVOLA_ID=:1`
 
@@ -6337,14 +6358,23 @@ func (m *OracleDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola,
 		&d.DozvolaID,
 		&d.BrojDozvole,
 		&d.TipZahteva,
+		&d.RazlogPosete,
 		&d.VremePocetka,
 		&d.VremeZavrsetka,
 		&d.Primalac,
 		&d.RegistracijaVozilo,
 		&d.KontaktTelefon,
 		&d.Status,
+		&d.DatumPosete,
+		&d.Bzr,
+		&d.StrucnoLice,
+		&d.BrojUgovora,
 	)
 	if err != nil {
+		// if errors.Is(err, sql.ErrNoRows) {
+		// 	// nema rezultata — vrati nil bez greške
+		// 	return nil, nil
+		// }
 		// fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
 	}
@@ -6509,6 +6539,23 @@ func (m *OracleDBRepo) GetOsnovnaDozvolaById(id string) (bool, error) {
 	defer cancel()
 
 	query := `SELECT COUNT(*) FROM TDN.AAMS_DOZVOLE WHERE AAMS_DOZVOLA_ID = :1`
+
+	var count int
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+func (m *OracleDBRepo) GetD2D3ByOsnovnaId(id string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	query := `select count(*)
+			 from aams_d2d3_dozvole
+			 where id_osnovne_doz= :1`
 
 	var count int
 	err := m.DB.QueryRowContext(ctx, query, id).Scan(&count)
