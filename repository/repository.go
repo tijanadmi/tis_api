@@ -70,6 +70,8 @@ type DatabaseRepo interface {
 	GetTransmissionLineFailure(ipsId string, vremeOd string, vremeDo string) ([]*models.GisOutage, error)
 	GetPlans(year string) ([]*models.Plan, error)
 	GetUnopenedPermitForDay(day string, org string) ([]*models.UnopenedPermit, error)
+	GetUnopenedPermitByGroupForDay(day string, group string) ([]*models.UnopenedPermit, error)
+
 	Authenticate(username, testPassword string) error
 	GetUserByUsername(username string) (*models.User, error)
 	GetUserByID(id int) (*models.User, error)

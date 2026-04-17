@@ -480,6 +480,13 @@ func (m *TestDBRepo) GetUnopenedPermitForDay(day string, org string) ([]*models.
 	return p, nil
 }
 
+func (m *TestDBRepo) GetUnopenedPermitByGroupForDay(day string, group string) ([]*models.UnopenedPermit, error) {
+
+	var p []*models.UnopenedPermit
+
+	return p, nil
+}
+
 // Authenticate authenticates a user
 func (m *TestDBRepo) Authenticate(username, testPassword string) error {
 

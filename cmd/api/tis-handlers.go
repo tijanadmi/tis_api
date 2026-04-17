@@ -1014,6 +1014,22 @@ func (app *application) getUnopenedPermitForDay(w http.ResponseWriter, r *http.R
 	}
 }
 
+func (app *application) getUnopenedPermitByGroupForDay(w http.ResponseWriter, r *http.Request) {
+	day := chi.URLParam(r, "day")
+	group := chi.URLParam(r, "group")
+
+	unopenedPermits, err := app.DB.GetUnopenedPermitByGroupForDay(day, group)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, unopenedPermits)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
 /***** start PiPiDDN api  ****/
 
 func (app *application) getAllPiPiDDN(w http.ResponseWriter, r *http.Request) {

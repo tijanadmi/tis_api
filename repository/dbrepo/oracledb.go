@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/tijanadmi/tis-api/models"
@@ -2956,6 +2957,72 @@ func (m *OracleDBRepo) GetUnopenedPermitForDay(day string, org string) ([]*model
 	if err != nil {
 		fmt.Println("Pogresan upit ili nema rezultata upita")
 		return nil, err
+	}
+	defer rows.Close()
+
+	var p []*models.UnopenedPermit
+
+	for rows.Next() {
+		var data models.UnopenedPermit
+		err := rows.Scan(
+			&data.BrojIsk,
+			&data.BrojIsk2,
+			&data.BrojIskRDC,
+			&data.RbrIsk,
+			&data.RazlogO,
+			&data.DatumO,
+			&data.Rbr,
+			&data.Korisnik,
+			&data.Opis,
+			&data.LiceRuk,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		p = append(p, &data)
+	}
+
+	return p, nil
+}
+
+func (m *OracleDBRepo) GetUnopenedPermitByGroupForDay(day string, group string) ([]*models.UnopenedPermit, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	baseQuery := `
+		select  COALESCE(to_char(BROJ_ISK), ''),
+				COALESCE(BROJ_ISK2, ''),
+				COALESCE(BROJ_ISK_RDC, ''),
+				RBR_ISK,
+				COALESCE(RAZLOG_O, ''),
+				to_char(DATUM_O,'dd.mm.yyyy HH24:MI:SS'),
+				COALESCE(to_char(RBR), ''),
+				COALESCE(KORISNIK, ''),
+				COALESCE(OPIS, ''),
+				COALESCE(LICE_RUK, '')
+		from TED.SYNSOFT_NEOTVORENE_DOZ
+		WHERE to_char(DATUM_O,'dd.mm.yyyy')= :1
+	`
+
+	group = strings.ToLower(group)
+
+	switch group {
+	case "1":
+		baseQuery += " AND BROJ_ISK IS NOT NULL"
+	case "23":
+		baseQuery += " AND BROJ_ISK_RDC IS NOT NULL"
+	case "all":
+		// bez dodatnog uslova
+	default:
+		return nil, errors.New("invalid group parameter")
+	}
+
+	rows, err := m.DB.QueryContext(ctx, baseQuery, day)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, fmt.Errorf("query error: %w", err)
 	}
 	defer rows.Close()
 

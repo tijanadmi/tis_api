@@ -165,6 +165,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/request1gr", app.getRequest1Gr)
 		mux.Get("/request2gr", app.getRequest2Gr)
 		mux.Get("/unopenedpermitsforday/{org}/{day}", app.getUnopenedPermitForDay)
+		mux.Get("/unopenedpermitsbygroupforday/{group}/{day}", app.getUnopenedPermitByGroupForDay)
 
 		// mux.Get("/unfinishedevents/ndc", app.getAllUnfinishedEventsNDC)
 		// mux.Get("/unfinishedevents/{id}", app.getUnfinishedEventsByID)
