@@ -56,6 +56,7 @@ type DatabaseRepo interface {
 	GetWorkPermissionElradAll() ([]*models.DozvolaElrad, error)
 	GetRequest1Gr() ([]*models.Request1Gr, error)
 	GetRequest2Gr() ([]*models.Request2Gr, error)
+	GetRequest3Gr() ([]*models.Request3Gr, error)
 	GetWorkInEENetwork() ([]*models.WorkInEENetwork, error)
 	GetWeather(year string) ([]*models.WeatherData, error)
 	GetWeatherForecast() ([]*models.WeatherData, error)

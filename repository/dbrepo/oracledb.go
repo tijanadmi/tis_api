@@ -1986,6 +1986,64 @@ func (m *OracleDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
 	return prms, nil
 }
 
+// Get returns all Request3Gr and error, if any
+func (m *OracleDBRepo) GetRequest3Gr() ([]*models.Request3Gr, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	query := `select ID_ZAHTEVA,
+            COALESCE(GRUPA, ''),
+            COALESCE(UKLJUCENOST, ''),
+            COALESCE(INT_PL, ''),
+            COALESCE(BR_Z_RDC_3GR, ''),
+            COALESCE(PL_DATUM_OD_Z, ''),
+            COALESCE(PL_VREME_OD_Z, ''),
+            COALESCE(PL_DATUM_DO_Z, ''),
+            COALESCE(PL_VREME_DO_Z, ''),
+            COALESCE(RUK_RADOVA, ''),
+            COALESCE(ELEMENTI, ''),
+            COALESCE(OPIS_RADOVA, ''),
+            COALESCE(NAPOMENA_VEZA, '')
+              from synsoft_zahtevi_3gr
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		fmt.Println("Pogresan upit ili nema rezultata upita")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var prms []*models.Request3Gr
+
+	for rows.Next() {
+		var prm models.Request3Gr
+		err := rows.Scan(
+			&prm.IdZahteva,
+			&prm.Grupa,
+			&prm.Ukljucenost,
+			&prm.IntPl,
+			&prm.BrZRDC3Gr,
+			&prm.PlDatumOdZ,
+			&prm.PlVremeOdZ,
+			&prm.PlDatumDoZ,
+			&prm.PlVremeDoZ,
+			&prm.RukRadova,
+			&prm.Elementi,
+			&prm.OpisRadova,
+			&prm.NapomenaVeza,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		prms = append(prms, &prm)
+	}
+
+	return prms, nil
+}
+
 // Get returns all permissions and error, if any
 func (m *OracleDBRepo) GetWorkInEENetwork() ([]*models.WorkInEENetwork, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)

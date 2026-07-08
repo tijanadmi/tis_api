@@ -383,6 +383,14 @@ func (m *TestDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
 	return prms, nil
 }
 
+// Get returns all Request3Gr and error, if any
+func (m *TestDBRepo) GetRequest3Gr() ([]*models.Request3Gr, error) {
+
+	var prms []*models.Request3Gr
+
+	return prms, nil
+}
+
 // Get returns all permissions and error, if any
 func (m *TestDBRepo) GetWorkInEENetwork() ([]*models.WorkInEENetwork, error) {
 

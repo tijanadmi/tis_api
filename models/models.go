@@ -787,6 +787,22 @@ type Request2Gr struct {
 	SagNapomenaVeza string `json:"sag_napomena_veza"`
 }
 
+type Request3Gr struct {
+	IdZahteva       int64  `json:"id_zahteva"`
+	Grupa           string `json:"grupa"`
+	Ukljucenost     string `json:"ukljucenost"`
+	IntPl           string `json:"int_pl"`
+	BrZRDC3Gr       string `json:"br_z_rdc_3gr"`
+	PlDatumOdZ      string `json:"pl_datum_od_z"`
+	PlVremeOdZ      string `json:"pl_vreme_od_z"`
+	PlDatumDoZ      string `json:"pl_datum_do_z"`
+	PlVremeDoZ      string `json:"pl_vreme_do_z"`
+	RukRadova       string `json:"ruk_radova"`
+	Elementi        string `json:"elementi"`
+	OpisRadova      string `json:"opis_radova"`
+	NapomenaVeza    string `json:"napomena_veza"`
+}
+
 type Outage struct {
 	Datizv        string `json:"datizv"`
 	Vrepoc        string `json:"vrepoc"`
