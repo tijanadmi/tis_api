@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/godror/godror"
+	_ "github.com/sijms/go-ora/v2"
 	"github.com/tijanadmi/tis-api/repository"
 	"github.com/tijanadmi/tis-api/repository/dbrepo"
 )
@@ -120,7 +120,7 @@ func main() {
 }
 
 func openDB(cfg config) (*sql.DB, error) {
-	db, err := sql.Open("godror", cfg.db.dsn)
+	db, err := sql.Open("oracle", cfg.db.dsn)
 	if err != nil {
 		return nil, err
 	}
