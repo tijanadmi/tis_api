@@ -223,6 +223,13 @@ func (app *application) routes() http.Handler {
 		mux.Put("/closepgi", app.closePgiP)
 		mux.Put("/transferinpgi", app.transferInPgiP)
 		/*** end transfer and close pgi ***/
+
+		mux.Get("/signals/mesizv", app.getMesIzv)
+		mux.Get("/signals/mrct/{id}", app.getOneMrcT)
+		mux.Get("/signals/mrct", app.getMrcT)
+
+		mux.Get("/mesizvdata", app.GetMesIzvDataHandler)
+
 	})
 
 	return mux

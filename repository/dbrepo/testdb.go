@@ -952,3 +952,29 @@ func (m *TestDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola, e
 }
 
 /*** end TDN ***/
+
+func (m *TestDBRepo) GetMesIzv() ([]*models.PiMMP, error) {
+	var signals []*models.PiMMP
+
+	return signals, nil
+}
+
+func (m *TestDBRepo) GetMesIzvData(P_DATOD string, P_DATDO string, P_TIPD int, P_KOM int) ([]*models.PiMMP, error) {
+	var signals []*models.PiMMP
+
+	return signals, nil
+}
+
+func (m *TestDBRepo) OneMrcT(id int) (*models.Signal, error) {
+
+	var signal models.Signal
+
+	return &signal, nil
+}
+
+// Get returns all zas_dv_didf_all_v and error, if any
+func (m *TestDBRepo) GetMrcT() ([]*models.Signal, error) {
+	var signals []*models.Signal
+
+	return signals, nil
+}
