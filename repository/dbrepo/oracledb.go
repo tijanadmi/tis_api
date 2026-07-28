@@ -6726,7 +6726,7 @@ REPLACE(PI_DD.OPIS, CHR(10), ' ') AS OPIS,
 to_char(PI_DDD.DATIZV,'dd.mm.yyyy hh24:mi') DATIZV,
 COALESCE(to_char(PI_DD.ID1), '') ID1_DD, 
 COALESCE(to_char(PI_DD.ID2), '') ID2_DD,
-PI_DD.OB_ID,
+coalesce(to_char(PI_DD.OB_ID), '') OB_ID, 
 UPPER(case
 when V_S_OB.TIPOB in (8,9,4,10) then v_s_ob.ob_sif || ' ' || V_s_ob.nazob
 else v_s_ob.opis
@@ -7379,7 +7379,7 @@ REPLACE(PI_DD.OPIS, CHR(10), ' ') AS OPIS,
 to_char(PI_DDD.DATIZV,'dd.mm.yyyy hh24:mi') DATIZV,
 COALESCE(to_char(PI_DD.ID1), '') ID1_DD, 
 COALESCE(to_char(PI_DD.ID2), '') ID2_DD,
-PI_DD.OB_ID,
+coalesce(to_char(PI_DD.OB_ID), '') OB_ID, 
 UPPER(case
 when V_S_OB.TIPOB in (8,9,4,10) then v_s_ob.ob_sif || ' ' || V_s_ob.nazob
 else v_s_ob.opis
