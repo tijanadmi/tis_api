@@ -2663,3 +2663,98 @@ func (app *application) logout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, app.auth.GetExpiredRefreshCookie())
 	w.WriteHeader(http.StatusAccepted)
 }
+
+func (app *application) getMesIzv(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.DB.GetMesIzv()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getOneMrcT(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	signalID, err := strconv.Atoi(id)
+	if err != nil {
+		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	signals, err := app.DB.OneMrcT(signalID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) getMrcT(w http.ResponseWriter, r *http.Request) {
+	signals, err := app.DB.GetMrcT()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, signals)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
+
+func (app *application) GetMesIzvDataHandler(w http.ResponseWriter, r *http.Request) {
+	// 1. Preuzimanje Query parametara iz URL-a (npr. /endpoint?datod=01.01.2026&datdo=31.01.2026&tipd=5&kom=0)
+	queryParams := r.URL.Query()
+
+	pDatOd := queryParams.Get("datod")
+	pDatDo := queryParams.Get("datdo")
+	pTipdStr := queryParams.Get("tipd")
+	pKomStr := queryParams.Get("kom")
+
+	// 2. Validacija obaveznih string parametara
+	if pDatOd == "" || pDatDo == "" {
+		http.Error(w, "Parametri datod i datdo su obavezni", http.StatusBadRequest)
+		return
+	}
+
+	// 3. Konverzija string parametara u int
+	pTipd, err := strconv.Atoi(pTipdStr)
+	if err != nil {
+		http.Error(w, "Parametar tipd mora biti broj", http.StatusBadRequest)
+		return
+	}
+
+	pKom, err := strconv.Atoi(pKomStr)
+	if err != nil {
+		http.Error(w, "Parametar kom mora biti broj", http.StatusBadRequest)
+		return
+	}
+
+	// 4. Pozivanje funkcije iz baze preko repozitorijuma
+	// Prilagodi "app.DB" (ili gde god ti se nalazi instanca OracleDBRepo)
+	podaci, err := app.DB.GetMesIzvData(pDatOd, pDatDo, pTipd, pKom)
+	if err != nil {
+		http.Error(w, "Greška prilikom čitanja iz baze: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 5. Slanje odgovora nazad klijentu u JSON formatu
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	err = json.NewEncoder(w).Encode(podaci)
+	if err != nil {
+		http.Error(w, "Greška prilikom generisanja JSON-a", http.StatusInternalServerError)
+		return
+	}
+}

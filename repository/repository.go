@@ -130,4 +130,9 @@ type DatabaseRepo interface {
 	DeleteOsnovnaDozvolaByID(dozvolaID string) error
 	GetD2D3ByOsnovnaId(id string) (bool, error)
 	InsertLog(operacija, status, poruka string) error
+
+	GetMesIzv() ([]*models.PiMMP, error)
+	GetMrcT() ([]*models.Signal, error)
+	OneMrcT(id int) (*models.Signal, error)
+	GetMesIzvData(P_DATOD string, P_DATDO string, P_TIPD int, P_KOM int) ([]*models.PiMMP, error)
 }
