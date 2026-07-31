@@ -7,4 +7,4 @@ API that exposes data about EEE function locations and equipment and signals of 
 - Uses the [chi router](https://github.com/go-chi/chi)
 - Uses [crypto](https://golang.org/x/crypto) 
 - Uses [golang-jwt](https://github.com/golang-jwt/jwt/v4) and [pascaldekloe](https://github.com/pascaldekloe/jwt) to generate JWT tokens
-- Uses [godror Oracle driver](https:/github.com/sijms/go-ora/v2)
+- Uses [go-ora Oracle driver](https:/github.com/sijms/go-ora/v2)
