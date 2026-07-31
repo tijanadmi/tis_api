@@ -185,7 +185,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/interruptionofdelivery/{id}", app.getDDNInterruptionOfDeliveryByIDP)
 
 		mux.Put("/interruptionofdelivery/0", app.insertUpdateDDNInterruptionOfDeliveryP)
-		mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
+		// mux.Put("/interruptionsofdelivery/0", app.insertUpdateAllDDNInterruptionOfDelivery)
 
 		/*Old version*/
 		/*mux.Put("/interruptionofdelivery/0", app.insertDDNInterruptionOfDelivery)
