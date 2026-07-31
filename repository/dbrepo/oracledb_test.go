@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	_ "github.com/sijms/go-ora/v2"
+	_ "github.com/godror/godror"
 	"github.com/tijanadmi/tis-api/models"
 	"github.com/tijanadmi/tis-api/repository"
 )
@@ -20,7 +20,7 @@ var testDB *sql.DB
 var testRepo repository.DatabaseRepo
 
 func TestMain(m *testing.M) {
-	testDB, err := sql.Open("oracle", dns)
+	testDB, err := sql.Open("godror", dns)
 	if err != nil {
 		log.Panicln(err)
 	}

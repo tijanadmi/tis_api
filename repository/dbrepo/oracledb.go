@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	go_ora "github.com/sijms/go-ora/v2"
 	"github.com/tijanadmi/tis-api/models"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -19,6 +20,62 @@ type OracleDBRepo struct {
 
 func (m *OracleDBRepo) Connection() *sql.DB {
 	return m.DB
+}
+
+// ScanSafe пресреће NULL вредности за све string показиваче и уписује ""
+func ScanSafe(rows *sql.Rows, dest ...interface{}) error {
+	scanners := make([]interface{}, len(dest))
+	nullStrings := make([]sql.NullString, len(dest))
+
+	for i, d := range dest {
+		// Ако је одредиште показивач на string (*string)
+		if _, ok := d.(*string); ok {
+			scanners[i] = &nullStrings[i]
+		} else {
+			scanners[i] = d
+		}
+	}
+
+	// Скенирамо кроз sql.NullString за сва string поља
+	if err := rows.Scan(scanners...); err != nil {
+		return err
+	}
+
+	// Враћамо вредности: ако је био NULL, nullStrings[i].String је већ ""
+	for i, d := range dest {
+		if strPtr, ok := d.(*string); ok {
+			*strPtr = nullStrings[i].String
+		}
+	}
+
+	return nil
+}
+
+// ScanRowSafe пресреће NULL вредности за pojedinaчни *sql.Row
+func ScanRowSafe(row *sql.Row, dest ...interface{}) error {
+	scanners := make([]interface{}, len(dest))
+	nullStrings := make([]sql.NullString, len(dest))
+
+	for i, d := range dest {
+		if _, ok := d.(*string); ok {
+			scanners[i] = &nullStrings[i]
+		} else {
+			scanners[i] = d
+		}
+	}
+
+	// Скенирамо директно из *sql.Row
+	if err := row.Scan(scanners...); err != nil {
+		return err
+	}
+
+	for i, d := range dest {
+		if strPtr, ok := d.(*string); ok {
+			*strPtr = nullStrings[i].String
+		}
+	}
+
+	return nil
 }
 
 func (m *OracleDBRepo) OneSignal(id int) (*models.Signal, error) {
@@ -33,11 +90,7 @@ func (m *OracleDBRepo) OneSignal(id int) (*models.Signal, error) {
 
 	var signal models.Signal
 
-	err := row.Scan(
-		&signal.ID,
-		&signal.Name,
-		&signal.Status,
-	)
+	err := ScanRowSafe(row, &signal.ID, &signal.Name, &signal.Status)
 
 	if err != nil {
 		return nil, err
@@ -65,11 +118,7 @@ func (m *OracleDBRepo) GetDvDidf() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -100,7 +149,7 @@ func (m *OracleDBRepo) GetDiffTr() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&signal.ID,
 			&signal.Name,
 			&signal.Status,
@@ -135,11 +184,7 @@ func (m *OracleDBRepo) GetDisTrRes() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -170,7 +215,7 @@ func (m *OracleDBRepo) GetDisDiffSp() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&signal.ID,
 			&signal.Name,
 			&signal.Status,
@@ -205,7 +250,7 @@ func (m *OracleDBRepo) GetMalfunctionIn() ([]*models.MalfunctionIn, error) {
 
 	for rows.Next() {
 		var m models.MalfunctionIn
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&m.ID,
 			&m.Name,
 			&m.Order,
@@ -233,11 +278,7 @@ func (m *OracleDBRepo) OneMalfunctionIn(id int) (*models.MalfunctionIn, error) {
 
 	var mf models.MalfunctionIn
 
-	err := row.Scan(
-		&mf.ID,
-		&mf.Name,
-		&mf.Order,
-	)
+	err := ScanRowSafe(row, &mf.ID, &mf.Name, &mf.Order)
 
 	if err != nil {
 		return nil, err
@@ -265,7 +306,7 @@ func (m *OracleDBRepo) GetAPU() ([]*models.Apu, error) {
 
 	for rows.Next() {
 		var m models.Apu
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&m.ID,
 			&m.Name,
 			&m.ShortName,
@@ -295,13 +336,7 @@ func (m *OracleDBRepo) OneAPU(id int) (*models.Apu, error) {
 
 	var apu models.Apu
 
-	err := row.Scan(
-		&apu.ID,
-		&apu.Name,
-		&apu.ShortName,
-		&apu.Code,
-		&apu.Status,
-	)
+	err := ScanRowSafe(row, &apu.ID, &apu.Name, &apu.ShortName, &apu.Code, &apu.Status)
 
 	if err != nil {
 		return nil, err
@@ -329,11 +364,7 @@ func (m *OracleDBRepo) GetOCDV() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -364,11 +395,7 @@ func (m *OracleDBRepo) GetOCTR12() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -399,11 +426,7 @@ func (m *OracleDBRepo) GetOCTRR() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -434,11 +457,7 @@ func (m *OracleDBRepo) GetOCSP() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -469,11 +488,7 @@ func (m *OracleDBRepo) GetEarthfaultOCDV() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -504,11 +519,7 @@ func (m *OracleDBRepo) GetEarthfaultOCTR() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -539,11 +550,7 @@ func (m *OracleDBRepo) GetEarthfaultOCSP() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -574,11 +581,7 @@ func (m *OracleDBRepo) GetEarthfaultOCTRR() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -609,11 +612,7 @@ func (m *OracleDBRepo) GetDirEarthfaultOC() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -644,11 +643,7 @@ func (m *OracleDBRepo) GetTPSendRcdv() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -679,11 +674,7 @@ func (m *OracleDBRepo) GetCircuitbreaker() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -714,11 +705,7 @@ func (m *OracleDBRepo) GetBBPBFtrip() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -749,11 +736,7 @@ func (m *OracleDBRepo) GetNonElectrical() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -784,11 +767,7 @@ func (m *OracleDBRepo) GetBBPBBtrip() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -819,11 +798,7 @@ func (m *OracleDBRepo) GetBFtrip() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
-			&signal.ID,
-			&signal.Name,
-			&signal.Status,
-		)
+		err := ScanSafe(rows, &signal.ID, &signal.Name, &signal.Status)
 
 		if err != nil {
 			return nil, err
@@ -855,15 +830,7 @@ func (m *OracleDBRepo) GetGroupsOfCauses() ([]*models.GroupOfCause, error) {
 
 	for rows.Next() {
 		var grc models.GroupOfCause
-		err := rows.Scan(
-			&grc.ID,
-			&grc.Code,
-			&grc.Name,
-			&grc.ShortName,
-			&grc.Status,
-			&grc.DDNCode,
-			&grc.Sort,
-		)
+		err := ScanSafe(rows, &grc.ID, &grc.Code, &grc.Name, &grc.ShortName, &grc.Status, &grc.DDNCode, &grc.Sort)
 
 		if err != nil {
 			return nil, err
@@ -887,15 +854,7 @@ func (m *OracleDBRepo) OneGroupOfCauses(id int) (*models.GroupOfCause, error) {
 
 	var grc models.GroupOfCause
 
-	err := row.Scan(
-		&grc.ID,
-		&grc.Code,
-		&grc.Name,
-		&grc.ShortName,
-		&grc.Status,
-		&grc.DDNCode,
-		&grc.Sort,
-	)
+	err := ScanRowSafe(row, &grc.ID, &grc.Code, &grc.Name, &grc.ShortName, &grc.Status, &grc.DDNCode, &grc.Sort)
 
 	if err != nil {
 		return nil, err
@@ -925,7 +884,7 @@ func (m *OracleDBRepo) GetCauses() ([]*models.Cause, error) {
 
 	for rows.Next() {
 		var cau models.Cause
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&cau.ID,
 			&cau.GroupCauseId,
 			&cau.Code,
@@ -965,7 +924,7 @@ func (m *OracleDBRepo) OneCause(id int) (*models.Cause, error) {
 
 	var cau models.Cause
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&cau.ID,
 		&cau.GroupCauseId,
 		&cau.Code,
@@ -1009,7 +968,7 @@ func (m *OracleDBRepo) GetGroupOfReasons() ([]*models.GroupOfReason, error) {
 
 	for rows.Next() {
 		var gr models.GroupOfReason
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&gr.ID,
 			&gr.Code,
 			&gr.Name,
@@ -1040,7 +999,7 @@ func (m *OracleDBRepo) OneGroupOfReasons(id int) (*models.GroupOfReason, error) 
 
 	var gr models.GroupOfReason
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&gr.ID,
 		&gr.Code,
 		&gr.Name,
@@ -1077,7 +1036,7 @@ func (m *OracleDBRepo) GetReasons() ([]*models.Reason, error) {
 
 	for rows.Next() {
 		var r models.Reason
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&r.ID,
 			&r.GroupReasonId,
 			&r.Code,
@@ -1116,7 +1075,7 @@ func (m *OracleDBRepo) OneReason(id int) (*models.Reason, error) {
 
 	var r models.Reason
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&r.ID,
 		&r.GroupReasonId,
 		&r.Code,
@@ -1158,7 +1117,7 @@ func (m *OracleDBRepo) GetWeatherConditions() ([]*models.WeatherCondition, error
 
 	for rows.Next() {
 		var signal models.WeatherCondition
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&signal.ID,
 			&signal.Code,
 			&signal.Name,
@@ -1187,7 +1146,7 @@ func (m *OracleDBRepo) OneWeatherCondition(id int) (*models.WeatherCondition, er
 
 	var signal models.WeatherCondition
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&signal.ID,
 		&signal.Code,
 		&signal.Name,
@@ -1222,7 +1181,7 @@ func (m *OracleDBRepo) GetCategoriesOfEvents() ([]*models.CategoryOfEvent, error
 
 	for rows.Next() {
 		var ce models.CategoryOfEvent
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ce.ID,
 			&ce.TypeEventId,
 			&ce.Code,
@@ -1254,7 +1213,7 @@ func (m *OracleDBRepo) OneCategoryOfEvents(id int) (*models.CategoryOfEvent, err
 
 	var ce models.CategoryOfEvent
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&ce.ID,
 		&ce.TypeEventId,
 		&ce.Code,
@@ -1293,7 +1252,7 @@ func (m *OracleDBRepo) GetOHL() ([]*models.OverheadLine, error) {
 
 	for rows.Next() {
 		var ohl models.OverheadLine
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ohl.ID,
 			&ohl.IpsIdDV,
 			&ohl.SapIdDV,
@@ -1357,7 +1316,7 @@ func (m *OracleDBRepo) GetPowerCables() ([]*models.PowerCable, error) {
 
 	for rows.Next() {
 		var cab models.PowerCable
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&cab.ID,
 			&cab.IpsIdKB,
 			&cab.SapIdKB,
@@ -1417,7 +1376,7 @@ func (m *OracleDBRepo) GetSubstations() ([]*models.Substation, error) {
 
 	for rows.Next() {
 		var sub models.Substation
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&sub.ID,
 			&sub.IpsId,
 			&sub.SapId,
@@ -1466,7 +1425,7 @@ func (m *OracleDBRepo) GetFeeders() ([]*models.Feeder, error) {
 
 	for rows.Next() {
 		var feed models.Feeder
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&feed.ID,
 			&feed.IpsIdFeeder,
 			&feed.SapIdFeeder,
@@ -1520,7 +1479,7 @@ func (m *OracleDBRepo) GetProtectionDevices() ([]*models.ProtectionDevice, error
 
 	for rows.Next() {
 		var prt models.ProtectionDevice
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prt.ID,
 			&prt.IpsIdDV,
 			&prt.TisIdFeeder,
@@ -1571,7 +1530,7 @@ func (m *OracleDBRepo) GetPowerTransformers() ([]*models.PowerTransformer, error
 
 	for rows.Next() {
 		var tr models.PowerTransformer
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&tr.ID,
 			&tr.IpsIdDV,
 			&tr.SapIdDV,
@@ -1633,7 +1592,7 @@ func (m *OracleDBRepo) GetDisconnectors() ([]*models.Disconnector, error) {
 
 	for rows.Next() {
 		var dis models.Disconnector
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&dis.ID,
 			&dis.IpsIdDs,
 			&dis.SapIdDs,
@@ -1679,7 +1638,7 @@ func (m *OracleDBRepo) GetWorkPermissions() ([]*models.WorkPermission, error) {
 
 	for rows.Next() {
 		var prm models.WorkPermission
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.Code,
 			&prm.PerNum1,
 			&prm.PerNum2,
@@ -1746,7 +1705,7 @@ func (m *OracleDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, err
 
 	for rows.Next() {
 		var prm models.WorkPermissionAll
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.IdZahteva,
 			&prm.Grupa,
 			&prm.Ukljucenost,
@@ -1841,7 +1800,7 @@ func (m *OracleDBRepo) GetWorkPermissionElradAll() ([]*models.DozvolaElrad, erro
 
 	for rows.Next() {
 		var prm models.DozvolaElrad
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.IdZahteva,
 			&prm.IdDozvole,
 			&prm.NaSnazi,
@@ -1895,7 +1854,7 @@ func (m *OracleDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
 
 	for rows.Next() {
 		var prm models.Request1Gr
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.IdZahteva,
 			&prm.Grupa,
 			&prm.Ukljucenost,
@@ -1957,7 +1916,7 @@ func (m *OracleDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
 
 	for rows.Next() {
 		var prm models.Request2Gr
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.IdZahteva,
 			&prm.Grupa,
 			&prm.Ukljucenost,
@@ -2018,7 +1977,7 @@ func (m *OracleDBRepo) GetRequest3Gr() ([]*models.Request3Gr, error) {
 
 	for rows.Next() {
 		var prm models.Request3Gr
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.IdZahteva,
 			&prm.Grupa,
 			&prm.Ukljucenost,
@@ -2065,7 +2024,7 @@ func (m *OracleDBRepo) GetWorkInEENetwork() ([]*models.WorkInEENetwork, error) {
 
 	for rows.Next() {
 		var prm models.WorkInEENetwork
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&prm.MaxNum,
 			&prm.Num,
 			&prm.EEElements,
@@ -2139,7 +2098,7 @@ func (m *OracleDBRepo) GetWeather(year string) ([]*models.WeatherData, error) {
 
 	for rows.Next() {
 		var data models.WeatherData
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Name,
 			&data.Latitude,
 			&data.Longitude,
@@ -2241,7 +2200,7 @@ func (m *OracleDBRepo) GetWeatherForecast() ([]*models.WeatherData, error) {
 
 	for rows.Next() {
 		var data models.WeatherData
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Name,
 			&data.Latitude,
 			&data.Longitude,
@@ -2343,7 +2302,7 @@ func (m *OracleDBRepo) GetWeatherHistory(year string) ([]*models.WeatherDataHist
 
 	for rows.Next() {
 		var data models.WeatherDataHistory
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Name,
 			&data.Latitude,
 			&data.Longitude,
@@ -2432,7 +2391,7 @@ func (m *OracleDBRepo) GetPermissions1(year string) ([]*models.Permission, error
 
 	for rows.Next() {
 		var data models.Permission
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.RbrPk,
 			&data.BrZahtevaFK,
 			&data.SapSifra,
@@ -2507,7 +2466,7 @@ func (m *OracleDBRepo) GetPermissions23(year string) ([]*models.Permission, erro
 
 	for rows.Next() {
 		var data models.Permission
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.RbrPk,
 			&data.BrZahtevaFK,
 			&data.SapSifra,
@@ -2582,7 +2541,7 @@ func (m *OracleDBRepo) GetRequests1(year string) ([]*models.Request, error) {
 
 	for rows.Next() {
 		var data models.Request
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.RbrPk,
 			&data.Rco,
 			&data.BrojIsk,
@@ -2657,7 +2616,7 @@ func (m *OracleDBRepo) GetRequests23(year string) ([]*models.Request, error) {
 
 	for rows.Next() {
 		var data models.Request
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.RbrPk,
 			&data.Rco,
 			&data.BrojIsk,
@@ -2727,7 +2686,7 @@ func (m *OracleDBRepo) GetOutages(year string) ([]*models.Outage, error) {
 
 	for rows.Next() {
 		var data models.Outage
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Datizv,
 			&data.Vrepoc,
 			&data.Vrezav,
@@ -2792,7 +2751,7 @@ func (m *OracleDBRepo) GetTransmissionLineFailure(ipsId string, vremeOd string, 
 
 	for rows.Next() {
 		var data models.GisOutage
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Vrepoc,
 			&data.Vrezav,
 			&data.Traj,
@@ -2851,7 +2810,7 @@ func (m *OracleDBRepo) GetExclusions(year string) ([]*models.Exclusion, error) {
 
 	for rows.Next() {
 		var data models.Exclusion
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Datizv,
 			&data.Vrepoc,
 			&data.Vrezav,
@@ -2912,7 +2871,7 @@ func (m *OracleDBRepo) GetTransmissionLineOutage(ipsId string, vremeOd string, v
 
 	for rows.Next() {
 		var data models.GisExclusion
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.Datizv,
 			&data.Vrepoc,
 			&data.Vrezav,
@@ -2969,7 +2928,7 @@ func (m *OracleDBRepo) GetPlans(year string) ([]*models.Plan, error) {
 
 	for rows.Next() {
 		var data models.Plan
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.IdPogOdr,
 			&data.IdSapFLok,
 			&data.IdIPSFLok,
@@ -3022,7 +2981,7 @@ func (m *OracleDBRepo) GetUnopenedPermitForDay(day string, org string) ([]*model
 
 	for rows.Next() {
 		var data models.UnopenedPermit
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.BrojIsk,
 			&data.BrojIsk2,
 			&data.BrojIskRDC,
@@ -3088,7 +3047,7 @@ func (m *OracleDBRepo) GetUnopenedPermitByGroupForDay(day string, group string) 
 
 	for rows.Next() {
 		var data models.UnopenedPermit
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&data.BrojIsk,
 			&data.BrojIsk2,
 			&data.BrojIskRDC,
@@ -3147,7 +3106,7 @@ func (m *OracleDBRepo) GetUserByUsername(username string) (*models.User, error) 
 	var user models.User
 	row := m.DB.QueryRowContext(ctx, query, username)
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&user.ID,
 		&user.Username,
 		&user.Password,
@@ -3168,7 +3127,7 @@ func (m *OracleDBRepo) GetUserByUsername(username string) (*models.User, error) 
 
 	for rows.Next() {
 		var r models.UserRole
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&r.ID,
 			&r.IdUser,
 			&r.IdRole,
@@ -3217,7 +3176,7 @@ func (m *OracleDBRepo) GetUserByID(id int) (*models.User, error) {
 
 	for rows.Next() {
 		var r models.UserRole
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&r.ID,
 			&r.IdUser,
 			&r.IdRole,
@@ -3263,7 +3222,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 		pipiddn.KorUneo,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -3309,7 +3268,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
 		pipiddn.KorUneo,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -3355,7 +3314,7 @@ func (m *OracleDBRepo) UpdatePiPiDDNIsklj(pipiddn models.PiPiDDNIsklj) error {
 		pipiddn.KorUneo,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -3402,7 +3361,7 @@ func (m *OracleDBRepo) UpdatePiPiDDNIskljP(pipiddn models.PiPiDDNIsklj) error {
 		pipiddn.KorUneo,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -3495,7 +3454,7 @@ func (m *OracleDBRepo) GetAllPiPiDDN() ([]*models.PiPiDDN, error) {
 
 	for rows.Next() {
 		var pipiddn models.PiPiDDN
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&pipiddn.Datizv,
 			&pipiddn.IdSMrc,
 			&pipiddn.IdSTipd,
@@ -3639,7 +3598,7 @@ func (m *OracleDBRepo) GetAllPiPiDDNP() ([]*models.PiPiDDN, error) {
 
 	for rows.Next() {
 		var pipiddn models.PiPiDDN
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&pipiddn.Datizv,
 			&pipiddn.IdSMrc,
 			&pipiddn.IdSTipd,
@@ -3775,7 +3734,7 @@ func (m *OracleDBRepo) GetPiPiDDNByID(synsoftId string) (*models.PiPiDDN, error)
 	row := m.DB.QueryRowContext(ctx, query, synsoftId)
 
 	var pipiddn models.PiPiDDN
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&pipiddn.Datizv,
 		&pipiddn.IdSMrc,
 		&pipiddn.IdSTipd,
@@ -3908,7 +3867,7 @@ func (m *OracleDBRepo) GetPiPiDDNByIDP(synsoftId string) (*models.PiPiDDN, error
 	row := m.DB.QueryRowContext(ctx, query, synsoftId)
 
 	var pipiddn models.PiPiDDN
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&pipiddn.Datizv,
 		&pipiddn.IdSMrc,
 		&pipiddn.IdSTipd,
@@ -4044,7 +4003,7 @@ func (m *OracleDBRepo) GetAllUnfinishedEventsNDC() ([]*models.UnfinishedEvents, 
 
 	for rows.Next() {
 		var ue models.UnfinishedEvents
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ue.Datizv,
 			&ue.IdSMrc,
 			&ue.IdSTipd,
@@ -4177,7 +4136,7 @@ func (m *OracleDBRepo) GetAllUnfinishedEventsNDCP() ([]*models.UnfinishedEvents,
 
 	for rows.Next() {
 		var ue models.UnfinishedEvents
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ue.Datizv,
 			&ue.IdSMrc,
 			&ue.IdSTipd,
@@ -4301,7 +4260,7 @@ func (m *OracleDBRepo) GetUnfinishedEventsByID(synsoftId string) (*models.Unfini
 	row := m.DB.QueryRowContext(ctx, query, synsoftId)
 
 	var ue models.UnfinishedEvents
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&ue.Datizv,
 		&ue.IdSMrc,
 		&ue.IdSTipd,
@@ -4422,7 +4381,7 @@ func (m *OracleDBRepo) GetUnfinishedEventsByIDP(synsoftId string) (*models.Unfin
 	row := m.DB.QueryRowContext(ctx, query, synsoftId)
 
 	var ue models.UnfinishedEvents
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&ue.Datizv,
 		&ue.IdSMrc,
 		&ue.IdSTipd,
@@ -4536,7 +4495,7 @@ func (m *OracleDBRepo) UpdateUnfinishedEvents(ue models.UnfinishedEventsUpdate) 
 		ue.IdZTeleKrajGL2,
 		ue.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -4604,7 +4563,7 @@ func (m *OracleDBRepo) UpdateUnfinishedEventsP(ue models.UnfinishedEventsUpdate)
 		ue.IdZTeleKrajGL2,
 		ue.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -4712,7 +4671,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 		pipiddn.IdZTeleKrajGL2,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -4792,7 +4751,7 @@ func (m *OracleDBRepo) InsertPiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
 		pipiddn.IdZTeleKrajGL2,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -4872,7 +4831,7 @@ func (m *OracleDBRepo) UpdatePiPiDDNIspad(pipiddn models.PiPiDDNIspad) error {
 		pipiddn.IdZTeleKrajGL2,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -4952,7 +4911,7 @@ func (m *OracleDBRepo) UpdatePiPiDDNIspadP(pipiddn models.PiPiDDNIspad) error {
 		pipiddn.IdZTeleKrajGL2,
 		pipiddn.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5005,7 +4964,7 @@ func (m *OracleDBRepo) GetAllPiPiDDNIspad() ([]*models.PiPiDDN, error) {
 
 	for rows.Next() {
 		var pipiddn models.PiPiDDN
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&pipiddn.Datizv,
 			&pipiddn.IdSMrc,
 			&pipiddn.IdSTipd,
@@ -5076,7 +5035,7 @@ func (m *OracleDBRepo) GetAllPiPiDDNIspadP() ([]*models.PiPiDDN, error) {
 
 	for rows.Next() {
 		var pipiddn models.PiPiDDN
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&pipiddn.Datizv,
 			&pipiddn.IdSMrc,
 			&pipiddn.IdSTipd,
@@ -5144,7 +5103,7 @@ func (m *OracleDBRepo) InsertDDNInterruptionOfDelivery(ddnintd models.DDNInterru
 		ddnintd.IdTipDogadjajaNdc,
 		ddnintd.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5197,7 +5156,7 @@ func (m *OracleDBRepo) InsertDDNInterruptionOfDeliveryP(ddnintd models.DDNInterr
 		ddnintd.IdTipDogadjajaNdc,
 		ddnintd.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5250,7 +5209,7 @@ func (m *OracleDBRepo) UpdateDDNInterruptionOfDelivery(ddnintd models.DDNInterru
 		ddnintd.IdTipDogadjajaNdc,
 		ddnintd.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5304,7 +5263,7 @@ func (m *OracleDBRepo) UpdateDDNInterruptionOfDeliveryP(ddnintd models.DDNInterr
 		ddnintd.IdTipDogadjajaNdc,
 		ddnintd.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5364,7 +5323,7 @@ func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDelivery(ddnintd models.DDNI
 		ddnintd.TipObjekta,
 		ddnintd.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5409,7 +5368,7 @@ func (m *OracleDBRepo) InsertUpdateDDNInterruptionOfDeliveryP(ddnintd models.DDN
 		ddnintd.TipObjekta,
 		ddnintd.SynsoftId,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5481,7 +5440,7 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDC() ([]*models.DDNInterrupt
 
 	for rows.Next() {
 		var ue models.DDNInterruptionOfDelivery
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ue.IdSMrc,
 			&ue.IdSTipd,
 			&ue.IdSVrpd,
@@ -5556,7 +5515,7 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCP() ([]*models.DDNInterrup
 
 	for rows.Next() {
 		var ue models.DDNInterruptionOfDelivery
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ue.IdSMrc,
 			&ue.IdSTipd,
 			&ue.IdSVrpd,
@@ -5623,7 +5582,7 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByID(synsoftId string) (*m
 	row := m.DB.QueryRowContext(ctx, query, synsoftId)
 
 	var ue models.DDNInterruptionOfDelivery
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&ue.IdSMrc,
 		&ue.IdSTipd,
 		&ue.IdSVrpd,
@@ -5687,7 +5646,7 @@ func (m *OracleDBRepo) GetDDNInterruptionOfDeliveryNDCByIDP(synsoftId string) (*
 	row := m.DB.QueryRowContext(ctx, query, synsoftId)
 
 	var ue models.DDNInterruptionOfDelivery
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&ue.IdSMrc,
 		&ue.IdSTipd,
 		&ue.IdSVrpd,
@@ -5758,7 +5717,7 @@ func (m *OracleDBRepo) ClosePgiP(datIzv string, idSMrc string) error {
 		datIzv,
 		idSMrc,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5789,7 +5748,7 @@ func (m *OracleDBRepo) TransferInPgiP(datIzv string, idSMrc string, Tip string) 
 		idSMrc,
 		Tip,
 		sql.Out{Dest: &status},
-		sql.Out{Dest: &message},
+		go_ora.Out{Dest: &message, Size: 4000},
 	)
 
 	if err != nil {
@@ -5829,7 +5788,7 @@ func (m *OracleDBRepo) GetAllUnbalancedTrader() ([]*models.UnbalancedTrader, err
 
 	for rows.Next() {
 		var ue models.UnbalancedTrader
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&ue.Code,
 			&ue.Deviation,
 		)
@@ -6130,7 +6089,7 @@ func (m *OracleDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) 
 
 	for rows.Next() {
 		var d models.OsnovnaDozvola
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&d.DozvolaID,
 			&d.BrojDozvole,
 			&d.TipZahteva,
@@ -6166,7 +6125,7 @@ func (m *OracleDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) 
 
 		for rows1.Next() {
 			var ob string
-			err := rows1.Scan(
+			err := ScanSafe(rows1,
 				&ob,
 			)
 
@@ -6196,7 +6155,7 @@ func (m *OracleDBRepo) GetAllOsnovnaDozvola() ([]*models.OsnovnaDozvola, error) 
 
 		for rows2.Next() {
 			var l models.Lice
-			err := rows2.Scan(
+			err := ScanSafe(rows2,
 				&l.LiceID,
 				&l.Ime,
 				&l.NazivPreduzeca,
@@ -6251,7 +6210,7 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 
 	for rows.Next() {
 		var d models.D2D3Dozvola
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&d.D2D3DozvolaID,
 			&d.OsnovnaDozvolaID,
 			&d.D2D3BrojDozvole,
@@ -6286,7 +6245,7 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 
 		for rows1.Next() {
 			var ob string
-			err := rows1.Scan(
+			err := ScanSafe(rows1,
 				&ob,
 			)
 
@@ -6316,7 +6275,7 @@ func (m *OracleDBRepo) GetAllD2D3Dozvola() ([]*models.D2D3Dozvola, error) {
 
 		for rows2.Next() {
 			var l models.Lice
-			err := rows2.Scan(
+			err := ScanSafe(rows2,
 				&l.LiceID,
 				&l.Ime,
 				&l.NazivPreduzeca,
@@ -6364,7 +6323,7 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 	row := m.DB.QueryRowContext(ctx, query, id)
 
 	var d models.D2D3Dozvola
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&d.D2D3DozvolaID,
 		&d.OsnovnaDozvolaID,
 		&d.D2D3BrojDozvole,
@@ -6403,7 +6362,7 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 
 	for rows1.Next() {
 		var ob string
-		err := rows1.Scan(
+		err := ScanSafe(rows1,
 			&ob,
 		)
 
@@ -6433,7 +6392,7 @@ func (m *OracleDBRepo) GetByIdD2D3Dozvola(id string) (*models.D2D3Dozvola, error
 
 	for rows2.Next() {
 		var l models.Lice
-		err := rows2.Scan(
+		err := ScanSafe(rows2,
 			&l.LiceID,
 			&l.Ime,
 			&l.NazivPreduzeca,
@@ -6479,7 +6438,7 @@ func (m *OracleDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola,
 	row := m.DB.QueryRowContext(ctx, query, id)
 
 	var d models.OsnovnaDozvola
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&d.DozvolaID,
 		&d.BrojDozvole,
 		&d.TipZahteva,
@@ -6519,7 +6478,7 @@ func (m *OracleDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola,
 
 	for rows1.Next() {
 		var ob string
-		err := rows1.Scan(
+		err := ScanSafe(rows1,
 			&ob,
 		)
 
@@ -6549,7 +6508,7 @@ func (m *OracleDBRepo) GetByIdOsnovnaDozvola(id string) (*models.OsnovnaDozvola,
 
 	for rows2.Next() {
 		var l models.Lice
-		err := rows2.Scan(
+		err := ScanSafe(rows2,
 			&l.LiceID,
 			&l.Ime,
 			&l.NazivPreduzeca,
@@ -7033,7 +6992,7 @@ FROM PI_DDD, PI_DD, V_s_ob
 
 	for rows.Next() {
 		var signal models.PiMMP
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&signal.TIPD,
 			&signal.TIPDPR,
 			&signal.NAZTIPD,
@@ -7318,7 +7277,7 @@ func (m *OracleDBRepo) OneMrcT(id int) (*models.Signal, error) {
 
 	var signal models.Signal
 
-	err := row.Scan(
+	err := ScanRowSafe(row,
 		&signal.ID,
 		&signal.Name,
 		&signal.Status,
@@ -7349,7 +7308,7 @@ func (m *OracleDBRepo) GetMrcT() ([]*models.Signal, error) {
 
 	for rows.Next() {
 		var signal models.Signal
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&signal.ID,
 			&signal.Name,
 			&signal.Status,
@@ -7713,7 +7672,7 @@ ORDER BY 2,PI_DD.DATIZV,PI_DD.ID1  ,PI_DD.ID2 ,PI_DD.VREPOC,PI_DD.VREZAV`
 	for rows.Next() {
 		var signal models.PiMMP
 
-		err := rows.Scan(
+		err := ScanSafe(rows,
 			&signal.TIPD,
 			&signal.TIPDPR,
 			&signal.NAZTIPD,
