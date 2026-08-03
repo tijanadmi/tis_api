@@ -329,7 +329,7 @@ func (m *OracleDBRepo) OneAPU(id int) (*models.Apu, error) {
 	defer cancel()
 
 	query := `select id,naziv,SKR_NAZ,SIFRA, status
-			  from s_rapu
+			  from ddn.s_rapu
 			  where id=:1`
 
 	row := m.DB.QueryRowContext(ctx, query, id)
@@ -1238,7 +1238,7 @@ func (m *OracleDBRepo) GetOHL() ([]*models.OverheadLine, error) {
 	query := `select TIS_ID_DV,IPS_ID_DV,SAP_ID_DV,ID_DAL,NAZIV_IPS,OPIS_PO_KATEGORIZACIJI,ID_NAP,NAPON_NAZIV,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),TIS_ID_PT_POLJA,IPS_ID_PT_POLJA,
 			  SAP_ID_PT_POLJA,BROJ_POLJA_PT,NAZIV_PT_POLJA,NAZIV_PT_POLJA_PO_KATEGORIZACIJI,TIS_ID_KT_POLJA,IPS_ID_KT_POLJA,SAP_ID_KT_POLJA,BROJ_POLJA_KT,
 	          NAZIV_KT_POLJA,NAZIV_KT_POLJA_PO_KATEGORIZACIJI,TIPOB_ID,TIPOB_SIFRA,TIPOB_NAZIV,COALESCE(to_char(ID_S_MRC1), ''),COALESCE(MRC1, ''),COALESCE(to_char(ID_S_MRC2), ''),COALESCE(MRC2, '')
- 	          from synsoft_DV_a
+ 	          from ted.synsoft_DV_a
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -1302,7 +1302,7 @@ func (m *OracleDBRepo) GetPowerCables() ([]*models.PowerCable, error) {
 	query := `select TIS_ID_KB,IPS_ID_KB,SAP_ID_KB,ID_KAB,NAZIV_IPS,OPIS_PO_KATEGORIZACIJI,COALESCE(to_char(KATEGORIJA_ID), ''),COALESCE(KATEGORIJA, ''),TIS_ID_PT_POLJA,IPS_ID_PT_POLJA,
 			  SAP_ID_PT_POLJA,BROJ_POLJA_PT,NAZIV_PT_POLJA,NAZIV_PT_POLJA_PO_KATEGORIZACIJI,TIS_ID_KT_POLJA,IPS_ID_KT_POLJA,SAP_ID_KT_POLJA,BROJ_POLJA_KT,
 	          NAZIV_KT_POLJA,NAZIV_KT_POLJA_PO_KATEGORIZACIJI,TIPOB_ID,TIPOB_SIFRA,TIPOB_NAZIV,COALESCE(to_char(ID_S_MRC1), ''),COALESCE(MRC1, ''),COALESCE(to_char(ID_S_MRC2), ''),COALESCE(MRC2, '')
- 	          from synsoft_KB_a
+ 	          from ted.synsoft_KB_a
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
@@ -2010,7 +2010,7 @@ func (m *OracleDBRepo) GetWorkInEENetwork() ([]*models.WorkInEENetwork, error) {
 
 	query := `select  COALESCE(to_char(MAX_RB), ''), COALESCE(to_char(BROJ), ''),  COALESCE(EE_ELEMENTI, ''), COALESCE(MESTO_RADA, ''), 
     		COALESCE(OPIS, ''), COALESCE(STATUS, ''), COALESCE(VREME, '') , COALESCE(VEZA, '')
-			from SYNSOFT_RADOVI_U_MREZI
+			from TED.SYNSOFT_RADOVI_U_MREZI
 	`
 
 	rows, err := m.DB.QueryContext(ctx, query)
