@@ -92,6 +92,8 @@ func (app *application) routes() http.Handler {
 
 		mux.Post("/gettransmissionlineoutage", app.getTransmissionLineOutage)
 		mux.Post("/gettransmissionlinefailure", app.GetTransmissionLineFailure)
+
+		mux.Get("/mesizvdata", app.GetMesIzvDataHandler)
 	})
 
 	mux.Route("/doz", func(mux chi.Router) {
@@ -228,7 +230,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/signals/mrct/{id}", app.getOneMrcT)
 		mux.Get("/signals/mrct", app.getMrcT)
 
-		mux.Get("/mesizvdata", app.GetMesIzvDataHandler)
+		// mux.Get("/mesizvdata", app.GetMesIzvDataHandler)
 
 	})
 

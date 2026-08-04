@@ -304,6 +304,9 @@ type WorkPermissionAll struct {
 	ZavDatum        string   `json:"zav_datum"`
 	Status          string   `json:"status"`
 	EES             []string `json:"ees"`
+	PpOdob          string   `json:"pp_odob"`
+	Nodob           string   `json:"nodob"`
+	Storno          string   `json:"storno"`
 }
 
 type DozvolaElrad struct {
@@ -766,6 +769,9 @@ type Request1Gr struct {
 	Elementi     string `json:"elementi"`
 	OpisRadova   string `json:"opis_radova"`
 	NapomenaVeza string `json:"napomena_veza"`
+	PpOdob          string   `json:"pp_odob"`
+	Nodob           string   `json:"nodob"`
+	Storno          string   `json:"storno"`
 }
 
 type Request2Gr struct {
@@ -785,6 +791,9 @@ type Request2Gr struct {
 	NapomenaVeza    string `json:"napomena_veza"`
 	SagUslovi       string `json:"sag_uslovi"`
 	SagNapomenaVeza string `json:"sag_napomena_veza"`
+	PpOdob          string   `json:"pp_odob"`
+	Nodob           string   `json:"nodob"`
+	Storno          string   `json:"storno"`
 }
 
 type Request3Gr struct {
@@ -801,6 +810,9 @@ type Request3Gr struct {
 	Elementi     string `json:"elementi"`
 	OpisRadova   string `json:"opis_radova"`
 	NapomenaVeza string `json:"napomena_veza"`
+	PpOdob          string   `json:"pp_odob"`
+	Nodob           string   `json:"nodob"`
+	Storno          string   `json:"storno"`
 }
 
 type Outage struct {
