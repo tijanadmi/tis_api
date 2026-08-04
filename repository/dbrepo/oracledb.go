@@ -1690,7 +1690,10 @@ func (m *OracleDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, err
 			COALESCE(PL_DATUM_OD, ''),
 			COALESCE(ZAV_VREME, ''),
 			COALESCE(to_char(ZAV_DATUM,'dd.mm.yyyy HH24:MI:SS'), ''),
-			COALESCE(STATUS, '')
+			COALESCE(STATUS, ''),
+			COALESCE(PP_ODOB, ''),
+            COALESCE(NODOB, ''),
+            COALESCE(STORNO, '')
 			  from synsoft_dozvole_sve
 	`
 
@@ -1732,6 +1735,9 @@ func (m *OracleDBRepo) GetWorkPermissionsAll() ([]*models.WorkPermissionAll, err
 			&prm.ZavVreme,
 			&prm.ZavDatum,
 			&prm.Status,
+			&prm.PpOdob,
+			&prm.Nodob,
+			&prm.Storno,
 		)
 
 		if err != nil {
@@ -1839,7 +1845,10 @@ func (m *OracleDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
 			COALESCE(RUK_RADOVA, ''),
 			COALESCE(ELEMENTI, ''),
 			COALESCE(OPIS_RADOVA, ''),
-			COALESCE(NAPOMENA_VEZA, '')
+			COALESCE(NAPOMENA_VEZA, ''),
+			COALESCE(PP_ODOB, ''),
+            COALESCE(NODOB, ''),
+            COALESCE(STORNO, '')
 			  from synsoft_zahtevi_1gr
 	`
 
@@ -1869,6 +1878,9 @@ func (m *OracleDBRepo) GetRequest1Gr() ([]*models.Request1Gr, error) {
 			&prm.Elementi,
 			&prm.OpisRadova,
 			&prm.NapomenaVeza,
+			&prm.PpOdob,
+			&prm.Nodob,
+			&prm.Storno,
 		)
 
 		if err != nil {
@@ -1901,7 +1913,10 @@ func (m *OracleDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
 			COALESCE(OPIS_RADOVA, ''),
 			COALESCE(NAPOMENA_VEZA, ''),
 			COALESCE(SAG_USLOVI, ''),
-			COALESCE(SAG_NAPOMENA_VEZA, '')
+			COALESCE(SAG_NAPOMENA_VEZA, ''),
+			COALESCE(PP_ODOB, ''),
+            COALESCE(NODOB, ''),
+            COALESCE(STORNO, '')
 			  from synsoft_zahtevi_2gr
 	`
 
@@ -1933,6 +1948,9 @@ func (m *OracleDBRepo) GetRequest2Gr() ([]*models.Request2Gr, error) {
 			&prm.NapomenaVeza,
 			&prm.SagUslovi,
 			&prm.SagNapomenaVeza,
+			&prm.PpOdob,
+			&prm.Nodob,
+			&prm.Storno,
 		)
 
 		if err != nil {
@@ -1962,7 +1980,10 @@ func (m *OracleDBRepo) GetRequest3Gr() ([]*models.Request3Gr, error) {
             COALESCE(RUK_RADOVA, ''),
             COALESCE(ELEMENTI, ''),
             COALESCE(OPIS_RADOVA, ''),
-            COALESCE(NAPOMENA_VEZA, '')
+            COALESCE(NAPOMENA_VEZA, ''),
+			COALESCE(PP_ODOB, ''),
+            COALESCE(NODOB, ''),
+            COALESCE(STORNO, '')
               from synsoft_zahtevi_3gr
 	`
 
@@ -1991,6 +2012,9 @@ func (m *OracleDBRepo) GetRequest3Gr() ([]*models.Request3Gr, error) {
 			&prm.Elementi,
 			&prm.OpisRadova,
 			&prm.NapomenaVeza,
+			&prm.PpOdob,
+			&prm.Nodob,
+			&prm.Storno,
 		)
 
 		if err != nil {
