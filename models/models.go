@@ -769,9 +769,9 @@ type Request1Gr struct {
 	Elementi     string `json:"elementi"`
 	OpisRadova   string `json:"opis_radova"`
 	NapomenaVeza string `json:"napomena_veza"`
-	PpOdob          string   `json:"pp_odob"`
-	Nodob           string   `json:"nodob"`
-	Storno          string   `json:"storno"`
+	PpOdob       string `json:"pp_odob"`
+	Nodob        string `json:"nodob"`
+	Storno       string `json:"storno"`
 }
 
 type Request2Gr struct {
@@ -791,9 +791,9 @@ type Request2Gr struct {
 	NapomenaVeza    string `json:"napomena_veza"`
 	SagUslovi       string `json:"sag_uslovi"`
 	SagNapomenaVeza string `json:"sag_napomena_veza"`
-	PpOdob          string   `json:"pp_odob"`
-	Nodob           string   `json:"nodob"`
-	Storno          string   `json:"storno"`
+	PpOdob          string `json:"pp_odob"`
+	Nodob           string `json:"nodob"`
+	Storno          string `json:"storno"`
 }
 
 type Request3Gr struct {
@@ -810,9 +810,9 @@ type Request3Gr struct {
 	Elementi     string `json:"elementi"`
 	OpisRadova   string `json:"opis_radova"`
 	NapomenaVeza string `json:"napomena_veza"`
-	PpOdob          string   `json:"pp_odob"`
-	Nodob           string   `json:"nodob"`
-	Storno          string   `json:"storno"`
+	PpOdob       string `json:"pp_odob"`
+	Nodob        string `json:"nodob"`
+	Storno       string `json:"storno"`
 }
 
 type Outage struct {
@@ -1246,5 +1246,19 @@ type PiMMP struct {
 	DIF_TR_GL3_IPS_ID            string `json:"dif_tr_gl3_ips_id"`
 	DOP_GL1_IPS_ID               string `json:"dop_gl1_ips_id"`
 	DOP_GL2_IPS_ID               string `json:"dop_gl2_ips_id"`
+	DIS_GL1_IPS_ID_S2            string `json:"dis_gl1_ips_id_s2"`
+	DIS_GL2_IPS_ID_S2            string `json:"dis_gl2_ips_id_s2"`
+	DIS_GL3_IPS_ID_S2            string `json:"dis_gl3_ips_id_s2"`
+	DIF_GL1_IPS_ID_S2            string `json:"dif_gl1_ips_id_s2"`
+	DIF_GL2_IPS_ID_S2            string `json:"dif_gl2_ips_id_s2"`
+	DIF_GL3_IPS_ID_S2            string `json:"dif_gl3_ips_id_s2"`
+	APU_GL1_IPS_ID_S2            string `json:"apu_gl1_ips_id_s2"`
+	APU_GL2_IPS_ID_S2            string `json:"apu_gl2_ips_id_s2"`
+	APU_GL3_IPS_ID_S2            string `json:"apu_gl3_ips_id_s2"`
+	DIF_TR_GL1_IPS_ID_S2         string `json:"dif_tr_gl1_ips_id_s2"`
+	DIF_TR_GL2_IPS_ID_S2         string `json:"dif_tr_gl2_ips_id_s2"`
+	DIF_TR_GL3_IPS_ID_S2         string `json:"dif_tr_gl3_ips_id_s2"`
+	DOP_GL1_IPS_ID_S2            string `json:"dop_gl1_ips_id_s2"`
+	DOP_GL2_IPS_ID_S2            string `json:"dop_gl2_ips_id_s2"`
 	POVEZAN                      string `json:"povezan"`
 }
